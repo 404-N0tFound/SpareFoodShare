@@ -1,24 +1,40 @@
-image: python:latest
+test_py:
+    image: python:latest
 
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    variables:
+      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-# Pip's cache doesn't store the python packages
-# https://pip.pypa.io/en/stable/topics/caching/
-cache:
-  paths:
-    - .cache/pip
-    - venv/
+    # Pip's cache doesn't store the python packages
+    # https://pip.pypa.io/en/stable/topics/caching/
+    cache:
+      paths:
+        - .cache/pip
+        - venv/
 
-before_script:
-  - python --version
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
+    before_script:
+      - python --version
+      - pip install virtualenv
+      - virtualenv venv
+      - source venv/bin/activate
 
-test:
+    script:
+      - python setup.py test
+      - python -m pip install --upgrade pip
+      - pip install -r requirements-dev.txt
+      - python -m flake8 src/
+
+test_js:
+  image: node:latest
+
+  services:
+      - postgres:latest
+
+  cache:
+      paths:
+          - node_modules/
+
   script:
-    - python setup.py test
-    - python -m pip install --upgrade pip
-    - pip install -r requirements-dev.txt
-    - python -m flake8 src/
+    - npm install
+    - npm install eslint
+    - npm install prettier
+    - npx eslint ./src
