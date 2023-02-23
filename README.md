@@ -2,7 +2,7 @@
 ![Node Version](https://img.shields.io/badge/Node.js-18.14.1LTS_|_19.6.1-informational?style=flat&logo=node.js&logoColor=white&color=11BB11)
 ![React Version](https://img.shields.io/badge/React-^18.2.0-informational?style=flat&logo=react&logoColor=white&color=107bb1)
 ![Python Version](https://img.shields.io/badge/Python_Version-3.9_|_3.10_|_3.11-informational?style=flat&logo=python&logoColor=white&color=11BB11)
-![Lint](https://git.shefcompsci.org.uk/com6103-2022-23/team09/project/badges/main/pipeline.svg)
+![Lint](https://git.shefcompsci.org.uk/com6103-2022-23/team09/project/badges/master/pipeline.svg)
 
 This is the code for spare food share. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
 
