@@ -1,0 +1,4 @@
+-r requirements.txt
+
+setuptools~=66.1.1
+flake8~=6.0.0

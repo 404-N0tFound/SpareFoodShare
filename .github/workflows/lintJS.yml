@@ -1,0 +1,28 @@
+name: LintJS
+
+on:
+    - push
+    - pull_request
+
+jobs:
+    lint:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+                node-version: [18.x, 19.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Install Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - name: Install EsLint
+              run:
+                  npm install eslint
+                  npm install prettier
+            - name: Lint
+              run: npx eslint ./src
