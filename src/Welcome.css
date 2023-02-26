@@ -23,6 +23,34 @@
     color: black;
 }
 
-.Welcome-link {
-  color: #61dafb;
+.loginButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: #212624;
+    height: 35px;
+    width: 125px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.loginButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+.browseButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: white;
+    height: 35px;
+    width: 125px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.browseButton:hover {
+    background-color: blue;
+    color: white;
 }
