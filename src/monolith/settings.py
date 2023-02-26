@@ -101,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'sparefood',
         'USER': 'postgres',
-        'PASSWORD': '010318',
+        'PASSWORD': os.getenv('DATABASE_PASSWD'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
 =======
