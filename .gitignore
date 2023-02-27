@@ -26,6 +26,7 @@ yarn-error.log*
 
 # IDEA generated files
 .idea/
+.fleet/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

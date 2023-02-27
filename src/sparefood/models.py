@@ -10,12 +10,15 @@ class Items(models.Model):
     item_provider = models.CharField("item_provider", max_length=240)
     # item_label = models.CharField("item_label", max_length=240)
     item_pricing = models.IntegerField()
+    item_status = models.CharField("item_status", max_length=240)
+    item_isprivate = models.BooleanField()
+    item_location = models.CharField("item_location", max_length=240)
 
-    class Meta:
-        db_table = 'items_details'
-
-    def __str__(self):
-        return self.item_name
+    # class Meta:
+    #     db_table = 'items_details'
+    #
+    # def __str__(self):
+    #     return self.item_name
 
 
 class Users(models.Model):
@@ -27,8 +30,8 @@ class Users(models.Model):
     user_email = models.CharField("user_email", max_length=240)
     user_created_date = models.DateField()
 
-    class Meta:
-        db_table = 'users_info'
-
-    def __str__(self):
-        return self.user_name
+    # class Meta:
+    #     db_table = 'users_info'
+    #
+    # def __str__(self):
+    #     return self.user_name

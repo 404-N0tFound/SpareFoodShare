@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
-import psycopg2
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,7 +36,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',
     'sparefood',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,11 +51,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
-
-
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'monolith.urls'
@@ -85,9 +80,8 @@ WSGI_APPLICATION = 'monolith.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 '''
-update the DATABASE to the POSTGRESQL
 NAME → Database name
-USER → Database username 
+USER → Database username
 PASSWORD → Database password
 HOST → Database host (In the development stage, use 127.0.0.1)
 PORT → The port that used to run the database (The default port is 5432)
@@ -95,14 +89,12 @@ PORT → The port that used to run the database (The default port is 5432)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sparefood',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('DATABASE_PASSWD'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': '127.0.0.1',
-        'PORT': '5432',
-
+        'PORT': os.getenv('DB_PORT'),
     }
-
 }
 
 

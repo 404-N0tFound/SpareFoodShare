@@ -24,3 +24,5 @@ To compile and run the project, you will need to instantiate a react instance. Y
     - Using .env file to replace password in file
     - Solve the errors in App.js
     - Modified README.md
+#### Update by @Joshua
+    - Project structure rebuild
