@@ -11,11 +11,11 @@ class Items(models.Model):
     # item_label = models.CharField("item_label", max_length=240)
     item_pricing = models.IntegerField()
 
-    class Meta:
+    """class Meta:
         db_table = 'items_details'
 
     def __str__(self):
-        return self.item_name
+        return self.item_name"""
 
 
 class Users(models.Model):

@@ -6,7 +6,7 @@ from .models import *
 
 
 def home(request):
-    return render(request, 'app/base.html')
+    return render(request, 'index.html')
 
 
 # SELECT

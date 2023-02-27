@@ -1,16 +1,11 @@
 import "./Welcome.css";
+import WelcomePageNavbar from "./WelcomePageNavbar";
 
 function Welcome() {
     return (
         <div className="Welcome">
-            <header className="Welcome-header">
-                <h1>Spare Food Share</h1>
-                <p>Login |</p>
-                <p>About Us |</p>
-                <p>Browse |</p>
-                <p>Contact</p>
-            </header>
             <body className="Welcome-body">
+                <WelcomePageNavbar />
                 <h1>
                     Our mission is to facilitate food sharing within the community, battling food waste and insecurity.
                 </h1>
