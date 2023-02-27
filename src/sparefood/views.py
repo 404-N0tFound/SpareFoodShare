@@ -1,12 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
 from .models import *
 
 
 def home(request):
-    return render(request, 'app/base.html')
+    return render(request, 'index.html')
 
 
 # SELECT

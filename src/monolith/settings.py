@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
-import psycopg2
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -82,7 +81,7 @@ WSGI_APPLICATION = 'monolith.wsgi.application'
 
 '''
 NAME → Database name
-USER → Database username 
+USER → Database username
 PASSWORD → Database password
 HOST → Database host (In the development stage, use 127.0.0.1)
 PORT → The port that used to run the database (The default port is 5432)
