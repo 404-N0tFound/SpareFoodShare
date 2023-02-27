@@ -7,7 +7,7 @@
 This is the code for spare food share. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
 
 # Installation
-To get all the packages installed on your local machine, you can download the support versions of node and python. From there, you can use pip to install from [requirements_dev.txt](requirements_dev.txt) and node packages from [package.json](package.json).
+To get all the packages installed on your local machine, you can download the support versions of node and python. From there, you can use pip to install from [requirements_dev.txt](requirements_dev.txt) and node packages from [package.json](package.json). You will also need an instance of [PostgreSQL](https://www.postgresql.org/) running on your machine with the correct configuration. The necessary values can be set in your local [.env file](.env).
 
 # Running
 To compile and run the project, you will need to instantiate a react instance. You can do this by doing a node build with `npm run build`. Once you have a build, specify the location and a secret key in your `.env` file. With that, you can launch the app using `python src/manage.py runserver`. [Django](https://www.djangoproject.com/) will pick a port for you and allocate that on your localhost for you to connect to in a web browser.
