@@ -161,3 +161,6 @@ dmypy.json
 
 # React front end build
 src/sparefood/templates/app/build/
+
+# To stop changing the README
+README.md
