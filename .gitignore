@@ -163,4 +163,4 @@ dmypy.json
 src/sparefood/templates/app/build/
 
 # To stop changing the README
-# README.md
+README.md
