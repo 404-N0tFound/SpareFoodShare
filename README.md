@@ -26,3 +26,7 @@ To compile and run the project, you will need to instantiate a react instance. Y
     - Modified README.md
 #### Update by @Joshua
     - Project structure rebuild
+
+### Version 0.1.2 Date: 28/02/2023 20:33 pm:
+    - Solving the data fetch problem, now we use serializer and view to pass data to url as json
+    - adjust the project structure

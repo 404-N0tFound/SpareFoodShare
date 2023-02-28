@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {} from "./index.css";
-import Welcome from "./jsx/welcome/Welcome";
+//import Welcome from "./jsx/welcome/Welcome";
+import Listings from "./jsx/listings/Listings"
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
         <React.StrictMode>
-            <Welcome />
+            <Listings />
         </React.StrictMode>
 );
 
