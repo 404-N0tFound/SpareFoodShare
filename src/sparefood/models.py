@@ -2,6 +2,7 @@ from django.db import models
 
 
 # Items details
+
 class Items(models.Model):
     item_name = models.CharField("item_name", max_length=240)
     item_des = models.TextField("item_des", max_length=240)
