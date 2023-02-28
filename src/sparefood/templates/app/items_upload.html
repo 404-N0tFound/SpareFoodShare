@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Items</title>
+</head>
+<body>
+<button type="button" onclick="window.location.href='../'">Home</button>
+<h1>Upload an item </h1>
+    <form action="" method="POST">
+    {% csrf_token %}
+    Name: <input type="text" name="item_name"/><br/><br/>
+    <input type="submit" value="Upload"/>
+    </form>
+</body>
+</html>
