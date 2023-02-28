@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            }
+    </style>
+</head>
+<body>
+<button type="button" onclick="window.location.href='../'">Home</button>
+    <div class="container">
+      <!-- this code block is used to used to create a url link -->
+      <hr>
+      <!-- this code bloack is used to loop the data in the database -->
+      <div class="items-list">
+          <button type="button" onclick="item_delete()">Delete</button>>
+
+          <table id="items_table">
+              <tr>
+                <th>Select</th>
+                <th>Item Name</th>
+                <th>id</th>
+              </tr>
+              {% for data in Items %}
+              <tr>
+<!--                <td><input type="checkbox" value={{data.id}} name="items_checkbox"/>&nbsp;</td>-->
+                <td>{{data.item_name}}</td>
+                <td>{{data.id}}</td>
+                <td><a href="item_delete/{{ data.id }}">delete</a></td>
+              </tr>
+              {% endfor %}
+          </table>
+      </div>
+      <hr>
+    </div>
+    <script type="text/javascript">
+        function item_delete() {
+            //Reference the Table.
+            var grid = document.getElementById("items_table");
+
+            //Reference the CheckBoxes in Table.
+            var checkBoxes = grid.getElementsByTagName("INPUT");
+            // store the checked id
+            var checked_id = [checkBoxes.length];
+            var checked_count = 0;
+            //Loop through the CheckBoxes.
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                    var row = checkBoxes[i].parentNode.parentNode;
+                    checked_id[checked_count] = row.cells[2].innerHTML;
+                    checked_count++;
+                }
+            }
+            //Display selected Row data in Alert Box.
+            alert(checked_id);
+        }
+    </script>
+</body>
+</html>
