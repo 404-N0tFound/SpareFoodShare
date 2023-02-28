@@ -9,7 +9,7 @@
 /coverage
 
 # production
-/build
+/src/sparefood/templates/app/build
 /src/build
 /src/sparefood/templates/app/build
 
@@ -39,7 +39,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+src/sparefood/templates/app/build/
 develop-eggs/
 dist/
 downloads/
@@ -160,4 +160,4 @@ dmypy.json
 .pyre/
 
 # React front end build
-build/
+src/sparefood/templates/app/build/

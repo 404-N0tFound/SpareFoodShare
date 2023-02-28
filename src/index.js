@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {} from "./index.css";
-import Welcome from "./jsx/welcome/Welcome";
+//import Welcome from "./jsx/welcome/Welcome";
+import Welcome from "./jsx/welcome/Welcome"
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

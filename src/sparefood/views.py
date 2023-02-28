@@ -1,8 +1,11 @@
 import os
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+
+from .itemsSerializers import ItemsSerializer
 from .models import *
 
 
@@ -11,15 +14,27 @@ def home(request):
 
 
 # SELECT
-def items_view(request):
-    queryset = Items.objects.all()
-    print("Items:", Items.objects.all().query)
+@csrf_exempt
+def items_list(request):
+    if request.method == 'GET':
+        snippets = Items.objects.all()
+        print(snippets.query)
+        serializer = ItemsSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
-    context = {
-        'Items': queryset
-    }
-    # return render(request, 'app/items_demon.html', context)
-    return render(request, 'jsx/listings/items_demon.html', context)
+@csrf_exempt
+def items_details(request, pk):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        snippet = Items.objects.get(pk=pk)
+    except Items.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = ItemsSerializer(snippet)
+        return JsonResponse(serializer.data)
 
 
 def users_view(request):
