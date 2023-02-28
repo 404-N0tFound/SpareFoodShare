@@ -1,6 +1,18 @@
-
+import { useState, useEffect } from 'react'
 
 function Listings(){
+
+    const [name, setName] = useState([]);
+    const names = async() => {
+        const response = await fetch('./items');
+        setName(await response.json())
+    }
+
+    useEffect(() => {
+        names()
+    }, []
+    )
+
     return (
         <div className="listings-page">
             <header className="listings-header">
@@ -16,6 +28,13 @@ function Listings(){
                             <th>Provider</th>
                             <th>Status</th>
                         </tr>
+                        <tr>
+                            {name.map((data) => {
+                                return(
+                                    console.log("123")
+                                    <td>{data.id}</td>
+                                    )}
+                            )}
                     </table>
                 </div>
             </body>

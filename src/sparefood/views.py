@@ -1,3 +1,5 @@
+import os
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -5,6 +7,7 @@ from .models import *
 
 
 def home(request):
+
     return render(request, 'index.html')
 
 
@@ -16,7 +19,8 @@ def items_view(request):
     context = {
         'Items': queryset
     }
-    return render(request, 'app/items_demon.html', context)
+    # return render(request, 'app/items_demon.html', context)
+    return render(request, 'jsx/listings/items_demon.html', context)
 
 
 def users_view(request):
