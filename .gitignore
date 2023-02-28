@@ -9,8 +9,13 @@
 /coverage
 
 # production
+<<<<<<< HEAD
 /build
 /build
+=======
+/src/sparefood/templates/app/build
+/src/build
+>>>>>>> 0ea7837af6f1845c641cef1df0f55992510f6e9f
 
 # misc
 .DS_Store
@@ -38,7 +43,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+src/sparefood/templates/app/build/
 develop-eggs/
 dist/
 downloads/
@@ -159,4 +164,4 @@ dmypy.json
 .pyre/
 
 # React front end build
-build/
+src/sparefood/templates/app/build/
