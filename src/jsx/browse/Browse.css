@@ -14,41 +14,53 @@
     text-align: left;
     color: black;
 }
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-td,th {
-    border-width: 0 0 1px 0;
-    padding: 0;
-}
-
-.listings-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    empty-cells: show;
-    border: 1px solid ;
-}
-
-.listings-table caption {
-    color: #000;
-    font: italic 85%/1 arial,sans-serif;
-    padding: 1em 0;
-    text-align: center;
-}
-
-.listings-table td,.listings-table th {
-    border-left: 1px solid;
-    border-width: 0 0 0 1px;
-    border-bottom: 1px solid;
-    font-size: inherit;
-    margin: 0;
-    overflow: visible;
-    padding: .5em 1em;
-}
 
 .listings-table td {
     background-color: transparent;
 }
 
+.listings-content ul{
+	width: 1280px;
+}
+.listings-content ul li{
+	width: 260px;
+	float: left;
+	margin: 0 60px 60px 0;
+	list-style: none;
+	background-color: #FFFFFF;
+
+	margin-top: 30px;
+	height: 300px;
+	-webkit-box-shadow: 0 0 5px 3px #ccc;
+}
+
+ .listings-content .item_info h3{
+	font-size: 25px;
+	color: black;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+.listings-content .item_info p{
+    font-size: 15px;
+	line-height: 25px;
+	margin-bottom: 10px;
+}
+.listings-content .item_info{
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+.item-pic{
+    width: 260px;
+    height: 150px;
+}
+
+.item_btn{
+    background-color: black;
+    color: white;
+    font-size: 15px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 50px 0px;
+    cursor: pointer;
+}
