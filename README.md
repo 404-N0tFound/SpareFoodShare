@@ -36,7 +36,12 @@ To compile and run the project, you will need to instantiate a react instance. Y
     - Merged some changes, which includes a few additional js file
     - Modified view.py file to post data to frontend
 
-#### Update to Version 0.1.3
+#### Version 0.1.3 Date: 01/03/2023 12:25 pm
     - Add router which enables pages to redirect by @Joshua
     - some modifications to the welcome page (css) by @Joshua
     - pages now are able fetch data from the designated url
+
+#### Update to Version 0.1.3
+    - Have fetched data displayed in a table
+    - Add some css files to the js files
+    - Created global components, like navbar
