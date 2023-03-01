@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react'
 
 function Listings(){
 
-    const [setName] = useState([]);
-    const names = async() => {
-        const response = await fetch('./items');
-        setName(await response.json())
-    }
+    const [user, setUser] = useState([]);
 
-    useEffect(() => {
-        names()
-    }, []
-    )
-
+  const fetchData = () => {
+    return fetch('../items/')
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .then((data) => setUser(data));
+  }
+  useEffect(() => {
+    fetchData()
+  },[])
     return (
         <div className="listings-page">
             <header className="listings-header">
@@ -28,7 +28,9 @@ function Listings(){
                             <th>Provider</th>
                             <th>Status</th>
                         </tr>
-
+                        {user && user.length > 0 && user.map((userObj) => (
+                            <tr key={userObj.id}>{userObj.item_name}</tr>
+                        ))}
                     </table>
                 </div>
             </body>

@@ -5,12 +5,19 @@ class WelcomePageNavbar extends Component {
     render() {
         return (
                 <div className="Welcome-header">
-                    <h1>Spare Food Share</h1>
-                    <p>Login |</p>
-                    <a href="./items">Click me</a>
-                    <p>About Us |</p>
-                    <p>Browse |</p>
-                    <p>Contact</p>
+                    <div className="Website Logo">
+                        <a href="./">
+                            <h1>Spare Food Share</h1>
+                        </a>
+                    </div>
+                    <div className="links-list">
+                        <ul>
+                            <a href="./listings">Login(test listings)</a>
+                            <a>About Us</a>
+                            <a href="./browse">Browse</a>
+                            <a className="contact">Contact</a>
+                        </ul>
+                    </div>
                 </div>
             );
     }

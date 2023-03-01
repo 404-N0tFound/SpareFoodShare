@@ -15,7 +15,6 @@ class Items(models.Model):
     item_location = models.CharField("item_location", max_length=240)
 
 
-
 class Users(models.Model):
     user_name = models.CharField("user_name", max_length=240)
     user_account = models.CharField("user_account", max_length=240)

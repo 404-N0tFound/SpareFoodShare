@@ -1,11 +1,9 @@
-import os
 
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from .itemsSerializers import ItemsSerializer
+from .serializers import ItemsSerializer, UsersSerializer
 from .models import *
 
 
@@ -22,6 +20,7 @@ def items_list(request):
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+
 @csrf_exempt
 def items_details(request, pk):
     """
@@ -37,33 +36,25 @@ def items_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-def users_view(request):
-    queryset = Users.objects.all()
-    print("Users:", Users.objects.all().query)
-
-    context = {
-        'Users': queryset
-    }
-    return render(request, 'app/users_demon.html', context)
-
-
-def items_upload(request):
-    if request.method == 'POST':
-        item = Items()
-        item.item_name = request.POST.get('item_name')
-        print(item)
-        item.save()
-        redirect('base.html')
-        return render(request, 'app/items_upload.html')
-    return render(request, 'app/items_upload.html')
+@csrf_exempt
+def users_list(request):
+    if request.method == 'GET':
+        snippets = Users.objects.all()
+        print(snippets.query)
+        serializer = UsersSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
-def items_delete(request, id):
-    item = Items()
-    if request.method == 'POST':
-        item.id = id
-        print(item)
-        item.delete()
-        return HttpResponseRedirect(reverse('home'))
+@csrf_exempt
+def user_details(request, pk):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        snippet = Users.objects.get(pk=pk)
+    except Users.DoesNotExist:
+        return HttpResponse(status=404)
 
-    return render(request, 'app/base.html')
+    if request.method == 'GET':
+        serializer = UsersSerializer(snippet)
+        return JsonResponse(serializer.data)
