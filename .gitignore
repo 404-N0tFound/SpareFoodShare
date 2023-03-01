@@ -10,8 +10,8 @@
 
 # production
 <<<<<<< HEAD
-/build
-/build
+/src/sparefood/templates/app/build
+/src/sparefood/templates/app/build
 =======
 /src/sparefood/templates/app/build
 /src/build
