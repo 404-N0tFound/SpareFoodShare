@@ -12,7 +12,7 @@ class WelcomePageNavbar extends Component {
                     </div>
                     <div className="links-list">
                         <ul>
-                            <a href="./items">Login</a>
+                            <a href="./listings">Login(test listings)</a>
                             <a>About Us</a>
                             <a href="./browse">Browse</a>
                             <a className="contact">Contact</a>
