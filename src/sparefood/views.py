@@ -1,5 +1,3 @@
-import os
-
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -7,10 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .itemsSerializers import ItemsSerializer
 from .models import *
-
-
-def home(request):
-    return render(request, 'index.html')
 
 
 # SELECT
@@ -21,6 +15,7 @@ def items_list(request):
         print(snippets.query)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
+
 
 @csrf_exempt
 def items_details(request, pk):
