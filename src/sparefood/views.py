@@ -1,7 +1,6 @@
-import os
 
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import ItemsSerializer, UsersSerializer
