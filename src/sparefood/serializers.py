@@ -15,4 +15,3 @@ class UsersSerializer(serializers.ModelSerializer):
         model = Users
         fields = ['id', 'user_name', 'user_account', 'user_passwd', 'user_role',
                   'user_phone', 'user_email', 'user_created_date']
-
