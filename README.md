@@ -45,3 +45,7 @@ To compile and run the project, you will need to instantiate a react instance. Y
     - Have fetched data displayed in a table
     - Add some css files to the js files
     - Created global components, like navbar
+
+#### Update to Version 0.1.3
+    - Replaced Listings with Browse
+    - Added some css to browse page
