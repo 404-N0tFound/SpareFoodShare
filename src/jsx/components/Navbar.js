@@ -5,7 +5,7 @@ class Navbar extends Component {
     render() {
         return (
         <div className="Navbar">
-                <div className="Welcome-header">
+                <div className="header">
                     <div className="Website Logo">
                         <a href="./">
                             <h1>Spare Food Share</h1>

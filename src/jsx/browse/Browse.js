@@ -28,27 +28,35 @@ function Browse(){
                         <li>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
-                                        <h3>test</h3>
-                                        <p>name: test</p>
-                                        <button className="item_btn">Details</button>
+                                        <h3>Name</h3>
+                                        <p>Descriptions</p>
                                     </div>
+                                    <button className="item_btn">Details</button>
                         </li>
                         <li>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
-                                        <h3>test</h3>
-                                        <p>name: test</p>
-                                        <button className="item_btn">Details</button>
+                                        <h3>Name</h3>
+                                        <p>Descriptions</p>
                                     </div>
+                                    <button className="item_btn">Details</button>
+                        </li>
+                        <li>
+                                <img className="item-pic" src={pic} />
+                                    <div className="item_info">
+                                        <h3>Name</h3>
+                                        <p>Descriptions</p>
+                                    </div>
+                                    <button className="item_btn">Details</button>
                         </li>
                         {items && items.length > 0 && items.map((itemsObj, index) => (
                             <li key={index}>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
-                                        <h3>{itemsObj.id}</h3>
-                                        <p>name: {itemsObj.item_name}</p>
-                                        <button className="item_btn" onClick={() => btn_clicked(itemsObj.id)}>Details</button>
+                                        <h3>Name: {itemsObj.id}</h3>
+                                        <p>Des: {itemsObj.item_name}</p>
                                     </div>
+                                    <button className="item_btn" onClick={() => btn_clicked(itemsObj.id)}>Details</button>
                                 </li>
                             ))}
                     </ul>

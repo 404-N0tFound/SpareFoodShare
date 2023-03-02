@@ -14,8 +14,8 @@
 	float: left;
 	list-style: none;
 	background-color: #FFFFFF;
-	margin-top: 30px;
-	margin-left: 10%;
+	margin-top: 5%;
+	margin-left: 12.5%;
 	height: 300px;
 	-webkit-box-shadow: 0 0 5px 3px #ccc;
 }
@@ -23,30 +23,35 @@
  .listings-content .item_info h3{
 	font-size: 25px;
 	color: black;
-	margin-top: 5px;
-	margin-bottom: 20px;
+	margin-top: 20px;
+	margin-left: 55%;
 }
 .listings-content .item_info p{
     font-size: 15px;
 	line-height: 25px;
-	margin-bottom: 10px;
+	margin-top: 20px;
+	margin-left: 55%;
 }
-.listings-content .item_info{
+.item_info{
 	margin-left: 30px;
 	margin-right: 30px;
+	align: right;
+	height: 50%;
 }
 
 .item-pic{
-    width: 260px;
-    height: 150px;
+    width: 50%;
+    height: 100%;
+    float: left;
 }
 
 .item_btn{
     background-color: black;
     color: white;
     font-size: 15px;
-    padding: 10px 60px;
+    padding: 10px 50px;
     border-radius: 5px;
-    margin: 0% 70%;
-    cursor: pointer;
+    float: right;
+    margin-right: 3%;
+    margin-top: 10%;
 }
