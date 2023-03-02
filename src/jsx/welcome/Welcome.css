@@ -1,0 +1,63 @@
+.Welcome {
+  background-color: #e3fbe9;
+  text-align: center;
+  padding-left: 10%;
+  padding-right: 10%;
+  min-width: 1100px;
+}
+
+.Welcome-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: calc(10px + 2vmin);
+    text-align: left;
+    color: black;
+}
+
+.Welcome-information {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.Interact-buttons {
+    margin-right: auto;
+}
+
+.loginButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: #212624;
+    height: 35px;
+    width: 125px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.loginButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+.browseButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: white;
+    height: 35px;
+    width: 125px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.browseButton:hover {
+    background-color: blue;
+    color: white;
+}

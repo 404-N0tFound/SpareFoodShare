@@ -9,8 +9,9 @@
 /coverage
 
 # production
-/build
+/src/sparefood/templates/app/build
 /src/build
+/src/sparefood/templates/app/build
 
 # misc
 .DS_Store
@@ -26,6 +27,7 @@ yarn-error.log*
 
 # IDEA generated files
 .idea/
+.fleet/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -37,7 +39,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+src/sparefood/templates/app/build/
 develop-eggs/
 dist/
 downloads/
@@ -158,4 +160,7 @@ dmypy.json
 .pyre/
 
 # React front end build
-build/
+src/sparefood/templates/app/build/
+
+# To stop changing the README
+README.md

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            }
+    </style>
+</head>
+<body>
+<button type="button" onclick="window.location.href='../'">Home</button>
+    <div class="container">
+      <!-- this code block is used to used to create a url link -->
+      <hr>
+      <!-- this code bloack is used to loop the data in the database -->
+      <div class="users-list">
+          <table>
+              <tr>
+                <th>User Name</th>
+                <th>id</th>
+              </tr>
+              {% for data in Users %}
+              <tr>
+                <td>{{data.user_name}}</td>
+                <td>{{data.id}}</td>
+              </tr>
+              {% endfor %}
+          </table>
+      </div>
+      <hr>
+    </div>
+</body>
+</html>

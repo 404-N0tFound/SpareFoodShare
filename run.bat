@@ -1,0 +1,1 @@
+npm run windows_build && move /y build src\sparefood\templates\app && python src/manage.py runserver
