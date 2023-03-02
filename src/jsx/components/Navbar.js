@@ -1,7 +1,7 @@
 import { Component } from "react";
-import "./WelcomePageNavbar.css";
+import "./Navbar.css";
 
-class WelcomePageNavbar extends Component {
+class Navbar extends Component {
     render() {
         return (
                 <div className="Welcome-header">
@@ -12,7 +12,7 @@ class WelcomePageNavbar extends Component {
                     </div>
                     <div className="links-list">
                         <ul>
-                            <a href="./listings">Login(test listings)</a>
+                            <a href="./">Login</a>
                             <a>About Us</a>
                             <a href="./browse">Browse</a>
                             <a className="contact">Contact</a>
@@ -23,4 +23,4 @@ class WelcomePageNavbar extends Component {
     }
 }
 
-export default WelcomePageNavbar;
+export default Navbar;

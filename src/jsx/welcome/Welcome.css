@@ -22,6 +22,10 @@
     grid-gap: 20px;
 }
 
+.Interact-buttons {
+    margin-right: auto;
+}
+
 .loginButton {
     border-radius: 2px;
     border: 1px outset #0b0d0c;
@@ -31,6 +35,8 @@
     color: white;
     font-weight: bold;
     cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .loginButton:hover {
@@ -47,6 +53,8 @@
     color: black;
     font-weight: bold;
     cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .browseButton:hover {

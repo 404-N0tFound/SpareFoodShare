@@ -3,8 +3,6 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    # for the home function in the view file
-    path('', home, name='home'),
     path('items/', items_list),
     path('items/<int:pk>/', items_details),
     path('users/', users_list),

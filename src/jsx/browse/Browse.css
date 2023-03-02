@@ -1,15 +1,66 @@
-.Browse {
+.listings-page {
+  background-color: #e3fbe9;
   text-align: center;
+  padding-left: 10%;
+  padding-right: 10%;
+  min-width: 1100px;
 }
-
-.Browse-body {
-    background-color: #e3fbe9;
+.listings-body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     font-size: calc(10px + 2vmin);
     text-align: left;
     color: black;
+}
+
+.listings-table td {
+    background-color: transparent;
+}
+
+.listings-content ul{
+	width: 1280px;
+}
+.listings-content ul li{
+	width: 260px;
+	float: left;
+	margin: 0 60px 60px 0;
+	list-style: none;
+	background-color: #FFFFFF;
+
+	margin-top: 30px;
+	height: 300px;
+	-webkit-box-shadow: 0 0 5px 3px #ccc;
+}
+
+ .listings-content .item_info h3{
+	font-size: 25px;
+	color: black;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+.listings-content .item_info p{
+    font-size: 15px;
+	line-height: 25px;
+	margin-bottom: 10px;
+}
+.listings-content .item_info{
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+.item-pic{
+    width: 260px;
+    height: 150px;
+}
+
+.item_btn{
+    background-color: black;
+    color: white;
+    font-size: 15px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 50px 0px;
+    cursor: pointer;
 }
