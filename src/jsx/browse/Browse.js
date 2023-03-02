@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import "./Browse.css";
+import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import pic from "./test.jpg"
 function Browse(){
@@ -7,7 +8,7 @@ function Browse(){
     const [items, setItems] = useState([]);
 
   const fetchData = () => {
-    return fetch('../items/')
+    return fetch('../api/items/')
           .then((response) => response.json())
           .then((data) => setItems(data))
   }
@@ -19,7 +20,7 @@ function Browse(){
     alert('You clicked ' + id);
   };
     return (
-        <div className="listings-page">
+        <div className="page-content">
             <Navbar />
             <body className="listings-body">
                 <div className="listings-content">

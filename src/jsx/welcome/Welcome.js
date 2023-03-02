@@ -1,10 +1,11 @@
 import "./Welcome.css";
 import Navbar from "../components/Navbar";
-import FruitBasket from "./FoodBasket"
+import FruitBasket from "./FoodBasket";
+import "../components/Theme.css";
 
 function Welcome() {
     return (
-        <div className="Welcome">
+        <div className="page-content">
             <Navbar />
             <body className="Welcome-body">
                 <div className="Welcome-information">
