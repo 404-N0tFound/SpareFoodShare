@@ -4,6 +4,7 @@ import "./Navbar.css";
 class Navbar extends Component {
     render() {
         return (
+        <div className="Navbar">
                 <div className="Welcome-header">
                     <div className="Website Logo">
                         <a href="./">
@@ -13,12 +14,13 @@ class Navbar extends Component {
                     <div className="links-list">
                         <ul>
                             <a href="./">Login</a>
-                            <a>About Us</a>
                             <a href="./browse">Browse</a>
-                            <a className="contact">Contact</a>
+                            <a></a>
                         </ul>
                     </div>
                 </div>
+                <hr className="navbar-line" />
+            </div>
             );
     }
 }

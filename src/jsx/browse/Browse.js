@@ -24,6 +24,22 @@ function Browse(){
             <body className="listings-body">
                 <div className="listings-content">
                     <ul>
+                        <li>
+                                <img className="item-pic" src={pic} />
+                                    <div className="item_info">
+                                        <h3>test</h3>
+                                        <p>name: test</p>
+                                        <button className="item_btn">Details</button>
+                                    </div>
+                        </li>
+                        <li>
+                                <img className="item-pic" src={pic} />
+                                    <div className="item_info">
+                                        <h3>test</h3>
+                                        <p>name: test</p>
+                                        <button className="item_btn">Details</button>
+                                    </div>
+                        </li>
                         {items && items.length > 0 && items.map((itemsObj, index) => (
                             <li key={index}>
                                 <img className="item-pic" src={pic} />

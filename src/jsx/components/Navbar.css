@@ -37,3 +37,7 @@ a {
     color: inherit;
     text-decoration: inherit;
 }
+.navbar-line{
+    width: 100%;
+    color: #00000;
+}

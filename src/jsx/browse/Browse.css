@@ -1,9 +1,9 @@
 .listings-page {
-  background-color: #e3fbe9;
-  text-align: center;
-  padding-left: 10%;
-  padding-right: 10%;
-  min-width: 1100px;
+      background-color: #e3fbe9;
+      text-align: center;
+      min-width: 1100px;
+      padding-left: 10%;
+      padding-right: 10%;
 }
 .listings-body {
     min-height: 100vh;
@@ -20,15 +20,14 @@
 }
 
 .listings-content ul{
-	width: 1280px;
+	width: 100%;
 }
 .listings-content ul li{
-	width: 260px;
+	width: 500px;
 	float: left;
 	margin: 0 60px 60px 0;
 	list-style: none;
 	background-color: #FFFFFF;
-
 	margin-top: 30px;
 	height: 300px;
 	-webkit-box-shadow: 0 0 5px 3px #ccc;
@@ -61,6 +60,6 @@
     font-size: 15px;
     padding: 10px 60px;
     border-radius: 5px;
-    margin: 50px 0px;
+    margin: 0px 60%;
     cursor: pointer;
 }
