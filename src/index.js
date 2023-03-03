@@ -5,6 +5,7 @@ import Layout from "./jsx/Layout";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
 import reportWebVitals from "./reportWebVitals";
+import Item from "./jsx/item/Item";
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
+                        <Route path="item" element={<Item />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -3,9 +3,10 @@ import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import pic from "../pics/test.jpg"
-function Browse(){
+import { useNavigate } from "react-router-dom";
 
-    const [items, setItems] = useState([]);
+function Browse(){
+  const [items, setItems] = useState([]);
 
   const fetchData = () => {
     return fetch('../api/items/')
@@ -16,8 +17,12 @@ function Browse(){
     fetchData()
   },[])
 
+  let navigate = useNavigate();
+
   const btn_clicked = (id) => {
     alert('You clicked ' + id);
+    let path = '../item';
+    navigate(path);
   };
     return (
         <div className="page-content">
@@ -27,18 +32,18 @@ function Browse(){
                     <ul>
                         <div className="item-card">
                             <li>
-                                <img className="item-pic" src={pic} />
+                                <img className="items-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
                                     </div>
-                                    <button className="item_btn">Details</button>
+                                    <button className="item_btn" onClick={() => btn_clicked(1)}>Details</button>
                             </li>
                         </div>
 
                         <div className="item-card">
                             <li>
-                                <img className="item-pic" src={pic} />
+                                <img className="items-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
@@ -48,7 +53,7 @@ function Browse(){
                         </div>
                         <div className="item-card">
                             <li>
-                                <img className="item-pic" src={pic} />
+                                <img className="items-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
@@ -58,7 +63,7 @@ function Browse(){
                         </div>
                         {items && items.length > 0 && items.map((itemsObj, index) => (
                             <li key={index}>
-                                <img className="item-pic" src={pic} />
+                                <img className="items-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name: {itemsObj.id}</h3>
                                         <p>Des: {itemsObj.item_name}</p>
