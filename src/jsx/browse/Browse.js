@@ -25,30 +25,37 @@ function Browse(){
             <body className="listings-body">
                 <div className="listings-content">
                     <ul>
-                        <li>
+                        <div className="item-card">
+                            <li>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
                                     </div>
                                     <button className="item_btn">Details</button>
-                        </li>
-                        <li>
+                            </li>
+                        </div>
+
+                        <div className="item-card">
+                            <li>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
                                     </div>
                                     <button className="item_btn">Details</button>
-                        </li>
-                        <li>
+                            </li>
+                        </div>
+                        <div className="item-card">
+                            <li>
                                 <img className="item-pic" src={pic} />
                                     <div className="item_info">
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
                                     </div>
                                     <button className="item_btn">Details</button>
-                        </li>
+                            </li>
+                        </div>
                         {items && items.length > 0 && items.map((itemsObj, index) => (
                             <li key={index}>
                                 <img className="item-pic" src={pic} />
