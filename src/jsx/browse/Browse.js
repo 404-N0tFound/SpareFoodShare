@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
-import pic from "./test.jpg"
+import pic from "../pics/test.jpg"
 function Browse(){
 
     const [items, setItems] = useState([]);

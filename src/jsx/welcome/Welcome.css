@@ -60,3 +60,26 @@
     background-color: blue;
     color: white;
 }
+
+.Welcome-display ul{
+	width: 100%;
+}
+.display-list ul li{
+	width: 100%;
+	float: left;
+	background-color: #000000;
+	list-style: none;
+	margin-top: 5%;
+
+}
+.display-pic-1, .display-pic-3{
+    width: 45%;
+    height: 100%;
+    float: left;
+}
+.display-pic-2 {
+    width: 45%;
+    height: 100%;
+    float: right;
+}
+
