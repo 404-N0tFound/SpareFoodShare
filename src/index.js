@@ -6,6 +6,7 @@ import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
 import reportWebVitals from "./reportWebVitals";
 import Item from "./jsx/item/Item";
+import Upload from "./jsx/upload/Upload";
 
 export default function App() {
     return (
@@ -15,6 +16,7 @@ export default function App() {
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
                         <Route path="item" element={<Item />} />
+                        <Route path="upload" element={<Upload />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

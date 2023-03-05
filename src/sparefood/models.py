@@ -2,15 +2,15 @@ from django.db import models
 
 
 # Items details
+
 class Items(models.Model):
     item_name = models.CharField("item_name", max_length=240)
     item_des = models.TextField("item_des", max_length=240)
     item_upload_date = models.DateField()
     item_expiration_date = models.DateField()
     item_provider = models.CharField("item_provider", max_length=240)
-    item_pricing = models.IntegerField()
     item_status = models.CharField("item_status", max_length=240)
-    item_isprivate = models.BooleanField()
+    item_isprivate = models.IntegerField()
     item_location = models.CharField("item_location", max_length=240)
 
 
