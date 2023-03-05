@@ -29,4 +29,4 @@ jobs:
         pip install -r requirements-dev.txt
 
     - name: Lint
-      run: python -m flake8 src/
+      python -m flake8 --max-line-length=120 --extend-ignore=F403,F405 src/ setup.py
