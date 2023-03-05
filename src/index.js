@@ -5,6 +5,7 @@ import {} from "./index.css";
 import Layout from "./jsx/Layout";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
+import Upload from "./jsx/upload/Upload";
 import reportWebVitals from "./reportWebVitals";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
+                        <Route path="upload" element={<Upload />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

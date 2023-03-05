@@ -18,8 +18,8 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
-        "windows_build": "react-scripts build",
+        "build": "react-scripts src/sparefood/templates/app/build",
+        "windows_build": "react-scripts src/sparefood/templates/app/build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
