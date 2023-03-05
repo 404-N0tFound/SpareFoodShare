@@ -56,12 +56,12 @@ def user_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-"""
-    Add new item to database
-"""
 @csrf_exempt
 @api_view(['POST'])
 def upload_new(request):
+    """
+        Add new item to database
+    """
     if request.method == "POST":
         serializer = ItemsSerializer(data=request.POST)
         if serializer.is_valid():
