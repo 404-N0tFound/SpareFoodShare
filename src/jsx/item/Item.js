@@ -2,7 +2,9 @@ import Navbar from "../components/Navbar";
 import pic from "../pics/test.jpg"
 import "./Item.css";
 import "../components/Theme.css";
+import { useParams } from "react-router-dom";
 function Item(){
+    const { item_id } : { item_id : string } = useParams();
     return(
         <div className="page-content">
             <Navbar />
@@ -12,7 +14,7 @@ function Item(){
                     <div className="item-vl"></div>
                     <div className="item_info">
                         <h3>Name:</h3>
-                        <p>Descriptions:</p>
+                        <p>ID:{ item_id }</p>
                     </div>
                     <button className="item-collect-btn">Collect</button>
                 </div>

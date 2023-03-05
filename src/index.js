@@ -15,7 +15,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
-                        <Route path="item" element={<Item />} />
+                        <Route path="item/:item_id" element={<Item />} />
                         <Route path="upload" element={<Upload />} />
                     </Route>
                 </Routes>

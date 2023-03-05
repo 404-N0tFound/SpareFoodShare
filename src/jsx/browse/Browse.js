@@ -3,11 +3,10 @@ import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import pic from "../pics/test.jpg"
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function Browse(){
   const [items, setItems] = useState([]);
-
   const fetchData = () => {
     return fetch('../api/items/')
           .then((response) => response.json())
@@ -21,9 +20,9 @@ function Browse(){
 
   const btn_clicked = (id) => {
     alert('You clicked ' + id);
-    let path = '../item';
+    let path = '../item/' + id;
     navigate(path);
-  };
+}
     return (
         <div className="page-content">
             <Navbar />
@@ -37,7 +36,7 @@ function Browse(){
                                         <h3>Name</h3>
                                         <p>Descriptions</p>
                                     </div>
-                                    <button className="item_btn" onClick={() => btn_clicked(1)}>Details</button>
+                                    <button className="item_btn" onClick={() => btn_clicked(2)}>Details</button>
                             </li>
                         </div>
 
@@ -68,7 +67,7 @@ function Browse(){
                                         <h3>Name: {itemsObj.id}</h3>
                                         <p>Des: {itemsObj.item_name}</p>
                                     </div>
-                                    <button className="item_btn" onClick={() => btn_clicked(itemsObj.id)}>Details</button>
+                                    <button className="item_btn" onClick={this.btn_clicked.bind(itemsObj.id)}>Details</button>
                                 </li>
                             ))}
                     </ul>
