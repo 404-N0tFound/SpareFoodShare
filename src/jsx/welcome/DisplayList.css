@@ -1,0 +1,70 @@
+
+.display-list ul li{
+    width: 100%;
+    float: left;
+    list-style: none;
+    margin-top: 5%;
+}
+
+.display-pic-1, .display-pic-3{
+    width: 45%;
+    height: 100%;
+    float: left;
+    border-radius: 2px;
+    transition: filter 300ms ease;
+}
+
+.display-pic-2 {
+    width: 45%;
+    height: 100%;
+    float: right;
+    border-radius: 2px;
+    transition: filter 300ms ease;
+}
+
+.display-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: #212624;
+    height: 35px;
+    width: 125px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.loginButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+.browseButton {
+    border-radius: 2px;
+    border: 1px outset #0b0d0c;
+    background-color: white;
+    height: 35px;
+    width: 125px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.browseButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+.display-pic-1:hover, .display-pic-2:hover, .display-pic-3:hover {
+    filter: drop-shadow(4px 4px 4px #222);
+    transition-duration: 300ms;
+}
