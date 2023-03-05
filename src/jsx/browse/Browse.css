@@ -10,12 +10,12 @@
 	width: 100%;
 }
 .listings-content ul li{
-	width: 30%;
+	width: 35%;
 	float: left;
 	list-style: none;
 	background-color: #FFFFFF;
 	margin-top: 5%;
-	margin-left: 12.5%;
+	margin-left: 8%;
 	height: 350px;
 	-webkit-box-shadow: 0 0 5px 3px #ccc;
 }
