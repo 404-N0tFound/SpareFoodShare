@@ -3,21 +3,32 @@ import pic from "../pics/test.jpg"
 import "./Item.css";
 import "../components/Theme.css";
 import { useParams } from "react-router-dom";
+//import { useState, useEffect } from 'react';
 function Item(){
     const { item_id } : { item_id : string } = useParams();
+//    const [items, setItems] = useState([]);
+//    const fetchData = () => {
+//        return fetch('../api/items/'+item_id+'/')
+//            .then((response) => response.json())
+//            .then((data) => setItems(data))
+//    }
+//    useEffect(() => {
+//        fetchData()
+//
+//    },[])
     return(
         <div className="page-content">
             <Navbar />
             <body className="item-body">
-                <div className="item-content">
-                    <img className="item-pic" src={pic} />
-                    <div className="item-vl"></div>
-                    <div className="item_info">
-                        <h3>Name:</h3>
-                        <p>ID:{ item_id }</p>
+                    <div className="item-content">
+                        <img className="item-pic" src={pic} />
+                        <div className="item-vl"></div>
+                        <div className="item_info">
+                            <h3>Name:</h3>
+                            <p>ID:{ item_id }</p>
+                        </div>
+                        <button className="item-collect-btn">Collect</button>
                     </div>
-                    <button className="item-collect-btn">Collect</button>
-                </div>
             </body>
         </div>
     );
