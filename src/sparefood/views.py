@@ -29,6 +29,7 @@ def items_details(request, pk):
 
     if request.method == 'GET':
         serializer = ItemsSerializer(snippet)
+        print(serializer.data)
         return JsonResponse(serializer.data)
 
 

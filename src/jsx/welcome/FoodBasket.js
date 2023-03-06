@@ -2,11 +2,11 @@
 import { Component } from "react";
 import "./FoodBasket.css";
 import {Fade} from "react-awesome-reveal";
-import basket from "./basket.svg";
-import carrot from "./carrot.svg";
-import apple from "./apple.svg";
-import broccoli from "./broccoli.svg";
-import mushroom from "./mushroom.svg";
+import basket from "../pics/basket.svg";
+import carrot from "../pics/carrot.svg";
+import apple from "../pics/apple.svg";
+import broccoli from "../pics/broccoli.svg";
+import mushroom from "../pics/mushroom.svg";
 
 class FoodBasket extends Component {
     render() {
