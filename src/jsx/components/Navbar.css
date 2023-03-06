@@ -2,17 +2,18 @@
     background-color: #e3fbe9;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
     font-size: calc(10px + 2vmin);
     color: black;
 }
 
 .links-list {
     position: relative;
-    margin: 1em;
     overflow: hidden;
     text-align: center;
 }
+
 .links-list ul {
     display: flex;
     flex-direction: row;
@@ -37,25 +38,19 @@ a {
     color: inherit;
     text-decoration: inherit;
 }
-.navbar-line{
-    width: 100%;
-    color: #00000;
-}
 
 .nav-header {
-  --b: 0.1em;   /* the thickness of the line */
-  --c: #1095c1; /* the color */
-
-  color: #0000;
-  padding-block: var(--b);
-  background:
-    linear-gradient(var(--c) 50%,#000 0) 0% calc(100% - var(--_p,0%))/100% 200%,
-    linear-gradient(var(--c) 0 0) 0% var(--_p,0%)/var(--_p,0%) var(--b) no-repeat;
-  -webkit-background-clip: text,padding-box;
-          background-clip: text,padding-box;
-  transition: .3s var(--_s,0s) linear,background-size .3s calc(.3s - var(--_s,0s));
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    transition: 700ms ease;
+    font-variation-settings: "wght" 311;
+    margin-bottom: 0.8rem;
+    color: black;
+    outline: none;
+    text-align: center;
 }
+
 .nav-header:hover {
-  --_p: 100%;
-  --_s: .3s;
+    font-variation-settings: "wght" 582;
+    letter-spacing: 1px;
 }

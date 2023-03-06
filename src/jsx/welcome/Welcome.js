@@ -1,58 +1,39 @@
 import "./Welcome.css";
 import Navbar from "../components/Navbar";
+import DisplayList from "./DisplayList";
 import FruitBasket from "./FoodBasket";
+import {Fade} from "react-awesome-reveal";
 import "../components/Theme.css";
-import pic_1 from "../pics/pic-1.jpg";
-import pic_2 from "../pics/pic-2.jpg";
-import pic_3 from "../pics/pic-3.jpg";
+
 function Welcome() {
     return (
         <div className="page-content">
-            <Navbar />
+            <Navbar/>
             <body className="Welcome-body">
-                <div className="Welcome-information">
-                    <div className="Welcome-information-text">
+            <div className="Welcome-information">
+                <div className="Welcome-information-text">
+                    <Fade triggerOnce>
                         <h1>
-                            Our mission is to facilitate food sharing within the community, battling food waste and insecurity.
+                            Our mission is to facilitate food sharing within the community, battling food waste and
+                            insecurity.
                         </h1>
+                    </Fade>
+                    <Fade triggerOnce>
                         <p>
-                            It is estimated that the UK&apos;s total food waste could feed upwards of 30 million people in a year. Be part of the solution, not the problem - share your spare groceries with people in your area!
+                            It is estimated that the UK&apos;s total food waste could feed upwards of 30 million people
+                            in a
+                            year. Be
+                            part of the solution, not the problem - share your spare groceries with people in your area!
                         </p>
-                    </div>
-                    <div className="Welcome-information-interactable">
-                        <FruitBasket />
-                    </div>
+                    </Fade>
                 </div>
-                <div className="Interact-buttons">
-                    <input className="loginButton" type="button" value="Login"/>
-                    <input className="browseButton" type="button" value="Browse"/>
+                <div className="Welcome-information-interactable">
+                    <FruitBasket/>
                 </div>
-                <hr />
-                <div className="Welcome-display">
-                    <div className="display-list">
-                        <ul>
-                            <li>
-                                <img src={pic_1} className="display-pic-1" />
-                                <div className="display-info">
-                                    <p>123</p>
-                                </div>
-                            </li>
-
-                             <li>
-                                <img src={pic_2} className="display-pic-2" />
-                                <div className="display-info">
-                                    <p>123</p>
-                                </div>
-                            </li>
-                             <li>
-                                <img src={pic_3} className="display-pic-3" />
-                                <div className="display-info">
-                                    <p>123</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            </div>
+            <div className="Welcome-display">
+                <DisplayList />
+            </div>
             </body>
         </div>
     );

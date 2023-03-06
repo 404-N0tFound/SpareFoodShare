@@ -1,0 +1,82 @@
+.display-list ul li{
+    width: 100%;
+    float: left;
+    list-style: none;
+    margin-top: 2%;
+}
+
+.display-list p, .display-item-text {
+    pointer-events:none;
+}
+
+.display-pic-1, .display-pic-3{
+    width: 48%;
+    height: 100%;
+    float: left;
+    border-radius: 2px;
+    transition: filter 300ms ease;
+}
+
+.display-pic-2 {
+    width: 48%;
+    height: 100%;
+    float: right;
+    border-radius: 2px;
+    transition: filter 300ms ease;
+}
+
+.display-item-text {
+    text-align: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 100%);
+    max-width: 100%;
+}
+
+.loginButton, .browseButton {
+    border-radius: 3px;
+    height: 30px;
+    width: 125px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-top: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: filter 300ms ease, background-color 300ms ease;
+}
+
+.loginButton {
+    border: 1px outset #0b0d0c;
+    background-color: #212624;
+    color: white;
+}
+
+.browseButton {
+    border: 1px outset #0b0d0c;
+    background-color: white;
+    color: black;
+}
+
+.loginButton:hover {
+    background-color: #585858;
+    color: white;
+    filter: drop-shadow(1px 1px 1px #222);
+    transition-duration: 300ms;
+}
+
+.browseButton:hover {
+    background-color: #ededed;
+    color: black;
+    filter: drop-shadow(1px 1px 1px #222);
+    transition-duration: 300ms;
+}
+
+.display-pic-1:hover, .display-pic-2:hover, .display-pic-3:hover {
+    filter: drop-shadow(4px 4px 4px #222);
+    transition-duration: 300ms;
+}
