@@ -15,6 +15,7 @@ class Navbar extends Component {
                         <ul>
                             <a href="./item">Login</a>
                             <a href="./browse" className="browse-a">Browse</a>
+                            <a></a>
                         </ul>
                     </div>
                 </div>
