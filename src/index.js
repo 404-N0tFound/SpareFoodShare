@@ -1,10 +1,12 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {} from "./index.css";
 import Layout from "./jsx/Layout";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
 import reportWebVitals from "./reportWebVitals";
+import Item from "./jsx/item/Item";
+import Upload from "./jsx/upload/Upload";
 
 export default function App() {
     return (
@@ -13,13 +15,17 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
+                        <Route path="item/:item_id" element={<Item />} />
+                        <Route path="upload" element={<Upload />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
         );
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const container = document.getElementById("root");
+const root = createRoot(container);
+root.render(<App />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

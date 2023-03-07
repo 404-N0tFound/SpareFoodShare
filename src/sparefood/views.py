@@ -1,5 +1,7 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from .serializers import ItemsSerializer, UsersSerializer
 from .models import *
@@ -27,6 +29,7 @@ def items_details(request, pk):
 
     if request.method == 'GET':
         serializer = ItemsSerializer(snippet)
+        print(serializer.data)
         return JsonResponse(serializer.data)
 
 
@@ -52,3 +55,18 @@ def user_details(request, pk):
     if request.method == 'GET':
         serializer = UsersSerializer(snippet)
         return JsonResponse(serializer.data)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def upload_new(request):
+    """
+        Add new item to database
+    """
+    if request.method == "POST":
+        serializer = ItemsSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponseRedirect('/browse')
+        else:
+            return Response(serializer.errors, status=400)

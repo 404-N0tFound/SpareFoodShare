@@ -9,9 +9,17 @@
 /coverage
 
 # production
+<<<<<<< HEAD
 /src/sparefood/templates/app/build
-/src/build
 /src/sparefood/templates/app/build
+=======
+/src/sparefood/templates/app/build
+/src/sparefood/templates/app/build
+<<<<<<< HEAD
+>>>>>>> 0ea7837af6f1845c641cef1df0f55992510f6e9f
+=======
+/src/sparefood/templates/app/build
+>>>>>>> 2a1a3f8bfea817250a0bd3b9f3e036c1b47e36fe
 
 # misc
 .DS_Store
