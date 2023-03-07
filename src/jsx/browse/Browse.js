@@ -64,14 +64,16 @@ function Browse(){
                             </li>
                         </div>
                         {items && items.length > 0 && items.map((itemsObj, index) => (
-                            <li key={index}>
-                                <img className="items-pic" src={pic} />
-                                    <div className="item_info">
-                                        <h3>Name: {itemsObj.id}</h3>
-                                        <p>Des: {itemsObj.item_name}</p>
-                                    </div>
-                                    <button className="item_btn" onClick={() => btn_clicked( itemsObj.id )}>Details</button>
-                                </li>
+                            <div key={index} className="item-card">
+                                <li>
+                                    <img className="items-pic" src={pic} />
+                                        <div className="item_info">
+                                            <h3>Name: {itemsObj.id}</h3>
+                                            <p>Des: {itemsObj.item_name}</p>
+                                        </div>
+                                        <button className="item_btn" onClick={() => btn_clicked( itemsObj.id )}>Details</button>
+                                    </li>
+                            </div>
                             ))}
                     </ul>
                 </div>
