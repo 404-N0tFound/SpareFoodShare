@@ -12,7 +12,7 @@
  .item-content .item_info h3{
 	font-size: 45px;
 	color: black;
-	margin-top: 5%;
+	margin-top: 3%;
 
 }
 .item-content .item_info p, h3{
@@ -46,7 +46,7 @@
     border-radius: 5px;
     float: right;
     margin-right: 30%;
-    margin-top: 14%;
+    margin-top: 4%;
 }
 .item-vl {
   border-left: 1px solid black;

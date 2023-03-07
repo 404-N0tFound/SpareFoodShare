@@ -25,10 +25,16 @@ function Item(){
                         <div className="item_info">
                             <h3>Name: { item.item_name }</h3>
                             <p>ID:{ item_id }</p>
+                            <p>Description:</p><br />
+                            <p>Provider:</p>
+                            <p>Upload Date:</p>
+                            <p>Expiration Date:</p>
+                            <p>Location:</p>
                         </div>
                         <button className="item-collect-btn">Collect</button>
                     </div>
             </body>
+            <hr />
         </div>
     );
 }
