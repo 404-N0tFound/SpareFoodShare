@@ -7,7 +7,7 @@ class Navbar extends Component {
         <div className="Navbar">
                 <div className="header">
                     <div className="website-logo">
-                        <a href='./'>
+                        <a href='../'>
                             <h1 className="nav-header">Spare Food Share</h1>
                         </a>
                     </div>
