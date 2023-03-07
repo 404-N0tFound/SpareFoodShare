@@ -47,6 +47,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    pointer-events: auto;
     transition: filter 300ms ease, background-color 300ms ease;
 }
 

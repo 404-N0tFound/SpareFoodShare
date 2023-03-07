@@ -18,7 +18,7 @@ class DisplayList extends Component {
                                 </div>
                                 <div className="display-item-text">
                                     <div>
-                                        <p>Shop for your groceries at lowered rates.</p>
+                                        <p>Shop for your groceries, meals, and food at lowered rates than in store.</p>
                                     </div>
                                     <div>
                                         <a className="browseButton" type="button" href="./browse">
