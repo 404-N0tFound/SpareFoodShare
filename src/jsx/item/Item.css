@@ -18,6 +18,9 @@
 .item-content .item_info p, h3{
 	margin-left: 50%;
 }
+b{
+    margin-left: 10%;
+}
 .item-content .item_info p{
     font-size: 25px;
 	line-height: 25px;
