@@ -8,7 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
 import Orders from "./jsx/orders/Orders";
-
+import Login from "./jsx/login/Login";
 export default function App() {
     return (
             <BrowserRouter>
@@ -16,6 +16,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
+                        <Route path="login" element={<Login />} />
                         <Route path="item/:item_id" element={<Item />} />
                         <Route path="upload" element={<Upload />} />
                         <Route path="orders" element={<Orders />} />

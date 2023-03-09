@@ -1,0 +1,64 @@
+.input-group {
+  text-align: center;
+  margin: 15px;
+}
+
+.input-group > label,
+.input-group > input {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  max-width: 420px;
+  text-align: left;
+  width: 15%;
+}
+
+.input-group > label {
+  color: #092B0C;
+  display: inline-block;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.input-group > input {
+  background: #f2f2f5;
+  border-radius: 4px;
+  border: 1px solid #092B0C;
+  color: #092B0C;
+  font-size: 20px;
+  height: 40px;
+  padding: 0 15px;
+  transition: all 0.3s;
+}
+
+.input-group > input::placeholder {
+  color: #c4c4c4;
+  font-size: 20px;
+}
+
+button {
+  float: center;
+  border-radius: 25px;
+  border: solid;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  max-width: 150px;
+  outline: 0;
+  padding: 10px 0;
+  margin: 3px;
+  transition: background 0.3s;
+  width: 50%;
+}
+
+button.login {
+    background: #092B0C;
+    color: #F0FFF2;
+}
+
+button.register {
+    background: #F0FFF2;
+    color: #092B0C;
+    margin-bottom: 100%;
+}
