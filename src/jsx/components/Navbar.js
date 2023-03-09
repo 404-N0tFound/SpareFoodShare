@@ -4,10 +4,10 @@ import "./Navbar.css";
 class Navbar extends Component {
     render() {
         return (
-        <div className="Navbar">
+        <div className="navbar">
                 <div className="header">
                     <div className="website-logo">
-                        <a href='./'>
+                        <a href='../'>
                             <h1 className="nav-header">Spare Food Share</h1>
                         </a>
                     </div>

@@ -7,7 +7,33 @@
 This is the code for spare food share. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
 
 # Installation
-To get all the packages installed on your local machine, you can download the support versions of node and python. From there, you can use pip to install from [requirements_dev.txt](requirements_dev.txt) and node packages from [package.json](package.json).
+For installing all the required libraries for this project, you will need to download and install:
+- The current LTS version of [Node.js](https://nodejs.org/)
+- A supported version of [Python](https://www.python.org/downloads/) (3.9+)
+- [Postgresql](https://www.postgresql.org/)
+
+Next, you can simply clone this repository to your local machine. From there, `npm install` will install all necessary node modules for the project. 
+It is also important to `pip install -r requirements_dev.txt` to install all python libraries including django. 
+Alternatively, you can choose to install each module by hand and all versioning can be found in [requirements_dev.txt](requirements_dev.txt) and [package.json](package.json).
 
 # Running
-To compile and run the project, you will need to instantiate a react instance. You can do this by doing a node build with `npm run build`. Once you have a build, specify the location and a secret key in your `.env` file. With that, you can launch the app using `python src/manage.py runserver`. [Django](https://www.djangoproject.com/) will pick a port for you and allocate that on your localhost for you to connect to in a web browser.
+## Local Machine Instructions
+In order to run the project on your local machine, you will need to compile and run the project.
+### Front End
+##### Macos/Linux
+The front end can be compiled with `npm run build` for UNIX/POSIX machines.
+##### Windows
+The front end can be compiled with `npm run windows_build` for Windows machines. This will create a folder called `build` in the root directory. Move this folder to `.\src\sparefood\templates\app\build`.
+##### Execution
+Now that the front end has been compiled, it can be started with `npm run start`.
+NOTE: This will only run the front end code and much of the functionality will be missing.
+This is more of for development purposes.
+### Back End
+##### Database Setup
+To run the complete web application, start your postgres database. 
+This will likely be done with [pgAdmin](https://www.pgadmin.org/docs/pgadmin4/6.18/getting_started.html).
+Once you have a database, if necessary you can use django to migrate by running `python manage.py makemigrations` and then `python manage.py migrate`.
+##### Environment Variables
+From there, to run the webservice you will need a file named `.env`.
+In the environment file, you will need to specify your database configuration as well as the django secret key to start the app.
+Once that is done, simply run `python manage.py runserver` and the web app will be hosted at a given port by django!
