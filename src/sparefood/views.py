@@ -70,3 +70,18 @@ def upload_new(request):
             return HttpResponseRedirect('/browse')
         else:
             return Response(serializer.errors, status=400)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def login_check(request):
+    if request.method == "POST":
+        user_info = {
+            'email': '123',
+            'password': '123',
+            'role': 'admin'
+        }
+        snippet = Users.objects.raw('''SELECT COUNT(*) FROM sparefood_users 
+                        WHERE user_email = %(email)s AND user_password = %(password)s AND user_role = %(role)s''',
+                                    user_info)
+        print(snippet.query)
