@@ -8,6 +8,7 @@ import "../components/Theme.css";
 function Welcome() {
     return (
         <div className="page-content">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <Navbar/>
             <body className="Welcome-body">
             <div className="Welcome-information">
