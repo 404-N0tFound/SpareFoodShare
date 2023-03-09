@@ -1,0 +1,72 @@
+.navbar {
+    color: black;
+    min-height: 139px;
+    border-bottom: 3px solid black;
+}
+
+.header {
+    font-size: 26px;
+    margin-left: 10%;
+    margin-right: 10%;
+    align-items: center;
+    clear: both;
+    min-width: 880px;
+}
+
+.links-list {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    float: right;
+    max-height: 139px;
+}
+
+.links-list ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 55px;
+}
+.links-list a {
+    flex-grow: 1;
+    flex-basis: auto;
+    margin: auto;
+    padding: 0 1em;
+    text-align: center;
+    border-left: 3px solid black;
+}
+
+.browse-a {
+    border-right: 3px solid black;
+}
+
+.login-a {
+    border-right: 3px solid black;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.nav-header {
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    transition: 700ms ease;
+    font-variation-settings: "wght" 311;
+    color: black;
+    outline: none;
+    text-align: left;
+}
+
+.nav-header:hover {
+    font-variation-settings: "wght" 582;
+    letter-spacing: 1px;
+}
+
+.website-logo {
+    min-width: 530px;
+    max-width: 530px;
+    float: left;
+}
