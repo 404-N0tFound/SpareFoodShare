@@ -35,15 +35,16 @@
 }
 
 .loginButton, .browseButton {
-    border-radius: 3px;
+    border-radius: 25px;
     height: 30px;
     width: 125px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 18px;
     cursor: pointer;
     margin-right: 10px;
     margin-left: 10px;
-    padding-top: 5px;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -53,17 +54,19 @@
 
 .loginButton {
     border: 1px outset #0b0d0c;
-    background-color: #212624;
-    color: white;
+    background-color: #092B0C;
+    color: #F0FFF2;
 }
 
 .browseButton {
+    font-family: 'Poppins', sans-serif;
     border: 1px outset #0b0d0c;
-    background-color: white;
-    color: black;
+    background-color: #F0FFF2;
+    color: #092B0C;
 }
 
 .loginButton:hover {
+    font-family: 'Poppins', sans-serif;
     background-color: #585858;
     color: white;
     filter: drop-shadow(1px 1px 1px #222);
