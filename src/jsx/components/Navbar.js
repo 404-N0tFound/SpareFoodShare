@@ -13,7 +13,7 @@ class Navbar extends Component {
                     </div>
                     <div className="links-list">
                         <ul>
-                            <a href="./item">Login</a>
+                            <a href="./login" className="login-a">Login</a>
                             <a href="./browse" className="browse-a">Browse</a>
                         </ul>
                     </div>

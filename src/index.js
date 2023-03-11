@@ -4,6 +4,7 @@ import {} from "./index.css";
 import Layout from "./jsx/Layout";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
+import Login from "./jsx/login/Login";
 import reportWebVitals from "./reportWebVitals";
 import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
@@ -16,6 +17,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<Welcome />} />
                         <Route path="browse" element={<Browse />} />
+                        <Route path="login" element={<Login />} />
                         <Route path="item/:item_id" element={<Item />} />
                         <Route path="upload" element={<Upload />} />
                         <Route path="profile" element={<MyProfile />} />
