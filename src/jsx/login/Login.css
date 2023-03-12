@@ -1,9 +1,11 @@
 .page-content {
   text-align: center;
-  margin-bottom: 0px;
 }
 
 .login-body {
-  text-align: center;
-  margin-bottom: 25px;
+
+}
+
+.login-box {
+    margin-top: 100px;
 }
