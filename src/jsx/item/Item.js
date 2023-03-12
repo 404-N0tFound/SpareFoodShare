@@ -5,7 +5,9 @@ import "../components/Theme.css";
 import { useParams } from "react-router-dom";
 //import { useState, useEffect } from 'react';
 function Item(){
-    const { item_id } : { item_id : string } = useParams();
+    /* eslint-disable */
+    const { item_id } = useParams();
+    /* eslint-enable */
 //    const [items, setItems] = useState([]);
 //    const fetchData = () => {
 //        return fetch('../api/items/'+item_id+'/')

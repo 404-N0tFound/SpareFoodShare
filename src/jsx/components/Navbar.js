@@ -1,26 +1,30 @@
-import { Component } from "react";
 import "./Navbar.css";
+import {useContext} from "react";
+import AuthContext from "../AuthContext";
 
-class Navbar extends Component {
-    render() {
-        return (
-        <div className="Navbar">
+function Navbar () {
+    let {user} = useContext(AuthContext)
+    return (
+        <div className="navbar">
                 <div className="header">
                     <div className="website-logo">
-                        <a href='./'>
+                        <a href='../'>
                             <h1 className="nav-header">Spare Food Share</h1>
                         </a>
                     </div>
                     <div className="links-list">
                         <ul>
-                            <a href="./item">Login</a>
-                            <a href="./browse" className="browse-a">Browse</a>
+                            {user ? (
+                                <a href="../profile" className="login-a">My Profile</a>
+                            ) : (
+                                <a href="../login" className="login-a">Login</a>
+                            ) }
+                            <a href="../browse" className="browse-a">Browse</a>
                         </ul>
                     </div>
                 </div>
             </div>
-            );
-    }
+        );
 }
 
 export default Navbar;
