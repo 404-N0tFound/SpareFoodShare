@@ -86,7 +86,6 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(()=> {
-
         if (loading) {
             updateToken()
         }
