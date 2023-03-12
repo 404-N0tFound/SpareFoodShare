@@ -1,3 +1,5 @@
+import django.utils.timezone as timezone
+
 from django.db import models
 
 
@@ -6,7 +8,7 @@ from django.db import models
 class Items(models.Model):
     item_name = models.CharField("item_name", max_length=240)
     item_des = models.TextField("item_des", max_length=240)
-    item_upload_date = models.DateField()
+    item_upload_date = models.DateField(default=timezone.now)
     item_expiration_date = models.DateField()
     item_provider = models.CharField("item_provider", max_length=240)
     item_status = models.CharField("item_status", max_length=240)
@@ -23,5 +25,5 @@ class Users(models.Model):
     user_role = models.CharField("user_role", max_length=240)
     user_phone = models.CharField("user_phone", max_length=240)
     user_email = models.CharField("user_email", max_length=240)
-    user_created_date = models.DateField()
+    user_created_date = models.DateField(default=timezone.now)
     user_isVerified = models.BooleanField(default=False)

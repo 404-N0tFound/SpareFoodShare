@@ -14,11 +14,6 @@ function Upload(){
         <input type="text" name="item_des" id="item_des"/>
         <br/><br/>
         <label>
-          <p>Upload date</p>
-        </label>
-        <input type="date" name="item_upload_date" id="item_upload_date"/>
-        <br/><br/>
-        <label>
           <p>Expiry date</p>
         </label>
         <input type="date" name="item_expiration_date" id="item_expiration_date"/>
