@@ -47,7 +47,7 @@ function Item(){
                 <Navbar />
                 <body className="item-body">
                         <div className="item-content">
-                            <img className="item-pic" src={ require(`../${ img_src }`) } alt = { pic } />
+                            <img className="item-pic" src={ pic } />
                             <div className="item-vl"></div>
                             <div className="item_info">
                                 <h3>Name:  { item.item_name }</h3>
