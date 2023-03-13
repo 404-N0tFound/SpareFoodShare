@@ -7,6 +7,12 @@ function Login() {
     return (
         <div className="page-content">
             <Navbar/>
+            <h1>
+               Sign in or Register
+            </h1>
+              <p>
+                to continue to your Spare Food Share account
+              </p>
             <body className="login-body">
               <div className="login-box">
                   <LoginBox />
