@@ -1,9 +1,10 @@
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .serializers import ItemsSerializer, UsersSerializer
+from .serializers import *
 from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -96,9 +97,16 @@ def upload_new(request):
             return Response(serializer.errors, status=400)
 
 
-def login_check(request):
+@csrf_exempt
+@api_view(['POST'])
+def create_order(request):
     if request.method == "POST":
-        print("success")
-        # snippet = Users.objects.raw('''SELECT COUNT(*) FROM sparefood_users
-        #                 WHERE user_email = %(email)s AND user_password = %(password)s AND user_role = %(role)s''',
-        #                             user_info)
+        print(request.data)
+        serializer = OrdersSerializer(data=request.data)
+        if serializer.is_valid():
+            print("Order Created!")
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

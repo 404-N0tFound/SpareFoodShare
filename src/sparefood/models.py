@@ -29,11 +29,10 @@ class Users(models.Model):
 
 class Orders(models.Model):
     order_initiator = models.ForeignKey(Users, related_name="order_initiator", on_delete=models.CASCADE)
-    order_provider = models.ForeignKey(Users, related_name="order_provider", on_delete=models.CASCADE)
-    order_item_id = models.ForeignKey(Items, related_name="order_item_id", on_delete=models.CASCADE)
-    order_created_date = models.DateField()
+    order_item_id = models.ForeignKey(Items, on_delete=models.CASCADE)
+    order_created_date = models.DateField(auto_now_add=True)
     order_donation_amount = models.IntegerField(default=0)
     order_isCollected = models.BooleanField(default=False)
     order_isDeleted = models.BooleanField(default=False)
-    order_collected_date = models.DateField()
+    order_collected_date = models.DateField(auto_now_add=True)
     order_collection_location = models.CharField("order_location", max_length=240)

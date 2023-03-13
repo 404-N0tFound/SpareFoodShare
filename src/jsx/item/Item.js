@@ -25,12 +25,15 @@ function Item(){
         // if(isAvailable) // check if item is expired or deleted or becomes private, if so, show "page not available", and redirect to Browse page
     if(isLoaded){
         const btn_clicked = async(id) => {
-            console.log(id);
+            console.log(user.username);
+//            let currDate = new Date();
             const orderDetails = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user: user.username, item_id: id})}
-
+                body: JSON.stringify({ order_item_id: id, order_initiator: 1, order_created_date: null,
+                                       order_donation_amount: 0, order_isCollected: false, order_isDeleted: false,
+                                        order_collected_date: null, order_collection_location: 'location'})}
+            console.log(orderDetails)
             let response = await fetch('http://127.0.0.1:8000/api/orders/', orderDetails);
             let data = await response.json()
             if(response.status == 200)
