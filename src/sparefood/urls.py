@@ -1,3 +1,5 @@
+from django.views.generic import TemplateView
+
 from .views import *
 from django.urls import path
 
@@ -16,4 +18,5 @@ urlpatterns = [
     path('api/', getApiRoutes),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/orders/', login_check)
 ]

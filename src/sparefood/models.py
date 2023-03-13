@@ -25,3 +25,15 @@ class Users(models.Model):
     user_email = models.CharField("user_email", max_length=240)
     user_created_date = models.DateField()
     user_isVerified = models.BooleanField(default=False)
+
+
+class Orders(models.Model):
+    order_initiator = models.ForeignKey(Users, related_name="order_initiator", on_delete=models.CASCADE)
+    order_provider = models.ForeignKey(Users, related_name="order_provider", on_delete=models.CASCADE)
+    order_item_id = models.ForeignKey(Items, related_name="order_item_id", on_delete=models.CASCADE)
+    order_created_date = models.DateField()
+    order_donation_amount = models.IntegerField(default=0)
+    order_isCollected = models.BooleanField(default=False)
+    order_isDeleted = models.BooleanField(default=False)
+    order_collected_date = models.DateField()
+    order_collection_location = models.CharField("order_location", max_length=240)
