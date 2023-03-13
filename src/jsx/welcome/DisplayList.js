@@ -21,7 +21,7 @@ class DisplayList extends Component {
                                         <p>Shop for your groceries, meals, and food at lowered rates than in store.</p>
                                     </div>
                                     <div>
-                                        <a className="browseButton" type="button" href="./browse">
+                                        <a className="browseButton" type="button" href="../browse">
                                             Browse
                                         </a>
                                     </div>
@@ -44,7 +44,7 @@ class DisplayList extends Component {
                                         <a className="loginButton" type="button">
                                             Sign up
                                         </a>
-                                        <a className="browseButton" type="button" href="./login">
+                                        <a className="browseButton" type="button" href="../login">
                                             Login
                                         </a>
                                     </div>
