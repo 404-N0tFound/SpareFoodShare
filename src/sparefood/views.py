@@ -14,12 +14,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims
         token['username'] = user.username
-        # ...
-
         return token
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -99,16 +96,9 @@ def upload_new(request):
             return Response(serializer.errors, status=400)
 
 
-@csrf_exempt
-@api_view(['POST'])
 def login_check(request):
     if request.method == "POST":
-        user_info = {
-            'email': '123',
-            'password': '123',
-            'role': 'admin'
-        }
-        snippet = Users.objects.raw('''SELECT COUNT(*) FROM sparefood_users 
-                        WHERE user_email = %(email)s AND user_password = %(password)s AND user_role = %(role)s''',
-                                    user_info)
-        print(snippet.query)
+        print("success")
+        # snippet = Users.objects.raw('''SELECT COUNT(*) FROM sparefood_users
+        #                 WHERE user_email = %(email)s AND user_password = %(password)s AND user_role = %(role)s''',
+        #                             user_info)
