@@ -44,7 +44,7 @@ class DisplayList extends Component {
                                         <a className="loginButton" type="button">
                                             Sign up
                                         </a>
-                                        <a className="browseButton" type="button">
+                                        <a className="browseButton" type="button" href="./login">
                                             Login
                                         </a>
                                     </div>
