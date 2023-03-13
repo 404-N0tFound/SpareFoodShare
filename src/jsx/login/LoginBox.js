@@ -14,32 +14,32 @@ class LoginBox extends Component {
                 <div className="card-3d-wrap">
                   <div className="card-3d-wrapper">
                     <div className="card-front">
-                          <h4 >Sign In</h4>
-                            <div className="form-group">
-                              <input type="email" className="form-style" placeholder="Email" autoComplete="off">
-                              </input>
-                            <div className="form-group">
-                              <input type="password" className="form-style" placeholder="Password" autoComplete="off">
-                              </input>
-                            </div>
-                            <a href="#" className="button">submit</a>
+                      <h4 >Sign In</h4>
+                        <div className="form-group">
+                          <input type="email" className="form-style" placeholder="Email" autoComplete="off">
+                          </input>
                         </div>
-                    <div className="card-back">
-                          <h4>Create a new account</h4>
-                          <div className="form-group">
-                            <input type="text" className="form-style" placeholder="Full Name" autoComplete="off">
-                            </input>
-                          </div>
-                          <div className="form-group">
-                            <input type="email" className="form-style" placeholder="Email" autoComplete="off">
-                            </input>
-                          </div>
-                          <div className="form-group">
-                            <input type="password" className="form-style" placeholder="Password" autoComplete="off">
-                            </input>
-                          </div>
+                        <div className="form-group">
+                          <input type="password" className="form-style" placeholder="Password" autoComplete="off">
+                          </input>
+                        </div>
                           <a href="#" className="button">submit</a>
                     </div>
+                    <div className="card-back">
+                      <h4>Create a new account</h4>
+                        <div className="form-group">
+                          <input type="text" className="form-style" placeholder="Full Name" autoComplete="off">
+                          </input>
+                        </div>
+                        <div className="form-group">
+                          <input type="email" className="form-style" placeholder="Email" autoComplete="off">
+                          </input>
+                        </div>
+                        <div className="form-group">
+                          <input type="password" className="form-style" placeholder="Password" autoComplete="off">
+                          </input>
+                        </div>
+                          <a href="#" className="button">submit</a>
                     </div>
                   </div>
                 </div>
