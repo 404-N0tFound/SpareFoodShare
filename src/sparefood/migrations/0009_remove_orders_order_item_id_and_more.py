@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='orders',
             name='order_item_username',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='order_item_username', to='sparefood.items'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='order_item_username', to='sparefood.items'),
         ),
     ]
