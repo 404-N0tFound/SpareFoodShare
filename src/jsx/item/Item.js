@@ -41,7 +41,7 @@ function Item(){
         console.log(item.item_pic);
         console.log(isLoaded);
 //        const img_src = item.item_pic;
-        const img_src = 'pics/carrot.svg';
+//        const img_src = 'pics/carrot.svg';
         return(
             <div className="page-content">
                 <Navbar />
