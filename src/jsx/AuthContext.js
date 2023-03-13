@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
     let loginUser = async (e) => {
         e.preventDefault()
         if (!e.target.email.value) {
-            alert("Don't forget to enter your email")
+            alert("Don't forget to enter your username")
         } else if (!e.target.password.value) {
             alert("Don't forget to enter your password")
         } else {
