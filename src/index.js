@@ -12,6 +12,7 @@ import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
 import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
+import Register from "./jsx/register/Register";
 import MyProfile from "./jsx/MyProfile/MyProfile";
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
                         />
                         <Route path="item/:item_id" element={<Item />} />
                         <Route path="upload" element={<Upload />} />
+                        <Route path="register" element={<Register />} />
                         <Route path="profile" element={
                                 <PrivateRouteProfile>
                                         <MyProfile />

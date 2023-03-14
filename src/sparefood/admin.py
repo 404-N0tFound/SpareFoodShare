@@ -4,3 +4,4 @@ from .models import *
 
 admin.site.register(Items)
 admin.site.register(Users)
+admin.site.register(VerifyCode)

@@ -1,7 +1,9 @@
+from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.conf import settings
 
 from .serializers import ItemsSerializer, UsersSerializer
 from .models import *
@@ -94,3 +96,22 @@ def upload_new(request):
             return HttpResponseRedirect('/browse')
         else:
             return Response(serializer.errors, status=400)
+
+
+def send_message(email):
+    code = "1234"
+    message = 'Your verification code is ' + code
+    emailBox = []
+    emailBox.append(email)
+    send_mail('SpareFoodShare', message, 'littlesheepdy@gmail.com', emailBox, fail_silently=False)
+
+    return code
+
+
+@csrf_exempt
+@api_view(['POST'])
+def register(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        send_message(email)
+        return HttpResponseRedirect('/')
