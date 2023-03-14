@@ -15,6 +15,7 @@ urlpatterns = [
     path('api/users/', users_list),
     path('api/users/<int:pk>', user_details),
     path('upload_new', upload_new),
+    path('api/register', register),
     path('api/', getApiRoutes),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
