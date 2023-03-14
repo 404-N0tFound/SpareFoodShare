@@ -98,20 +98,19 @@ def upload_new(request):
             return Response(serializer.errors, status=400)
 
 
-def send_message(email):
-    code = "1234"
-    message = 'Your verification code is ' + code
-    emailBox = []
-    emailBox.append(email)
-    send_mail('SpareFoodShare', message, 'littlesheepdy@gmail.com', emailBox, fail_silently=False)
+# def send_message(email):
+#     code = "1234"
+#     message = 'Your verification code is ' + code
+#     emailBox = []
+#     emailBox.append(email)
+#     send_mail('SpareFoodShare', message, 'littlesheepdy@gmail.com', emailBox, fail_silently=False)
+#
+#     return code
 
-    return code
 
-
-@csrf_exempt
-@api_view(['POST'])
-def register(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
-        send_message(email)
-        return HttpResponseRedirect('/')
+# @csrf_exempt
+# @api_view(['POST'])
+# def register(request):
+#     email = request.POST.get('email')
+#     send_message(email)
+#     return HttpResponseRedirect('/')
