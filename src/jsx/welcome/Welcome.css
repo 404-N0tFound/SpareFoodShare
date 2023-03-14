@@ -1,12 +1,9 @@
-.Welcome {
-  background-color: #e3fbe9;
-  text-align: center;
-  padding-left: 10%;
-  padding-right: 10%;
-  min-width: 1100px;
-}
-
 .Welcome-body {
+    text-align: center;
+    padding-left: 10%;
+    padding-right: 10%;
+    min-width: 1100px;
+
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -26,38 +23,7 @@
     margin-right: auto;
 }
 
-.loginButton {
-    border-radius: 2px;
-    border: 1px outset #0b0d0c;
-    background-color: #212624;
-    height: 35px;
-    width: 125px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.loginButton:hover {
-    background-color: blue;
-    color: white;
-}
-
-.browseButton {
-    border-radius: 2px;
-    border: 1px outset #0b0d0c;
-    background-color: white;
-    height: 35px;
-    width: 125px;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
-.browseButton:hover {
-    background-color: blue;
-    color: white;
+.Welcome-display ul{
+	width: 100%;
+    padding-left: 0;
 }

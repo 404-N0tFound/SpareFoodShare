@@ -10,8 +10,6 @@
 
 # production
 /src/sparefood/templates/app/build
-/src/build
-/src/sparefood/templates/app/build
 
 # misc
 .DS_Store

@@ -1,0 +1,21 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    /*background-color: aquamarine;*/
+}
+
+
+.footer {
+    position: relative;
+    width: 100%;
+    background: #C6F8DA;
+    min-height: 100px;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
