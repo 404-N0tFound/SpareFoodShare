@@ -12,6 +12,7 @@ function Item(){
     const { item_id }  = useParams();
     const [item, setItem] = useState([]);
     const [isLoaded, setIsLoaded] = useState(true);
+    const [message, setMessage] = useState('');
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
 
@@ -41,6 +42,9 @@ function Item(){
             let path = './';
             navigate(path);
         }
+        const handleDonations = event =>{
+            setMessage(event.target.value);
+        };
         console.log(item.item_pic);
         console.log(isLoaded);
 //        const img_src = item.item_pic;
@@ -60,7 +64,7 @@ function Item(){
                                 <p>Upload Date:  { item.item_upload_date }</p>
                                 <p>Expiration Date:  { item.item_expiration_date }</p>
                                 <p>Location:  { item.item_location }</p>
-                                <p>Donations:<input type="text" /></p>
+                                <p>Donations:<input type="number" onChange={ handleDonations } placeholder="0~10" min="0" max="10"/>  You made a ￡{ message } donation:)</p>
                             </div>
                             <button className="item-collect-btn" onClick={() => btn_clicked( item_id )}>Collect</button>
                         </div>
