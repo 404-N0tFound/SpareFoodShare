@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/footer";
 import pic from "../pics/test.jpg"
 import {useNavigate} from "react-router-dom";
 import carrot from "../pics/carrot.svg";
@@ -76,6 +77,7 @@ function Browse(){
                     </ul>
                 </div>
             </body>
+            <Footer />
         </div>
     );
 }
