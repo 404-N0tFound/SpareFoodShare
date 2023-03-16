@@ -53,19 +53,17 @@ export const AuthProvider = ({children}) => {
         } else if (!e.target.password.value) {
             alert("Don't forget to enter your password")
         } else {
-            let response = await fetch('http://127.0.0.1:8000/api/token/', {
+            let response = await fetch('http://127.0.0.1:8000/api/register/', {
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({'email':e.target.email.value, 'password':e.target.password.value})
+                body:JSON.stringify({'full_name':e.target.name.value, 'email':e.target.email.value, 'password':e.target.password.value})
             })
             let data = await response.json()
             if (response.status === 200) {
-                setAuthTokens(data)
-                setUser(jwtDecode(data.access))
-                localStorage.setItem('authTokens', JSON.stringify(data))
-                navigator('../profile')
+                navigator('../login')
+                alert('Account created!')
             } else if (response.status === 401) {
                 alert('Invalid email or password.')
             } else {
@@ -112,7 +110,8 @@ export const AuthProvider = ({children}) => {
         user:user,
         authTokens:authTokens,
         loginUser:loginUser,
-        logoutUser:logoutUser
+        logoutUser:logoutUser,
+        createUser:createUser
     }
 
     useEffect(()=> {

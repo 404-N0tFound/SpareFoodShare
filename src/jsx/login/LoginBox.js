@@ -6,7 +6,7 @@ import AuthContext from "../AuthContext";
 import Footer from "../components/footer";
 
 function LoginBox () {
-    const {loginUser} = useContext(AuthContext)
+    const {loginUser, createUser} = useContext(AuthContext)
 
     return (
         <div className="section">
@@ -31,22 +31,24 @@ function LoginBox () {
                             </div>
                             <div className="card-back">
                                 <h4>Create a new account</h4>
-                                <div className="form-group">
-                                    <input type="text" className="form-style" placeholder="Full Name"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <div className="form-group">
-                                    <input type="email" className="form-style" placeholder="Email"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <div className="form-group">
-                                    <input type="password" className="form-style" placeholder="Password"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <a href="#" className="button">submit</a>
+                                <form onSubmit={createUser}>
+                                    <div className="form-group">
+                                        <input name="name" type="text" className="form-style" placeholder="Full Name"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <div className="form-group">
+                                        <input name="email" type="email" className="form-style" placeholder="Email"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <div className="form-group">
+                                        <input name="password" type="password" className="form-style" placeholder="Password"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <button className="button">submit</button>
+                                </form>
                             </div>
                         </div>
                     </div>
