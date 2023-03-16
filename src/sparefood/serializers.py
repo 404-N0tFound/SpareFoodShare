@@ -14,5 +14,21 @@ class ItemsSerializer(serializers.ModelSerializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'user_name', 'user_account', 'user_passwd', 'user_role',
-                  'user_phone', 'user_email', 'user_created_date', 'user_isVerified']
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'last_login', 'date_joined', 'is_admin',
+                  'is_active', 'is_staff', 'is_super_user']
+
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def save(self):
+        user = User(email=self.validated_data['email'])
+        password = self.validated_data['password']
+        user.set_password(password)
+        user.save()
+        return user
