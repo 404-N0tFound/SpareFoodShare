@@ -44,6 +44,36 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    let createUser = async (e) => {
+        e.preventDefault()
+        if (!e.target.name.value) {
+            alert("Please enter a name")
+        } else if (!e.target.email.value) {
+            alert("Don't forget to enter your email")
+        } else if (!e.target.password.value) {
+            alert("Don't forget to enter your password")
+        } else {
+            let response = await fetch('http://127.0.0.1:8000/api/token/', {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({'email':e.target.email.value, 'password':e.target.password.value})
+            })
+            let data = await response.json()
+            if (response.status === 200) {
+                setAuthTokens(data)
+                setUser(jwtDecode(data.access))
+                localStorage.setItem('authTokens', JSON.stringify(data))
+                navigator('../profile')
+            } else if (response.status === 401) {
+                alert('Invalid email or password.')
+            } else {
+                alert('Auth service failed! Is it maybe down?')
+            }
+        }
+    }
+
     let logoutUser = () => {
         setAuthTokens(null)
         setUser(null)

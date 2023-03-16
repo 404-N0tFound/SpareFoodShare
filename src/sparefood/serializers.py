@@ -14,7 +14,7 @@ class ItemsSerializer(serializers.ModelSerializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'last_login', 'date_joined', 'is_admin',
+        fields = ['id', 'email', 'full_name', 'phone_number', 'last_login', 'date_joined', 'is_admin',
                   'is_active', 'is_staff', 'is_super_user']
 
 

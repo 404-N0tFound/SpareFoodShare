@@ -49,8 +49,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(verbose_name="email", max_length=120, unique=True)
-    first_name = models.CharField(verbose_name="first_name", max_length=240)
-    last_name = models.CharField(verbose_name="last_name", max_length=240)
+    full_name = models.CharField(verbose_name="full_name", max_length=240)
     phone_number = PhoneNumberField(verbose_name="phone_number", unique=False)
 
     # The following fields are required for every custom User model
