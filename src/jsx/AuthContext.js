@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
     let loginUser = async (e) => {
         e.preventDefault()
         if (!e.target.email.value) {
-            alert("Don't forget to enter your username")
+            alert("Don't forget to enter your email")
         } else if (!e.target.password.value) {
             alert("Don't forget to enter your password")
         } else {
@@ -28,7 +28,7 @@ export const AuthProvider = ({children}) => {
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({'username':e.target.email.value, 'password':e.target.password.value})
+                body:JSON.stringify({'email':e.target.email.value, 'password':e.target.password.value})
             })
             let data = await response.json()
             if (response.status === 200) {
@@ -37,7 +37,7 @@ export const AuthProvider = ({children}) => {
                 localStorage.setItem('authTokens', JSON.stringify(data))
                 navigator('../profile')
             } else if (response.status === 401) {
-                alert('Invalid username or password.')
+                alert('Invalid email or password.')
             } else {
                 alert('Auth service failed! Is it maybe down?')
             }
