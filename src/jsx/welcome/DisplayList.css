@@ -27,10 +27,6 @@
 
 .display-item-text {
     text-align: center;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 100%);
     max-width: 100%;
 }
 

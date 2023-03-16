@@ -1,5 +1,6 @@
 import "./Welcome.css";
 import Navbar from "../components/Navbar";
+import Footer from "../components/footer";
 import DisplayList from "./DisplayList";
 import FruitBasket from "./FoodBasket";
 import {Fade} from "react-awesome-reveal";
@@ -36,6 +37,7 @@ function Welcome() {
                 <DisplayList />
             </div>
             </body>
+            <Footer />
         </div>
     );
 }
