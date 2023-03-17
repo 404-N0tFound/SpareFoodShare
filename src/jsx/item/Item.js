@@ -40,8 +40,6 @@ function Item(){
         const handleDonations = event =>{
             setMessage(event.target.value);
         };
-//        const img_src = item.item_pic;
-//        const img_src = 'pics/carrot.svg';
         return(
             <div className="page-content">
                 <Navbar />
