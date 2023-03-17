@@ -7,7 +7,7 @@ test_py:
     variables:
       PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
       SECRET_KEY: 'foobar'
-      FRONT_END_LOCATION: './sparefood/templates/app/build'
+      FRONT_END_LOCATION: 'sparefood/templates/app/build'
       DB_NAME: 'foo'
       DB_USER: 'foo'
       DB_PASSWORD: 'foo'
