@@ -22,7 +22,8 @@ test_py:
       - pip install -r requirements-dev.txt
       # TODO look into why the settings are not getting imported into the egg module
       # - python setup.py test
-      - python -m flake8 --max-line-length=120 --extend-ignore=F403,F405 src/ setup.py
+      - python -m flake8 --max-line-length=120 --extend-ignore=F403,F405 src/ setup.py --exclude="migrations"
+      - python ./src/manage.py test
 
 test_js:
   image: node:latest
