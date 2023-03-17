@@ -1,4 +1,5 @@
 test_py:
+    tags: [ saas-linux-large-amd64 ]
     image: python:latest
 
     services:
@@ -37,6 +38,7 @@ test_py:
       - python ./src/manage.py test
 
 test_js:
+  tags: [ saas-linux-medium-amd64 ]
   image: node:latest
 
   services:
