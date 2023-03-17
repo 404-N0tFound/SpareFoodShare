@@ -29,7 +29,6 @@ function Browse(){
          alert('Redirect to ' + id + '!');
     }
     if(isLoaded){
-        console.log(items)
         return (
             <div className="page-content">
                 <Navbar />
