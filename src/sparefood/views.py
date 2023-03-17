@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .serializers import ItemsSerializer, UsersSerializer, RegistrationSerializer
+from .serializers import *
 from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -55,9 +55,6 @@ def items_list(request):
 
 @csrf_exempt
 def items_details(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         snippet = Item.objects.get(pk=pk)
     except Item.DoesNotExist:
@@ -80,9 +77,6 @@ def users_list(request):
 
 @csrf_exempt
 def user_details(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         snippet = User.objects.get(pk=pk)
     except User.DoesNotExist:
@@ -106,3 +100,16 @@ def upload_new(request):
             return HttpResponseRedirect('/browse')
         else:
             return Response(serializer.errors, status=400)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def create_order(request):
+    if request.method == "POST":
+        print(request.data)
+        serializer = OrdersSerializer(data=request.data)
+        if serializer.is_valid():
+            print("Order Created!")
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Item
-from .models import User
+from .models import *
 
 
 class ItemsSerializer(serializers.ModelSerializer):
@@ -9,6 +8,14 @@ class ItemsSerializer(serializers.ModelSerializer):
         fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date',
                   'item_provider', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired',
                   'item_pic']
+
+
+class OrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'order_initiator', 'order_item_id', 'order_created_date',
+                  'order_donation_amount', 'order_isCollected', 'order_isDeleted', 'order_collected_date',
+                  'order_collection_location']
 
 
 class UsersSerializer(serializers.ModelSerializer):

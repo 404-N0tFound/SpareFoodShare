@@ -3,7 +3,7 @@ import "../components/Theme.css";
 
 import {useContext} from "react";
 import AuthContext from "../AuthContext";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 
 function LoginBox () {
     const {loginUser, createUser} = useContext(AuthContext)
