@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import pic from "../pics/test.jpg"
 import {useNavigate} from "react-router-dom";
 import apple from "../pics/apple.svg";
+import Footer from "../components/Footer";
 
 function Browse(){
     const [items, setItems] = useState([]);
@@ -76,6 +77,7 @@ function Browse(){
                         </ul>
                     </div>
                 </body>
+                <Footer />
             </div>
         );
     }
