@@ -20,12 +20,8 @@ Alternatively, you can choose to install each module by hand and all versioning 
 ## Local Machine Instructions
 In order to run the project on your local machine, you will need to compile and run the project.
 ### Front End
-##### Macos/Linux
-The front end can be compiled with `npm run build` for UNIX/POSIX machines.
-##### Windows
-The front end can be compiled with `npm run windows_build` for Windows machines. This will create a folder called `build` in the root directory. Move this folder to `.\src\sparefood\templates\app\build`.
 ##### Execution
-Now that the front end has been compiled, it can be started with `npm run start`.
+To run a live copy of the front end, it can be started with `npm run start`.
 NOTE: This will only run the front end code and much of the functionality will be missing.
 This is more of for development purposes.
 ### Back End
