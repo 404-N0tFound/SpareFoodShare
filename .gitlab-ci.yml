@@ -1,5 +1,4 @@
 test_py:
-    tags: [ saas-linux-large-amd64 ]
     image: python:latest
 
     services:
@@ -38,7 +37,9 @@ test_py:
       - python ./src/manage.py test
 
 test_js:
-  tags: [ saas-linux-medium-amd64 ]
+  before_script:
+    - docker image prune --filter label=stage=intermediate
+
   image: node:latest
 
   services:
