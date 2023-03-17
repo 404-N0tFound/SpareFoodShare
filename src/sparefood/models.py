@@ -51,6 +51,9 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="email", max_length=120, unique=True)
     full_name = models.CharField(verbose_name="full_name", max_length=240)
     phone_number = PhoneNumberField(verbose_name="phone_number", unique=False)
+    # For whatever reason, django wants to create a username field from the inherited abstract user,
+    # so we make it null with this field to solve that issue
+    username = models.CharField(null=True, max_length=240)
 
     # The following fields are required for every custom User model
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)

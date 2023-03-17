@@ -21,7 +21,7 @@ function LoginBox () {
                                 <form onSubmit={loginUser}>
                                     <h4>Sign In</h4>
                                     <div className="form-group">
-                                        <input name="email" className="form-style" placeholder="Email" autoComplete="off" />
+                                        <input name="email" type="email" className="form-style" placeholder="Email" autoComplete="off" />
                                     </div>
                                     <div className="form-group">
                                         <input name="password" type="password" className="form-style" placeholder="Password" autoComplete="off" />

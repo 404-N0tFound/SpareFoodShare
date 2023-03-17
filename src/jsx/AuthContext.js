@@ -61,8 +61,8 @@ export const AuthProvider = ({children}) => {
                 body:JSON.stringify({'full_name':e.target.name.value, 'email':e.target.email.value, 'password':e.target.password.value})
             })
             let data = await response.json()
-            if (response.status === 200) {
-                navigator('../login')
+            if (response.status === 200 || response.status === 201) {
+                navigator(0)
                 alert('Account created!')
             } else if (response.status === 401) {
                 alert('Invalid email or password.')

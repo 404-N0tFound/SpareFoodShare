@@ -47,7 +47,7 @@ def getApiRoutes(request):
 @csrf_exempt
 def items_list(request):
     if request.method == 'GET':
-        snippets = Items.objects.all()
+        snippets = Item.objects.all()
         print(snippets.query)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -59,8 +59,8 @@ def items_details(request, pk):
     Retrieve, update or delete a code snippet.
     """
     try:
-        snippet = Items.objects.get(pk=pk)
-    except Items.DoesNotExist:
+        snippet = Item.objects.get(pk=pk)
+    except Item.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
@@ -72,7 +72,7 @@ def items_details(request, pk):
 @csrf_exempt
 def users_list(request):
     if request.method == 'GET':
-        snippets = Users.objects.all()
+        snippets = User.objects.all()
         print(snippets.query)
         serializer = UsersSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -84,8 +84,8 @@ def user_details(request, pk):
     Retrieve, update or delete a code snippet.
     """
     try:
-        snippet = Users.objects.get(pk=pk)
-    except Users.DoesNotExist:
+        snippet = User.objects.get(pk=pk)
+    except User.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
