@@ -24,8 +24,9 @@ function Browse(){
     let navigate = useNavigate();
 
     const btn_clicked = (id) => {
-         let path = '../item/' + id;
-         navigate(path);
+//         let path = '../item/' + id;
+         navigate('./');
+         alert('Redirect to ' + id + '!');
     }
     if(isLoaded){
         console.log(items)
