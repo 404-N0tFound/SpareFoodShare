@@ -1,8 +1,17 @@
 test_py:
     image: python:latest
 
+    services:
+      - postgres:latest
+
     variables:
       PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+      SECRET_KEY: 'foobar'
+      FRONT_END_LOCATION: 'sparefood/templates/app/build'
+      DB_NAME: 'foo'
+      DB_USER: 'foo'
+      DB_PASSWORD: 'foo'
+      DB_PORT: '5432'
 
     # Pip's cache doesn't store the python packages
     # https://pip.pypa.io/en/stable/topics/caching/
@@ -16,13 +25,16 @@ test_py:
       - pip install virtualenv
       - virtualenv venv
       - source venv/bin/activate
+      - chmod +x ./setup_env.sh
+      - ./setup_env.sh
 
     script:
       - python -m pip install --upgrade pip
       - pip install -r requirements-dev.txt
       # TODO look into why the settings are not getting imported into the egg module
       # - python setup.py test
-      - python -m flake8 --max-line-length=120 --extend-ignore=F403,F405 src/ setup.py
+      - python -m flake8 --max-line-length=120 --extend-ignore=F403,F405 src/ setup.py --exclude="migrations"
+      - python ./src/manage.py test
 
 test_js:
   image: node:latest

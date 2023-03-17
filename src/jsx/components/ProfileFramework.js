@@ -1,6 +1,5 @@
 import {useContext} from "react";
 import "./ProfileFramework.css";
-import Navbar from "./Navbar";
 import AuthContext from "../AuthContext";
 
 function ProfileFramework () {
@@ -8,7 +7,6 @@ function ProfileFramework () {
 
     return (
         <div className="page-content">
-            <Navbar />
             <div className="sidebar">
                 <div>
                     <a href='../profile'>
