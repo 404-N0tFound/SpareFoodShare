@@ -106,10 +106,8 @@ def upload_new(request):
 @api_view(['POST'])
 def create_order(request):
     if request.method == "POST":
-        print(request.data)
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
-            print("Order Created!")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

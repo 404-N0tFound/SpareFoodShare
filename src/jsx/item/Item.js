@@ -7,12 +7,13 @@ import { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../AuthContext";
+import Footer from "../components/Footer";
 
 function Item(){
     const { item_id }  = useParams();
     const [item, setItem] = useState([]);
     const [isLoaded, setIsLoaded] = useState(true);
-    const [message, setMessage] = useState('');
+    const [donation, setDonation] = useState(0);
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
 
@@ -29,16 +30,15 @@ function Item(){
             const orderDetails = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order_item_id: id, order_initiator: 1, order_created_date: null,
-                                       order_donation_amount: 0, order_isCollected: false, order_isDeleted: false,
-                                        order_collected_date: null, order_collection_location: 'location'})}
+                body: JSON.stringify({ order_item_id: id, order_initiator: user.email,
+                                       order_donation_amount: donation, order_collection_location: 'location'})}
             let response = await fetch('http://127.0.0.1:8000/api/orders/', orderDetails);
-            let data = await response.json()
+            await response.json()
             let path = './';
             navigate(path);
         }
         const handleDonations = event =>{
-            setMessage(event.target.value);
+            setDonation(event.target.value);
         };
         return(
             <div className="page-content">
@@ -49,18 +49,19 @@ function Item(){
                             <div className="item-vl"></div>
                             <div className="item_info">
                                 <h3>Name:  { item.item_name }</h3>
-                                <p>ID:  { item_id }</p>
-                                <p>Description:  { item.item_des }</p><br />
-                                <p>Provider: { item.item_provider }</p>
-                                <p>Upload Date:  { item.item_upload_date }</p>
-                                <p>Expiration Date:  { item.item_expiration_date }</p>
-                                <p>Location:  { item.item_location }</p>
-                                <p>Donations:<input type="number" onChange={ handleDonations } placeholder="0~10" min="0" max="10"/>  You made a ￡{ message } donation:)</p>
+                                <p><b>ID:</b>  { item_id }</p>
+                                <p><b>Description:</b>  { item.item_des }</p><br />
+                                <p><b>Provider:</b> { item.item_provider }</p>
+                                <p><b>Upload Date:</b>  { item.item_upload_date }</p>
+                                <p><b>Expiration Date:</b>  { item.item_expiration_date }</p>
+                                <p><b>Location:</b>  { item.item_location }</p>
+                                <p><b>Donations:</b><input type="number" onChange={ handleDonations } placeholder="0~10" min="0" max="10"/>  You made a ￡{ donation } donation:)</p>
                             </div>
                             <button className="item-collect-btn" onClick={() => btn_clicked( item_id )}>Collect</button>
                         </div>
                 </body>
                 <hr />
+                <Footer />
             </div>
         );
     }
