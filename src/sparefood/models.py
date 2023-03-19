@@ -2,14 +2,11 @@ import uuid
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db.models.functions import datetime
 
 from phonenumber_field.modelfields import PhoneNumberField
 
 from django.db import models
 
-
-# Items details
 
 
 class CustomUserManager(BaseUserManager):
@@ -75,18 +72,12 @@ class Item(models.Model):
     item_provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
     item_isPrivate = models.BooleanField(default=False)
     item_isDeleted = models.BooleanField(default=False)
+    item_isExpired = models.BooleanField(default=False)
     item_location = models.CharField(verbose_name="item_location", max_length=240)
     item_pic = models.CharField(verbose_name="item_pic", max_length=240, default="PATH")
     item_shared_times = models.PositiveIntegerField()
     item_last_updated = models.DateTimeField(auto_now=True)
 
-    @property
-    def item_isExpired(self):
-        """not expired - False, expired - True"""
-        if datetime.now < self.item_expiration_date:
-            return False
-        else:
-            return True
 
 
 class Order(models.Model):

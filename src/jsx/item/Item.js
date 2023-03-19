@@ -34,8 +34,7 @@ function Item(){
                                        order_donation_amount: donation, order_collection_location: 'location'})}
             let response = await fetch('http://127.0.0.1:8000/api/orders/', orderDetails);
             await response.json()
-            let path = './';
-            navigate(path);
+            navigate('../');
         }
         const handleDonations = event =>{
             setDonation(event.target.value);
