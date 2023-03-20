@@ -43,7 +43,6 @@ def getApiRoutes(request):
     return Response(routes)
 
 
-# SELECT
 @csrf_exempt
 def items_list(request):
     if request.method == 'GET':
@@ -62,7 +61,6 @@ def items_details(request, pk):
 
     if request.method == 'GET':
         serializer = ItemsSerializer(snippet)
-        print(serializer.data)
         return JsonResponse(serializer.data)
 
 
@@ -70,7 +68,6 @@ def items_details(request, pk):
 def users_list(request):
     if request.method == 'GET':
         snippets = User.objects.all()
-        print(snippets.query)
         serializer = UsersSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
@@ -111,3 +108,23 @@ def create_order(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def my_orders_list(request):
+    if request.method == 'POST':
+        user = request.data['user']
+        snippets = Order.objects.filter(order_initiator=user)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@csrf_exempt
+@api_view(['POST'])
+def my_orders_check(request):
+    if request.method == 'POST':
+        user = request.data['user']
+        item = request.data['item']
+        snippets = Order.objects.filter(order_initiator=user, order_item_id_id = item)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
