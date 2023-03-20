@@ -19,7 +19,7 @@ function ProfileFramework () {
                     </a>
                 </div>
                 <div>
-                    <a href='../orders'>
+                    <a href='../profile/orders'>
                         Orders
                     </a>
                 </div>

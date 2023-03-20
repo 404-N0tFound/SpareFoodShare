@@ -40,7 +40,7 @@ export default function App() {
                                 </PrivateRouteProfile>
                             }
                         />
-                        <Route path="orders" element={
+                        <Route path="profile/orders" element={
                                 <PrivateRouteProfile>
                                         <MyOrders />
                                 </PrivateRouteProfile>
