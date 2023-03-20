@@ -4,16 +4,15 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 
 from phonenumber_field.modelfields import PhoneNumberField
+import django.utils.timezone as timezone
 
 from django.db import models
 
 
-# Items details
-
 class Item(models.Model):
     item_name = models.CharField("item_name", max_length=240)
     item_des = models.TextField("item_des", max_length=240)
-    item_upload_date = models.DateField()
+    item_upload_date = models.DateField(default=timezone.now)
     item_expiration_date = models.DateField()
     item_provider = models.CharField("item_provider", max_length=240)
     item_status = models.CharField("item_status", max_length=240)

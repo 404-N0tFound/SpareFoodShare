@@ -37,9 +37,6 @@ test_py:
       - python ./src/manage.py test
 
 test_js:
-  before_script:
-    - docker image prune --filter label=stage=intermediate
-
   image: node:latest
 
   services:
