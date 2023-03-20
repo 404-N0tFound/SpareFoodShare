@@ -17,6 +17,7 @@ function Item(){
     const [donation, setDonation] = useState(0);
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
+    let button;
 
     const getItemData = () => {
         return fetch('http://127.0.0.1:8000/api/items/'+item_id+'/')
@@ -41,7 +42,6 @@ function Item(){
     },[])
 
     if(isLoaded){
-        let button;
         if(item.item_isPrivate || item.item_isExpired || item.item_isDeleted){
             alert("Sorry, this item is not available anymore!")
             navigate('../browse')
@@ -62,7 +62,7 @@ function Item(){
             };
 
             if(isDuplicate){
-                button = <button disabled className="item-collected-btn" onClick={() => btn_clicked( item_id )}>Collected</button>
+                button = <button disabled className="item-collected-btn">Collected</button>
             }else
                 button = <button className="item-collect-btn" onClick={() => btn_clicked( item_id )}>Collect</button>
 

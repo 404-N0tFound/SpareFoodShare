@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
 
 function Browse(){
+    let navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const fetchData = () => {
@@ -19,8 +20,6 @@ function Browse(){
     useEffect(() => {
      fetchData()
     },[])
-
-    let navigate = useNavigate();
 
     const btn_clicked = (id) => {
          let path = '../item/' + id;

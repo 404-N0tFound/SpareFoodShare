@@ -47,7 +47,6 @@ def getApiRoutes(request):
 def items_list(request):
     if request.method == 'GET':
         snippets = Item.objects.all()
-        print(snippets.query)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
