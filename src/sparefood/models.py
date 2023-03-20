@@ -8,7 +8,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db import models
 
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -77,7 +76,6 @@ class Item(models.Model):
     item_pic = models.CharField(verbose_name="item_pic", max_length=240, default="PATH")
     item_shared_times = models.PositiveIntegerField()
     item_last_updated = models.DateTimeField(auto_now=True)
-
 
 
 class Order(models.Model):
