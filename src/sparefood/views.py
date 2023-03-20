@@ -119,12 +119,13 @@ def my_orders_list(request):
         serializer = OrdersSerializer(snippets, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @csrf_exempt
 @api_view(['POST'])
 def my_orders_check(request):
     if request.method == 'POST':
         user = request.data['user']
         item = request.data['item']
-        snippets = Order.objects.filter(order_initiator=user, order_item_id_id = item)
+        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
         serializer = OrdersSerializer(snippets, many=True)
         return Response(len(serializer.data), status=status.HTTP_201_CREATED)
