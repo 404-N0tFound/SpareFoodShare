@@ -65,7 +65,7 @@ class User(AbstractUser):
 
 class Item(models.Model):
     item_name = models.CharField(verbose_name="item_name", max_length=120)
-    item_des = models.TextField(verbose_name="item_des", max_length=240)
+    item_des = models.TextField(verbose_name="item_des", max_length=10000)
     item_upload_date = models.DateTimeField(auto_now_add=True)
     item_expiration_date = models.DateTimeField(auto_now_add=True)
     item_provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')

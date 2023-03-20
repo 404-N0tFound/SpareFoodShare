@@ -43,7 +43,6 @@ def getApiRoutes(request):
     return Response(routes)
 
 
-@csrf_exempt
 def items_list(request):
     if request.method == 'GET':
         snippets = Item.objects.all()
@@ -51,7 +50,6 @@ def items_list(request):
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
 def items_details(request, pk):
     try:
         snippet = Item.objects.get(pk=pk)
@@ -63,7 +61,6 @@ def items_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-@csrf_exempt
 def users_list(request):
     if request.method == 'GET':
         snippets = User.objects.all()
@@ -71,7 +68,6 @@ def users_list(request):
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
 def user_details(request, pk):
     try:
         snippet = User.objects.get(pk=pk)
@@ -83,7 +79,6 @@ def user_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def upload_new(request):
     """
@@ -98,7 +93,6 @@ def upload_new(request):
             return Response(serializer.errors, status=400)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def create_order(request):
     if request.method == "POST":
@@ -109,7 +103,6 @@ def create_order(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def my_orders_list(request):
     if request.method == 'POST':
@@ -119,7 +112,6 @@ def my_orders_list(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def my_orders_check(request):
     if request.method == 'POST':
