@@ -26,6 +26,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['email'] = user.email
+        token['full_name'] = user.full_name
         return token
 
 
@@ -43,6 +44,9 @@ def getApiRoutes(request):
 
 
 def items_list(request):
+    """
+        Method to get all items' details
+    """
     if request.method == 'GET':
         snippets = Item.objects.all()
         serializer = ItemsSerializer(snippets, many=True)
@@ -50,6 +54,9 @@ def items_list(request):
 
 
 def items_details(request, pk):
+    """
+        Method to get an item's details
+    """
     try:
         snippet = Item.objects.get(pk=pk)
     except Item.DoesNotExist:
@@ -61,6 +68,9 @@ def items_details(request, pk):
 
 
 def users_list(request):
+    """
+        Method to get all users' details
+    """
     if request.method == 'GET':
         snippets = User.objects.all()
         serializer = UsersSerializer(snippets, many=True)
@@ -68,6 +78,9 @@ def users_list(request):
 
 
 def user_details(request, pk):
+    """
+        Method to get a user's details
+    """
     try:
         snippet = User.objects.get(pk=pk)
     except User.DoesNotExist:
@@ -94,6 +107,9 @@ def upload_new(request):
 
 @api_view(['POST'])
 def create_order(request):
+    """
+        Method to create an order
+    """
     if request.method == "POST":
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
@@ -104,6 +120,9 @@ def create_order(request):
 
 @api_view(['POST'])
 def my_orders_list(request):
+    """
+        Method to get the orders of current user
+    """
     if request.method == 'POST':
         user = request.data['user']
         snippets = Order.objects.filter(order_initiator=user)
@@ -113,6 +132,9 @@ def my_orders_list(request):
 
 @api_view(['POST'])
 def my_orders_check(request):
+    """
+        Method to check duplicate order
+    """
     if request.method == 'POST':
         user = request.data['user']
         item = request.data['item']

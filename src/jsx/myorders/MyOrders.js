@@ -12,7 +12,7 @@ function MyOrders() {
     useEffect(() => {
         const request = {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json','Authorization': user},
                     body: JSON.stringify({ user: user.email })}
 
         fetch('http://127.0.0.1:8000/api/orders/', request)
