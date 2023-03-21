@@ -1,0 +1,95 @@
+<!--
+We are going to keep this file for now since it will eventually get converted into a react component for the user information page.
+A lot of this is test data but will get used and styled accordingly as time goes on to the personal details page.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Details</title>
+
+    <link rel="stylesheet" href="../components/PersonalDetails.css">
+
+
+</head>
+
+
+<body>
+<div class="w">
+    <header>
+        <div class="pic">
+
+<!--                <img src="images/logo.png" alt="">-->
+
+        </div>
+    </header>
+
+    <div class="Personal_Details">
+
+        <div class="reg_form">
+            <form action="">
+                <h2>Personal Details </h2>
+                <ul>
+                    <li>
+<!--                        <label id="username" >Name：</label>-->
+<!--                        <input type="text" class="inp">-->
+                        <label for="username" >Name：</label>
+                        <input type="text" class="inp"  name="username"  id="username" placeholder=""/>
+
+                    </li>
+                    <li>
+                        <label for = "phone_number">Phone&nbsp;&nbsp;number：</label>
+                        <!--                        <input type="text" class="inp">-->
+                        <input type="text" class="inp" name="phone_number"  id="phone_number" placeholder="+44"/>
+
+                    </li>
+                    <li>
+                        <label for = "email">Email：</label>
+                        <!--                        <input type="text" class="inp">-->
+                        <input type="email" class="inp"  name="email"  id="email" placeholder=""/>
+
+                    </li>
+                    <li>
+                        <label for = "password">Password：</label>
+                        <!--                        <input type="text" class="inp">-->
+                        <input type="password" class="inp"  name="password"  id="password" placeholder=""/>
+
+                    </li>
+                    <li>
+                        <label  for = "location">Location：</label>
+                        <!--                        <input type="text" class="inp">-->
+                        <input type="text" class="inp" readonly="readonly" name="location"  id="location" placeholder=""/>
+
+                    </li>
+
+
+                    <li>
+                        <label  for = "description">My&nbsp;&nbsp;Introduction：</label>
+                        <!--                        <input type="text" class="inp">-->
+                        <textarea type="text" class="inp"  name="description" id="description" placeholder=" Introduce Yourself"> </textarea>
+
+                    </li>
+
+                </ul>
+
+
+                <div>
+                    <input class="button" type="submit" value =' Save Changes'></input>
+<!--                    <input type = "submit">-->
+                </div>
+            </form>
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

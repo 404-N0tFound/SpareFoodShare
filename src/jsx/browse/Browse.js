@@ -3,6 +3,9 @@ import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/footer";
+
+import PersonalDetails from "../components/PersonalDetails";
+
 import pic from "../pics/test.jpg"
 import {useNavigate} from "react-router-dom";
 import carrot from "../pics/carrot.svg";
@@ -28,8 +31,9 @@ function Browse(){
     navigate(path);
 }
     return (
-        <div className="page-content">
+        <div className="pag-content">
             <Navbar />
+
             <body className="listings-body">
                 <div className="listings-content">
                     <ul>
@@ -77,6 +81,7 @@ function Browse(){
                     </ul>
                 </div>
             </body>
+            <div> <PersonalDetails/></div>
             <Footer />
         </div>
     );
