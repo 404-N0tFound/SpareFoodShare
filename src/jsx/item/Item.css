@@ -12,17 +12,21 @@
  .item-content .item_info h3{
 	font-size: 45px;
 	color: black;
-	margin-top: 5%;
+	margin-top: 3%;
 
 }
 .item-content .item_info p, h3{
 	margin-left: 50%;
+}
+b{
+    margin-left: 10%;
 }
 .item-content .item_info p{
     font-size: 25px;
 	line-height: 25px;
 	margin-top: 20px;
 }
+
 .item_info{
 	margin-left: 30px;
 	margin-right: 30px;
@@ -46,7 +50,7 @@
     border-radius: 5px;
     float: right;
     margin-right: 30%;
-    margin-top: 14%;
+    margin-top: 4%;
 }
 .item-vl {
   border-left: 1px solid black;

@@ -1,9 +1,10 @@
-import { Component } from "react";
 import "./Navbar.css";
+import {useContext} from "react";
+import AuthContext from "../AuthContext";
 
-class Navbar extends Component {
-    render() {
-        return (
+function Navbar () {
+    let {user} = useContext(AuthContext)
+    return (
         <div className="navbar">
                 <div className="header">
                     <div className="website-logo">
@@ -13,14 +14,17 @@ class Navbar extends Component {
                     </div>
                     <div className="links-list">
                         <ul>
-                            <a href="../browse" >Browse</a>
-                            <a href="../login" className="Login-a">Login</a>
+                            <a href="../browse" className="browse-a">Browse</a>
+                            {user ? (
+                                <a href="../profile" className="login-a">My Profile</a>
+                            ) : (
+                                <a href="../login" className="login-a">Login</a>
+                            ) }
                         </ul>
                     </div>
                 </div>
             </div>
-            );
-    }
+        );
 }
 
 export default Navbar;

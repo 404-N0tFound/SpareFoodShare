@@ -8,22 +8,18 @@ function Login() {
         <div className="page-content">
             <Navbar/>
             <h1>
-               Sign in or Register
+                Sign in or Register
             </h1>
-              <p>
+            <p>
                 to continue to your Spare Food Share account
-              </p>
+            </p>
             <body className="login-body">
-              <div className="login-box">
-                  <LoginBox />
-              </div>
+            <div className="login-box">
+                <LoginBox />
+            </div>
             </body>
         </div>
     );
 }
 
 export default Login;
-
-
-
-
