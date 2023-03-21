@@ -6,15 +6,6 @@ body{
   color: inherit;
 }
 
-a {
-  cursor: pointer;
-  transition: all 200ms linear;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
 h4 {
   font-weight: 600;
   font-size: 30px;
@@ -106,8 +97,6 @@ h6 span{
   width: 500px;
   height: 550px;
   background-color: #092B0C;
-  background-position: bottom center;
-  background-repeat: no-repeat;
   position: absolute;
   border-radius: 25px;
   left: 0;
@@ -116,7 +105,12 @@ h6 span{
   backface-visibility: hidden;
 }
 
+.card-front {
+  left: -75px;
+}
+
 .card-back {
+  left: -75px;
   transform: rotateY(180deg);
 }
 
@@ -147,14 +141,12 @@ h6 span{
   border: none;
   -webkit-transition: all 200ms linear;
   transition: all 200ms linear;
-  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
 }
 
 .form-style:focus,
 .form-style:active {
   border: none;
   outline: none;
-  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
 }
 
 .button{  
@@ -164,7 +156,8 @@ h6 span{
   font-weight: 600;
   text-transform: uppercase;
   transition: all 200ms linear;
-  padding: 0px 30px;
+  padding: 10px 30px;
+  margin: 5%;
   letter-spacing: 1px;
   display: inline-flex;
   -webkit-align-items: center;
@@ -172,11 +165,69 @@ h6 span{
   border: none;
   background-color: #ffea75;
   color: #5e2d1d;
-  box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
 }
 
 .button:hover{  
   background-color: #5e2d1d;
   color: #ffea75;
-  box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
 }
+
+.business-check-text{
+  font-size: 15px;
+  font-weight: 600;
+  color: #F0FFF2;
+  display: inline-block;
+}
+
+.business-check {
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+
+.business-check input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  left: 16%;
+  top: 20%;
+  border-radius: 25%;
+  background-color: white;
+}
+
+.business-check:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.business-check input: checked ~ .checkmark {
+  background-color: black;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.business-check input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.business-check .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+

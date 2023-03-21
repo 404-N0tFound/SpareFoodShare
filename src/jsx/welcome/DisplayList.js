@@ -44,10 +44,10 @@ class DisplayList extends Component {
                                         <h2>
                                         What can you do to help?
                                         </h2>
-                                        <p>Join the community and help fight back against food wastage. Browse through the existing listings or post an item of your own.</p>
+                                        <p>Join the community and help fight back against food wastage. Browse through the existing listings - or post an item of your own!</p>
                                     </div>
                                     <div>
-                                        <a className="loginButton" type="button">
+                                        <a className="loginButton" type="button" href="../login">
                                             Sign up
                                         </a>
                                         <a className="browseButton" type="button" href="../login">
@@ -68,7 +68,7 @@ class DisplayList extends Component {
                                 <div className="display-item-text">
                                     <div>
                                         <p>
-                                            Share the benefits with the wider community using social media
+                                            Join 
                                         </p>
                                     </div>
                                     <div>

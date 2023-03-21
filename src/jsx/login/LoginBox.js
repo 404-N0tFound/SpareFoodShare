@@ -3,9 +3,10 @@ import "../components/Theme.css";
 
 import {useContext} from "react";
 import AuthContext from "../AuthContext";
+import Footer from "../components/Footer";
 
 function LoginBox () {
-    const {loginUser} = useContext(AuthContext)
+    const {loginUser, createUser} = useContext(AuthContext)
 
     return (
         <div className="section">
@@ -20,37 +21,46 @@ function LoginBox () {
                                 <form onSubmit={loginUser}>
                                     <h4>Sign In</h4>
                                     <div className="form-group">
-                                        <input name="email" className="form-style" placeholder="Username" autoComplete="off" />
+                                        <input name="email" type="email" className="form-style" placeholder="Email" autoComplete="off" />
                                     </div>
                                     <div className="form-group">
                                         <input name="password" type="password" className="form-style" placeholder="Password" autoComplete="off" />
                                     </div>
-                                    <button className="button">submit</button>
+                                    <button className="button">sign in</button>
                                 </form>
                             </div>
                             <div className="card-back">
                                 <h4>Create a new account</h4>
-                                <div className="form-group">
-                                    <input type="text" className="form-style" placeholder="Full Name"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <div className="form-group">
-                                    <input type="email" className="form-style" placeholder="Email"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <div className="form-group">
-                                    <input type="password" className="form-style" placeholder="Password"
-                                           autoComplete="off">
-                                    </input>
-                                </div>
-                                <a href="#" className="button">submit</a>
+                                <form onSubmit={createUser}>
+                                    <div className="form-group">
+                                        <input name="name" type="text" className="form-style" placeholder="Full Name"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <div className="form-group">
+                                        <input name="email" type="email" className="form-style" placeholder="Email"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <div className="form-group">
+                                        <input name="password" type="password" className="form-style" placeholder="Password"
+                                               autoComplete="off">
+                                        </input>
+                                    </div>
+                                    <div className="business-check">
+                                      <label className="business-check-text">Check box to register as a business
+                                      <input type="checkbox" id = "business-checkbox"/>
+                                        <span className="checkmark"></span>
+                                      </label>
+                                    </div>
+                                    <button className="button">register</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

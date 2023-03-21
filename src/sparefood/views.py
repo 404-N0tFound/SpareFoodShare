@@ -2,19 +2,31 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework import status
 
-from .serializers import ItemsSerializer, UsersSerializer
+from .serializers import *
 from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
+class RegistrationView(APIView):
+    @classmethod
+    def post(cls, request):
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        token['username'] = user.username
+        token['email'] = user.email
         return token
 
 
@@ -35,7 +47,7 @@ def getApiRoutes(request):
 @csrf_exempt
 def items_list(request):
     if request.method == 'GET':
-        snippets = Items.objects.all()
+        snippets = Item.objects.all()
         print(snippets.query)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -43,12 +55,9 @@ def items_list(request):
 
 @csrf_exempt
 def items_details(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
-        snippet = Items.objects.get(pk=pk)
-    except Items.DoesNotExist:
+        snippet = Item.objects.get(pk=pk)
+    except Item.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
@@ -60,7 +69,7 @@ def items_details(request, pk):
 @csrf_exempt
 def users_list(request):
     if request.method == 'GET':
-        snippets = Users.objects.all()
+        snippets = User.objects.all()
         print(snippets.query)
         serializer = UsersSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
@@ -68,12 +77,9 @@ def users_list(request):
 
 @csrf_exempt
 def user_details(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
-        snippet = Users.objects.get(pk=pk)
-    except Users.DoesNotExist:
+        snippet = User.objects.get(pk=pk)
+    except User.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
@@ -94,3 +100,16 @@ def upload_new(request):
             return HttpResponseRedirect('/browse')
         else:
             return Response(serializer.errors, status=400)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def create_order(request):
+    if request.method == "POST":
+        print(request.data)
+        serializer = OrdersSerializer(data=request.data)
+        if serializer.is_valid():
+            print("Order Created!")
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
