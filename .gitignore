@@ -164,3 +164,4 @@ src/sparefood/templates/app/build/
 README.md
 
 # Migrations are irrelavent for now
+/src/sparefood/migrations
