@@ -162,3 +162,5 @@ src/sparefood/templates/app/build/
 
 # To stop changing the README
 README.md
+
+# Migrations are irrelavent for now

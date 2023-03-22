@@ -3,12 +3,20 @@ from .models import Item
 from .models import User
 
 
-class ItemsSerializer(serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date',
-                  'item_provider', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired',
-                  'item_pic']
+        fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired']
+
+    def save(self):
+        item = Item(
+            item_name=self.validated_data['item_name'],
+            item_des=self.validated_data['item_des'],
+            item_expiration_date=self.validated_data['item_expiration_date'],
+            item_location=self.validated_data['item_location']
+        )
+        item.save()
+        return item
 
 
 class UsersSerializer(serializers.ModelSerializer):

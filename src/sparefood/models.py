@@ -10,16 +10,16 @@ from django.db import models
 
 
 class Item(models.Model):
-    item_name = models.CharField("item_name", max_length=240)
-    item_des = models.TextField("item_des", max_length=240)
-    item_upload_date = models.DateField(default=timezone.now)
-    item_expiration_date = models.DateField()
-    item_provider = models.CharField("item_provider", max_length=240)
-    item_status = models.CharField("item_status", max_length=240)
-    item_isPrivate = models.BooleanField(default=False)
-    item_location = models.CharField("item_location", max_length=240)
-    item_isExpired = models.BooleanField(default=False)
-    item_pic = models.CharField("item_pic", max_length=240, default="PATH")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("item_name", max_length=240)
+    description = models.TextField("item_description", max_length=10000)
+    upload_date = models.DateField(default=timezone.now)
+    expiration_date = models.DateField()
+    status = models.CharField("item_status", max_length=30, default="Available")
+    isPrivate = models.BooleanField(default=False)
+    location = models.CharField("item_location", max_length=240)
+    isExpired = models.BooleanField(default=False)
+    pic = models.FilePathField(verbose_name="item_pic")
 
 
 class CustomUserManager(BaseUserManager):
