@@ -6,14 +6,14 @@ from .models import User
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired']
+        fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'status', 'isPrivate', 'location', 'isExpired']
 
     def save(self):
         item = Item(
-            item_name=self.validated_data['item_name'],
-            item_des=self.validated_data['item_des'],
-            item_expiration_date=self.validated_data['item_expiration_date'],
-            item_location=self.validated_data['item_location']
+            item_name=self.validated_data['name'],
+            item_des=self.validated_data['description'],
+            item_expiration_date=self.validated_data['expiration_date'],
+            item_location=self.validated_data['location']
         )
         item.save()
         return item

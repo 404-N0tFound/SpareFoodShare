@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 
 from .serializers import ItemSerializer, RegistrationSerializer
 from .models import *
@@ -43,7 +44,7 @@ def getApiRoutes(request):
     return Response(routes)
 
 
-class ItemView(APIView):
+class CreateItemView(APIView):
     @classmethod
     def post(cls, request):
         serializer = ItemSerializer(data=request.data)
@@ -52,8 +53,31 @@ class ItemView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @classmethod
-    def get(cls, request):
-        all_items = Item.objects.all()
-        items = [[item.id, item.name, item.des] for item in all_items]
-        return Response(items)
+
+def is_more_items(request):
+    offset = request.GET.get('offset')
+    if int(offset) > Item.objects.all().count():
+        return False
+    return True
+
+
+def infinite_filter(request):
+    limit = request.GET.get('limit')
+    offset = request.GET.get('offset')
+    return Item.objects.all()[int(offset): int(offset) + int(limit)]
+
+
+class InfiniteItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })

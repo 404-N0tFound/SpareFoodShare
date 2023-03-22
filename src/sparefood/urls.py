@@ -14,6 +14,7 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegistrationView.as_view()),
-    path('items/', ItemView.as_view()),
-    path('items/<int:pk>/', ItemView.as_view()),
+    path('items/', InfiniteItemsView.as_view()),
+    path('upload_item/', CreateItemView.as_view()),
+    # path('items/<int:pk>/', ItemView.as_view()),
 ]
