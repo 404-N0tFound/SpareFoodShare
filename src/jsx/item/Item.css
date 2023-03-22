@@ -12,7 +12,7 @@
  .item-content .item_info h3{
 	font-size: 45px;
 	color: black;
-	margin-top: 5%;
+	margin-top: 3%;
 
 }
 .item-content .item_info p, h3{
@@ -45,8 +45,18 @@
     padding: 0.6% 2.2%;
     border-radius: 5px;
     float: right;
-    margin-right: 30%;
-    margin-top: 14%;
+    margin-right: 20%;
+    margin-top: 4%;
+}
+.item-collected-btn{
+    background-color: red;
+    color: white;
+    font-size: 15px;
+    padding: 0.6% 2.2%;
+    border-radius: 5px;
+    float: right;
+    margin-right: 20%;
+    margin-top: 4%;
 }
 .item-vl {
   border-left: 1px solid black;

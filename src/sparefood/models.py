@@ -20,6 +20,8 @@ class Item(models.Model):
     location = models.CharField("item_location", max_length=240)
     isExpired = models.BooleanField(default=False)
     pic = models.FilePathField(verbose_name="item_pic")
+    item_shared_times = models.PositiveIntegerField()
+    item_last_updated = models.DateTimeField(auto_now=True)
 
 
 class CustomUserManager(BaseUserManager):
@@ -75,3 +77,17 @@ class User(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+class Order(models.Model):
+    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
+
+    order_created_date = models.DateTimeField(auto_now_add=True)
+    order_donation_amount = models.FloatField()
+
+    order_isCollected = models.BooleanField(default=False)
+    order_isDeleted = models.BooleanField(default=False)
+
+    order_collected_date = models.DateTimeField(null=True, blank=True)
+    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)

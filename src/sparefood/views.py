@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
-from .serializers import ItemSerializer, RegistrationSerializer
+from .serializers import *
 from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -26,6 +26,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['email'] = user.email
+        token['full_name'] = user.full_name
         return token
 
 
@@ -40,6 +41,10 @@ def getApiRoutes(request):
         '/api/token',
         '/api/token/refresh',
         '/api/items/',
+        '/api/items/upload',
+        '/api/orders/',
+        '/api/orders/create/',
+        '/api/orders/check/'
     ]
     return Response(routes)
 
@@ -48,6 +53,17 @@ class CreateItemView(APIView):
     @classmethod
     def post(cls, request):
         serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+
+@api_view(['POST'])
+def create_order(request):
+    """
+        Method to create an order
+    """
+    if request.method == "POST":
+        serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -81,3 +97,27 @@ class InfiniteItemsView(ListAPIView):
             "items": serializer.data,
             "has_more": is_more_items(request)
         })
+
+@api_view(['POST'])
+def my_orders_list(request):
+    """
+        Method to get the orders of current user
+    """
+    if request.method == 'POST':
+        user = request.data['user']
+        snippets = Order.objects.filter(order_initiator=user)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def my_orders_check(request):
+    """
+        Method to check duplicate order
+    """
+    if request.method == 'POST':
+        user = request.data['user']
+        item = request.data['item']
+        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
