@@ -17,7 +17,7 @@ function MyProfile() {
                         <p>
                             Master Windu, <b><i>you survived...</i></b>
                         </p>
-                        {user && <p>It&apos;s over {user.email}, I have the high ground!</p>}
+                        {user && <p>It&apos;s over {user.full_name}, I have the high ground!</p>}
                     </div>
                 </div>
             </div>

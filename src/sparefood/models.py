@@ -8,21 +8,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.db import models
 
 
-# Items details
-
-class Item(models.Model):
-    item_name = models.CharField("item_name", max_length=240)
-    item_des = models.TextField("item_des", max_length=240)
-    item_upload_date = models.DateField()
-    item_expiration_date = models.DateField()
-    item_provider = models.CharField("item_provider", max_length=240)
-    item_status = models.CharField("item_status", max_length=240)
-    item_isPrivate = models.BooleanField(default=False)
-    item_location = models.CharField("item_location", max_length=240)
-    item_isExpired = models.BooleanField(default=False)
-    item_pic = models.CharField("item_pic", max_length=240, default="PATH")
-
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -78,12 +63,30 @@ class User(AbstractUser):
         return True
 
 
+class Item(models.Model):
+    item_name = models.CharField(verbose_name="item_name", max_length=120)
+    item_des = models.TextField(verbose_name="item_des", max_length=10000)
+    item_upload_date = models.DateTimeField(auto_now_add=True)
+    item_expiration_date = models.DateTimeField(auto_now_add=True)
+    item_provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    item_isPrivate = models.BooleanField(default=False)
+    item_isDeleted = models.BooleanField(default=False)
+    item_isExpired = models.BooleanField(default=False)
+    item_location = models.CharField(verbose_name="item_location", max_length=240)
+    item_pic = models.CharField(verbose_name="item_pic", max_length=240, default="PATH")
+    item_shared_times = models.PositiveIntegerField()
+    item_last_updated = models.DateTimeField(auto_now=True)
+
+
 class Order(models.Model):
-    order_initiator = models.ForeignKey(User, related_name="order_initiator", on_delete=models.CASCADE)
+    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
     order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
-    order_created_date = models.DateField(auto_now_add=True)
-    order_donation_amount = models.IntegerField(default=0)
+
+    order_created_date = models.DateTimeField(auto_now_add=True)
+    order_donation_amount = models.FloatField()
+
     order_isCollected = models.BooleanField(default=False)
     order_isDeleted = models.BooleanField(default=False)
-    order_collected_date = models.DateField(auto_now_add=True)
-    order_collection_location = models.CharField("order_location", max_length=240)
+
+    order_collected_date = models.DateTimeField(null=True, blank=True)
+    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)

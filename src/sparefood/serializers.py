@@ -6,7 +6,7 @@ class ItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date',
-                  'item_provider', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired',
+                  'item_provider', 'item_isPrivate', 'item_location', 'item_isExpired',
                   'item_pic']
 
 

@@ -1,5 +1,4 @@
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -27,6 +26,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['email'] = user.email
+        token['full_name'] = user.full_name
         return token
 
 
@@ -43,18 +43,20 @@ def getApiRoutes(request):
     return Response(routes)
 
 
-# SELECT
-@csrf_exempt
 def items_list(request):
+    """
+        Method to get all items' details
+    """
     if request.method == 'GET':
         snippets = Item.objects.all()
-        print(snippets.query)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
 def items_details(request, pk):
+    """
+        Method to get an item's details
+    """
     try:
         snippet = Item.objects.get(pk=pk)
     except Item.DoesNotExist:
@@ -62,21 +64,23 @@ def items_details(request, pk):
 
     if request.method == 'GET':
         serializer = ItemsSerializer(snippet)
-        print(serializer.data)
         return JsonResponse(serializer.data)
 
 
-@csrf_exempt
 def users_list(request):
+    """
+        Method to get all users' details
+    """
     if request.method == 'GET':
         snippets = User.objects.all()
-        print(snippets.query)
         serializer = UsersSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
 def user_details(request, pk):
+    """
+        Method to get a user's details
+    """
     try:
         snippet = User.objects.get(pk=pk)
     except User.DoesNotExist:
@@ -87,7 +91,6 @@ def user_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def upload_new(request):
     """
@@ -102,14 +105,39 @@ def upload_new(request):
             return Response(serializer.errors, status=400)
 
 
-@csrf_exempt
 @api_view(['POST'])
 def create_order(request):
+    """
+        Method to create an order
+    """
     if request.method == "POST":
-        print(request.data)
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
-            print("Order Created!")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def my_orders_list(request):
+    """
+        Method to get the orders of current user
+    """
+    if request.method == 'POST':
+        user = request.data['user']
+        snippets = Order.objects.filter(order_initiator=user)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def my_orders_check(request):
+    """
+        Method to check duplicate order
+    """
+    if request.method == 'POST':
+        user = request.data['user']
+        item = request.data['item']
+        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
