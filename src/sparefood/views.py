@@ -48,11 +48,14 @@ def items_list(request):
         Method to get all items' details
     """
     if request.method == 'GET':
-        snippets = Item.objects.all()
+        snippets = Item.objects.filter(item_isPrivate=False,
+                                       item_isDeleted=False,
+                                       item_isExpired=False)
         serializer = ItemsSerializer(snippets, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
+@api_view(['GET'])
 def items_details(request, pk):
     """
         Method to get an item's details
@@ -64,7 +67,11 @@ def items_details(request, pk):
 
     if request.method == 'GET':
         serializer = ItemsSerializer(snippet)
-        return JsonResponse(serializer.data)
+        if (serializer.data['item_isExpired'] is True or serializer.data['item_isDeleted'] is True
+                or serializer.data['item_isPrivate'] is True):
+            return Response(False, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return JsonResponse(serializer.data)
 
 
 def users_list(request):
@@ -136,8 +143,13 @@ def my_orders_check(request):
         Method to check duplicate order
     """
     if request.method == 'POST':
+        flag = False
         user = request.data['user']
         item = request.data['item']
         snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
         serializer = OrdersSerializer(snippets, many=True)
-        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
+        if (len(serializer.data)) == 1:
+            flag = True
+            return Response(flag, status=status.HTTP_201_CREATED)
+        else:
+            return Response(flag, status=status.HTTP_201_CREATED)
