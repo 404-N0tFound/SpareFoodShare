@@ -81,9 +81,10 @@ def is_more_items(request):
 
 
 def infinite_filter(request):
-    limit = request.GET.get('limit')
-    offset = request.GET.get('offset')
-    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[int(offset): int(offset) + int(limit)]
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[offset: max_index]
 
 
 class InfiniteItemsView(ListAPIView):
