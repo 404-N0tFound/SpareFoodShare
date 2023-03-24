@@ -83,6 +83,11 @@ class Browse extends PureComponent {
                             </div>
                             )
                         )}
+                        {this.state.items.length === 0 &&
+                            <div>
+                                There are no items to display at this time.
+                            </div>
+                        }
                     </ul>
                 </div>
                 </body>
