@@ -20,9 +20,6 @@ function ProfileFramework () {
                 <a>Upload</a>
             </div>
             <div className="sidebar-text">
-                <a>Edit Profile</a>
-            </div>
-            <div className="sidebar-text">
                 <a onClick={logoutUser} href={'../login'}>Log Out</a>
             </div>
         </div>
