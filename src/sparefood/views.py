@@ -150,6 +150,6 @@ def my_orders_check(request):
         serializer = OrdersSerializer(snippets, many=True)
         if (len(serializer.data)) == 1:
             flag = True
-            return Response(flag, status=status.HTTP_201_CREATED)
+            return Response(flag, status=status.HTTP_200_OK)
         else:
-            return Response(flag, status=status.HTTP_201_CREATED)
+            return Response(flag, status=status.HTTP_200_OK)
