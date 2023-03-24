@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {PureComponent} from "react";
 import "./Browse.css";
 import "../components/Theme.css";
@@ -75,7 +74,7 @@ class Browse extends PureComponent {
                                         <p>Provider: { itemsObj.id }</p>
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
-                                    <button className="item_btn" onClick={() => btn_clicked( itemsObj.id )}>Details</button>
+                                    <button className="item_btn">Details</button>
                                 </li>
                             </div>
                             )
@@ -91,7 +90,7 @@ class Browse extends PureComponent {
                 <Footer id="foot_id"/>
             </div>
         )
-    };
+    }
 }
 
 export default Browse;
