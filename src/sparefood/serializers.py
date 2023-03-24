@@ -2,12 +2,23 @@ from rest_framework import serializers
 from .models import *
 
 
-class ItemsSerializer(serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date',
-                  'item_provider', 'item_status', 'item_isPrivate', 'item_location', 'item_isExpired',
-                  'item_pic']
+        fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'status', 'is_private', 'location',
+                  'picture']
+
+    def save(self):
+        item = Item(
+            name=self.validated_data['name'],
+            description=self.validated_data['description'],
+            expiration_date=self.validated_data['expiration_date'],
+            location=self.validated_data['location'],
+            is_private=self.validated_data['is_private'],
+            picture=self.validated_data['picture']
+        )
+        item.save()
+        return item
 
 
 class OrdersSerializer(serializers.ModelSerializer):

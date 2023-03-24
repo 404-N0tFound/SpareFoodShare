@@ -14,10 +14,10 @@ function ProfileFramework () {
                 <a>My Items</a>
             </div>
             <div className="sidebar-text">
-                <a>Chat</a>
+                <a href='../profile/orders'>Orders</a>
             </div>
             <div className="sidebar-text">
-                <a>Upload</a>
+                <a href='../profile/upload'>Upload</a>
             </div>
             <div className="sidebar-text">
                 <a onClick={logoutUser} href={'../login'}>Log Out</a>
