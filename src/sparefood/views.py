@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -74,7 +75,7 @@ def create_order(request):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.all().count():
+    if int(offset) >= Item.objects.filter(is_private__lte=False).count():
         return False
     return True
 
@@ -82,35 +83,22 @@ def is_more_items(request):
 def infinite_filter(request):
     limit = request.GET.get('limit')
     offset = request.GET.get('offset')
-    filtered_items = []
-    all_items = Item.objects.all()
-    idx = 0
-    new_offset = int(offset)
-    for item in all_items[int(offset):]:
-        if not item.isExpired and not item.isPrivate:
-            new_offset += 1
-            filtered_items.append(item)
-            if idx+1 > int(limit):
-                break
-            else:
-                idx += 1
-    return filtered_items, new_offset
+    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[int(offset): int(offset) + int(limit)]
 
 
 class InfiniteItemsView(ListAPIView):
     serializer_class = ItemSerializer
 
     def get_queryset(self):
-        qs, offset = infinite_filter(self.request)
-        return qs, offset
+        qs = infinite_filter(self.request)
+        return qs
 
     def list(self, request):
-        query_set, new_offset = self.get_queryset()
+        query_set = self.get_queryset()
         serializer = self.serializer_class(query_set, many=True)
         return Response({
             "items": serializer.data,
-            "has_more": is_more_items(request),
-            "new_offset": new_offset
+            "has_more": is_more_items(request)
         })
 
 

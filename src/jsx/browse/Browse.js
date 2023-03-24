@@ -49,12 +49,11 @@ class Browse extends PureComponent {
             if (response.status === 200) {
                 const newItems = data.items;
                 const has_more = data.has_more;
-                const new_offset = data.new_offset;
                 this.setState({
                     has_more: has_more,
                     loading: false,
                     items: [...this.state.items, ...newItems],
-                    offset: new_offset
+                    offset: offset + limit
                 })
             } else {
                 alert('Browse service failed! Is it maybe down?')
