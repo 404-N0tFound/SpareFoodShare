@@ -49,7 +49,7 @@ function LoginBox () {
                                     </div>
                                     <div className="business-check">
                                       <label className="business-check-text">Check box to register as a business
-                                      <input type="checkbox" id = "business-checkbox"/>
+                                      <input type="checkbox" id = "business-checkbox" name="is_business"/>
                                         <span className="checkmark"></span>
                                       </label>
                                     </div>
