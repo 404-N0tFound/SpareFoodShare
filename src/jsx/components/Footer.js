@@ -5,11 +5,8 @@ class Footer extends Component {
     render() {
         return (
             <footer className="footer">
-                <p>University of Sheffield, Sheffield, UK
-
-                </p >
-                <p>
-                    &copy; 2023 SpareFood Share by 404 Not Found. ALl Rights Reserved
+                <p>University of Sheffield, Sheffield, UK<br/>
+                 &copy; 2023 SpareFood Share by 404 Not Found. All Rights Reserved
                 </p >
             </footer>
         );

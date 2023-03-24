@@ -26,7 +26,7 @@ function LoginBox () {
                                     <div className="form-group">
                                         <input name="password" type="password" className="form-style" placeholder="Password" autoComplete="off" />
                                     </div>
-                                    <button className="button">submit</button>
+                                    <button className="button">sign in</button>
                                 </form>
                             </div>
                             <div className="card-back">
@@ -47,7 +47,13 @@ function LoginBox () {
                                                autoComplete="off">
                                         </input>
                                     </div>
-                                    <button className="button">submit</button>
+                                    <div className="business-check">
+                                      <label className="business-check-text">Check box to register as a business
+                                      <input type="checkbox" id = "business-checkbox"/>
+                                        <span className="checkmark"></span>
+                                      </label>
+                                    </div>
+                                    <button className="button">register</button>
                                 </form>
                             </div>
                         </div>

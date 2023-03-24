@@ -1,9 +1,7 @@
 .footer {
     position: relative;
-    width: 100%;
-    background: #a3ffae ;
     min-height: 100px;
-    padding: 20px 50px;
+    padding: 10px 50px;
     display: flex;
     justify-content: center;
     align-items: center;
