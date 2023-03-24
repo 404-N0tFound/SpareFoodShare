@@ -1,12 +1,9 @@
 /* eslint-disable */
-import { useState, useEffect } from 'react';
 import {PureComponent} from "react";
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
-import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
-import pic from "../pics/test.jpg"
 
 class Browse extends PureComponent {
     constructor(props) {
@@ -71,7 +68,7 @@ class Browse extends PureComponent {
                         {this.state.items && this.state.items.map((itemsObj) => (
                             <div key={itemsObj.id} className="item-card">
                                 <li>
-                                    <img className="items-pic" src={ pic } />
+                                    <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="item_info">
                                         <h3>Name: {itemsObj.name}</h3>
                                         <p>Des: {itemsObj.description}</p>

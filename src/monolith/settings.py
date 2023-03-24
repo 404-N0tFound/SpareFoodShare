@@ -181,8 +181,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(os.path.join(BASE_DIR, os.getenv('FRONT_END_LOCATION')), 'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'sparefood.user'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

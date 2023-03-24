@@ -1,8 +1,18 @@
 import Navbar from "../components/Navbar";
 import ProfileFramework from "../components/ProfileFramework";
 import "./Upload.css";
+import {useState} from "react";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function Upload() {
+    const [selectedImage, setSelectedImage] = useState(null);
+    const navigator = useNavigate();
+
+    let handleImageChange = (e) => {
+        setSelectedImage(e.target.files[0])
+    };
+
     let createItem = async (e) => {
         e.preventDefault()
         if (!e.target.name.value) {
@@ -14,18 +24,39 @@ function Upload() {
         } else if (!e.target.location.value) {
             alert("Don't forget to enter a distribution location")
         } else {
+            let form_data = new FormData();
+            form_data.append('picture', selectedImage, selectedImage.name);
+            form_data.append('name', e.target.name.value);
+            form_data.append('description', e.target.description.value);
+            form_data.append('expiration_date', e.target.expiration.value);
+            form_data.append('is_private', e.target.is_private.checked);
+            form_data.append('location', e.target.location.value);
+            let url = 'http://127.0.0.1:8000/api/items/upload/';
+            axios.post(url, form_data, {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            })
+                .then(res => {
+                    navigator('../browse')
+                    alert(`New ${res.data.name} uploaded!`)
+                })
+                .catch(err => console.log(err))
+
+            /*
+            const postData = new FormData();
+            postData.append('name', e.target.name.value)
+            postData.append('description', e.target.description.value)
+            postData.append('expiration_date', e.target.expiration.value)
+            postData.append('is_private', e.target.is_private.checked)
+            postData.append('location', e.target.location.value)
+            postData.append('picture', selectedImage)
             let response = await fetch('http://127.0.0.1:8000/api/items/upload/', {
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({
-                    'name':e.target.name.value,
-                    'description':e.target.description.value,
-                    'expiration_date':e.target.expiration.value,
-                    'is_private':e.target.is_private.checked,
-                    'location':e.target.location.value
-                })
+                body: postData
             })
             let data = await response.json()
             if (response.status === 200 || response.status === 201) {
@@ -34,6 +65,7 @@ function Upload() {
             } else {
                 alert('Upload service failed! Is it maybe down?')
             }
+            */
         }
     }
 
@@ -69,6 +101,13 @@ function Upload() {
                                 <p>Location</p>
                             </label>
                             <input type="text" name="location" id="location"/>
+                            <br/><br/>
+                            <label>
+                                <p>Picture</p>
+                            </label>
+                            <input type="file"
+                                   id="picture"
+                                   accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
                             <br/><br/>
                             <input type="submit"/>
                         </form>

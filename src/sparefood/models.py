@@ -6,22 +6,28 @@ from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 import django.utils.timezone as timezone
 
+from django.conf import settings
+
 from django.db import models
 
 
 class Item(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField("item_name", max_length=240)
-    description = models.TextField("item_description", max_length=10000)
+    name = models.CharField("name", max_length=240)
+    description = models.TextField("description", max_length=10000)
     upload_date = models.DateField(default=timezone.now)
     expiration_date = models.DateField()
-    status = models.CharField("item_status", max_length=30, default="Available")
+    status = models.CharField("status", max_length=30, default="Available")
     is_private = models.BooleanField(default=False)
-    location = models.CharField("item_location", max_length=240)
+    location = models.CharField("location", max_length=240)
     is_expired = models.BooleanField(default=False)
-    pic = models.FilePathField(verbose_name="item_pic")
+    picture = models.ImageField(verbose_name="picture", upload_to='items')
     item_shared_times = models.PositiveIntegerField(default=0)
     item_last_updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_absolute_image_url(self):
+        return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
 
 class CustomUserManager(BaseUserManager):
