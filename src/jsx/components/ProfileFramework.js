@@ -24,7 +24,7 @@ function ProfileFramework () {
                     </a>
                 </div>
                 <div>
-                    <a>
+                    <a href='../profile/upload'>
                         Upload
                     </a>
                 </div>

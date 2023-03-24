@@ -9,10 +9,11 @@ class ItemSerializer(serializers.ModelSerializer):
 
     def save(self):
         item = Item(
-            item_name=self.validated_data['name'],
-            item_des=self.validated_data['description'],
-            item_expiration_date=self.validated_data['expiration_date'],
-            item_location=self.validated_data['location']
+            name=self.validated_data['name'],
+            description=self.validated_data['description'],
+            expiration_date=self.validated_data['expiration_date'],
+            location=self.validated_data['location'],
+            isPrivate=self.validated_data['isPrivate']
         )
         item.save()
         return item

@@ -55,6 +55,8 @@ class CreateItemView(APIView):
         serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -80,23 +82,37 @@ def is_more_items(request):
 def infinite_filter(request):
     limit = request.GET.get('limit')
     offset = request.GET.get('offset')
-    return Item.objects.all()[int(offset): int(offset) + int(limit)]
+    filtered_items = []
+    all_items = Item.objects.all()
+    idx = 0
+    new_offset = int(offset)
+    for item in all_items[int(offset):]:
+        if not item.isExpired and not item.isPrivate:
+            new_offset += 1
+            filtered_items.append(item)
+            if idx+1 > int(limit):
+                break
+            else:
+                idx += 1
+    return filtered_items, new_offset
 
 
 class InfiniteItemsView(ListAPIView):
     serializer_class = ItemSerializer
 
     def get_queryset(self):
-        qs = infinite_filter(self.request)
-        return qs
+        qs, offset = infinite_filter(self.request)
+        return qs, offset
 
     def list(self, request):
-        query_set = self.get_queryset()
+        query_set, new_offset = self.get_queryset()
         serializer = self.serializer_class(query_set, many=True)
         return Response({
             "items": serializer.data,
-            "has_more": is_more_items(request)
+            "has_more": is_more_items(request),
+            "new_offset": new_offset
         })
+
 
 @api_view(['POST'])
 def my_orders_list(request):

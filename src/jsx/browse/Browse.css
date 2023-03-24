@@ -1,4 +1,5 @@
 .listings-body {
+    min-height: 75vh;
     align-items: center;
     font-size: calc(10px + 2vmin);
     text-align: left;

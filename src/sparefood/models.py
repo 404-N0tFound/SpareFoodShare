@@ -20,7 +20,7 @@ class Item(models.Model):
     location = models.CharField("item_location", max_length=240)
     isExpired = models.BooleanField(default=False)
     pic = models.FilePathField(verbose_name="item_pic")
-    item_shared_times = models.PositiveIntegerField()
+    item_shared_times = models.PositiveIntegerField(default=0)
     item_last_updated = models.DateTimeField(auto_now=True)
 
 

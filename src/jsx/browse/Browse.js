@@ -49,11 +49,12 @@ class Browse extends PureComponent {
             if (response.status === 200) {
                 const newItems = data.items;
                 const has_more = data.has_more;
+                const new_offset = data.new_offset;
                 this.setState({
                     has_more: has_more,
                     loading: false,
                     items: [...this.state.items, ...newItems],
-                    offset: offset + limit
+                    offset: new_offset
                 })
             } else {
                 alert('Browse service failed! Is it maybe down?')
@@ -75,7 +76,7 @@ class Browse extends PureComponent {
                                     <div className="item_info">
                                         <h3>Name: {itemsObj.name}</h3>
                                         <p>Des: {itemsObj.description}</p>
-                                        <p>Provider: { itemsObj.provider }</p>
+                                        <p>Provider: { itemsObj.id }</p>
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
                                     <button className="item_btn" onClick={() => btn_clicked( itemsObj.id )}>Details</button>
