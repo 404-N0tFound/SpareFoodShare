@@ -72,7 +72,7 @@ def create_order(request):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) > Item.objects.all().count():
+    if int(offset) >= Item.objects.all().count():
         return False
     return True
 
