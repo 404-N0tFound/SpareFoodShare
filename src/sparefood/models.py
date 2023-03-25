@@ -87,14 +87,16 @@ class User(AbstractUser):
 
 
 class Order(models.Model):
-    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
-    order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
 
-    order_created_date = models.DateTimeField(auto_now_add=True)
-    order_donation_amount = models.FloatField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
-    order_isCollected = models.BooleanField(default=False)
-    order_isDeleted = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    donation_amount = models.FloatField()
 
-    order_collected_date = models.DateTimeField(null=True, blank=True)
-    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)
+    is_collected = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+
+    collected_date = models.DateTimeField(null=True, blank=True)
+    collection_location = models.CharField(verbose_name="order_location", max_length=240)

@@ -28,6 +28,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['email'] = user.email
         token['full_name'] = user.full_name
+        token['is_business'] = user.is_business
         return token
 
 
@@ -60,12 +61,9 @@ class CreateItemView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def create_order(request):
-    """
-        Method to create an order
-    """
-    if request.method == "POST":
+class CreateOrderView(APIView):
+    @classmethod
+    def post(cls, request):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -103,16 +101,13 @@ class InfiniteItemsView(ListAPIView):
         })
 
 
-@api_view(['POST'])
-def my_orders_list(request):
-    """
-        Method to get the orders of current user
-    """
-    if request.method == 'POST':
+class OrdersView(ListAPIView):
+    @classmethod
+    def post(cls, request):
         user = request.data['user']
-        snippets = Order.objects.filter(order_initiator=user)
+        snippets = Order.objects.filter(initiator=user)
         serializer = OrdersSerializer(snippets, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -120,9 +115,8 @@ def my_orders_check(request):
     """
         Method to check duplicate order
     """
-    if request.method == 'POST':
-        user = request.data['user']
-        item = request.data['item']
-        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
-        serializer = OrdersSerializer(snippets, many=True)
-        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
+    user = request.data['user']
+    item = request.data['item']
+    snippets = Order.objects.filter(initiator=user, item_id=item)
+    serializer = OrdersSerializer(snippets, many=True)
+    return Response(len(serializer.data), status=status.HTTP_200_OK)
