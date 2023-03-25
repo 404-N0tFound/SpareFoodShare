@@ -12,6 +12,7 @@ urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegistrationView.as_view()),
+    path('item/', SingleItemView.as_view()),
     path('items/', InfiniteItemsView.as_view()),
     path('items/upload/', CreateItemView.as_view()),
     path('orders/create/', CreateOrderView.as_view()),
