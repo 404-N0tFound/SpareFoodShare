@@ -77,8 +77,8 @@ class Item(models.Model):
     is_private = models.BooleanField(default=False)
     location = models.CharField("location", max_length=240)
     picture = models.ImageField(verbose_name="picture", upload_to='items')
-    item_shared_times = models.PositiveIntegerField(default=0)
-    item_last_updated = models.DateTimeField(auto_now=True)
+    shared_times = models.PositiveIntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True)
 
     @property
     def get_absolute_image_url(self):

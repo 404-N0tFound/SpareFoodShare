@@ -105,6 +105,23 @@ class InfiniteItemsView(ListAPIView):
             "has_more": is_more_items(request)
         })
 
+    def get(self, request):
+        item = Item.objects.get(id__exact=request.GET.get('uuid'))
+        if item is not None:
+            return Response({
+                "id": item.id,
+                "name": item.name,
+                "description": item.description,
+                "upload_date": item.upload_date,
+                "expiration_date": item.expiration_date,
+                "status": item.status,
+                "location": item.location,
+                "picture": str(item.picture),
+                "shared_times": item.shared_times,
+                "last_updated": item.last_updated
+            }, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def my_orders_list(request):
