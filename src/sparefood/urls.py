@@ -16,6 +16,6 @@ urlpatterns = [
     path('items/upload/', CreateItemView.as_view()),
     path('orders/create/', CreateOrderView.as_view()),
     path('orders/', OrdersView.as_view()),
-    path('orders/check/', my_orders_check),
+    path('orders/check/', OrdersCheckView.as_view()),
     # path('items/<int:pk>/', ItemView.as_view()),
 ]

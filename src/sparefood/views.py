@@ -122,21 +122,23 @@ class InfiniteItemsView(ListAPIView):
 
 
 class OrdersView(ListAPIView):
-    @classmethod
-    def post(cls, request):
-        user = request.data['user']
-        snippets = Order.objects.filter(initiator=user)
+    def get(self, request):
+        snippets = Order.objects.filter(initiator_id=request.GET.get('user_id'))
         serializer = OrdersSerializer(snippets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
-def my_orders_check(request):
-    """
-        Method to check duplicate order
-    """
-    user = request.data['user']
-    item = request.data['item']
-    snippets = Order.objects.filter(initiator=user, item_id=item)
-    serializer = OrdersSerializer(snippets, many=True)
-    return Response(len(serializer.data), status=status.HTTP_200_OK)
+class OrdersCheckView(ListAPIView):
+    def get(self, request):
+        """
+            Method to check duplicate order
+        """
+        flag = False
+        snippets = Order.objects.filter(initiator_id=request.GET.get('user'),
+                                        item_id=request.GET.get('item'))
+        serializer = OrdersSerializer(snippets, many=True)
+        if (len(serializer.data)) > 0:
+            flag = True
+            return Response(flag, status=status.HTTP_200_OK)
+        else:
+            return Response(flag, status=status.HTTP_200_OK)

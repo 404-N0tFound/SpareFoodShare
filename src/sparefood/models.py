@@ -71,7 +71,7 @@ class Item(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("name", max_length=240)
     description = models.TextField("description", max_length=10000)
-    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', default="8ba97d61-4c1b-4d43-bcea-da0bd3653a7a")
     upload_date = models.DateField(default=timezone.now)
     expiration_date = models.DateField()
     status = models.CharField("status", max_length=30, default="Available")
@@ -89,7 +89,7 @@ class Item(models.Model):
 class Order(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
     created_date = models.DateTimeField(auto_now_add=True)
@@ -99,4 +99,4 @@ class Order(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     collected_date = models.DateTimeField(null=True, blank=True)
-    collection_location = models.CharField(verbose_name="order_location", max_length=240)
+    collection_location = models.CharField(verbose_name="order_location", max_length=240, default="Sheffield")
