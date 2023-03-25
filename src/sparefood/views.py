@@ -1,8 +1,9 @@
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 
 from .serializers import *
 from .models import *
@@ -27,7 +28,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['email'] = user.email
         token['full_name'] = user.full_name
-        token['is_business'] = user.is_business
         return token
 
 
@@ -38,79 +38,26 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['GET'])
 def getApiRoutes(request):
     routes = [
+        '/api/register',
         '/api/token',
         '/api/token/refresh',
+        '/api/items/',
+        '/api/items/upload',
+        '/api/orders/',
+        '/api/orders/create/',
+        '/api/orders/check/'
     ]
     return Response(routes)
 
 
-def items_list(request):
-    """
-        Method to get all items' details
-    """
-    if request.method == 'GET':
-        snippets = Item.objects.filter(item_isPrivate=False,
-                                       item_isDeleted=False,
-                                       item_isExpired=False)
-        serializer = ItemsSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
-@api_view(['GET'])
-def items_details(request, pk):
-    """
-        Method to get an item's details
-    """
-    try:
-        snippet = Item.objects.get(pk=pk)
-    except Item.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = ItemsSerializer(snippet)
-        if (serializer.data['item_isExpired'] is True or serializer.data['item_isDeleted'] is True
-                or serializer.data['item_isPrivate'] is True):
-            return Response(False, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return JsonResponse(serializer.data)
-
-
-def users_list(request):
-    """
-        Method to get all users' details
-    """
-    if request.method == 'GET':
-        snippets = User.objects.all()
-        serializer = UsersSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
-def user_details(request, pk):
-    """
-        Method to get a user's details
-    """
-    try:
-        snippet = User.objects.get(pk=pk)
-    except User.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = UsersSerializer(snippet)
-        return JsonResponse(serializer.data)
-
-
-@api_view(['POST'])
-def upload_new(request):
-    """
-        Add new item to database
-    """
-    if request.method == "POST":
-        serializer = ItemsSerializer(data=request.POST)
+class CreateItemView(APIView):
+    @classmethod
+    def post(cls, request):
+        serializer = ItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return HttpResponseRedirect('/browse')
-        else:
-            return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -124,6 +71,36 @@ def create_order(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def is_more_items(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Item.objects.filter(is_private__lte=False).count():
+        return False
+    return True
+
+
+def infinite_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[offset: max_index]
+
+
+class InfiniteItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
 
 
 @api_view(['POST'])
@@ -144,13 +121,8 @@ def my_orders_check(request):
         Method to check duplicate order
     """
     if request.method == 'POST':
-        flag = False
         user = request.data['user']
         item = request.data['item']
         snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
         serializer = OrdersSerializer(snippets, many=True)
-        if (len(serializer.data)) == 1:
-            flag = True
-            return Response(flag, status=status.HTTP_200_OK)
-        else:
-            return Response(flag, status=status.HTTP_200_OK)
+        return Response(len(serializer.data), status=status.HTTP_201_CREATED)

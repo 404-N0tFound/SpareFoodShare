@@ -4,8 +4,30 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 
 from phonenumber_field.modelfields import PhoneNumberField
+import django.utils.timezone as timezone
+
+from django.conf import settings
 
 from django.db import models
+
+
+class Item(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("name", max_length=240)
+    description = models.TextField("description", max_length=10000)
+    upload_date = models.DateField(default=timezone.now)
+    expiration_date = models.DateField()
+    status = models.CharField("status", max_length=30, default="Available")
+    is_private = models.BooleanField(default=False)
+    location = models.CharField("location", max_length=240)
+    is_expired = models.BooleanField(default=False)
+    picture = models.ImageField(verbose_name="picture", upload_to='items')
+    item_shared_times = models.PositiveIntegerField(default=0)
+    item_last_updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_absolute_image_url(self):
+        return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
 
 class CustomUserManager(BaseUserManager):
@@ -62,21 +84,6 @@ class User(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
-
-
-class Item(models.Model):
-    item_name = models.CharField(verbose_name="item_name", max_length=120)
-    item_des = models.TextField(verbose_name="item_des", max_length=10000)
-    item_upload_date = models.DateTimeField(auto_now_add=True)
-    item_expiration_date = models.DateTimeField(auto_now_add=True)
-    item_provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
-    item_isPrivate = models.BooleanField(default=False)
-    item_isDeleted = models.BooleanField(default=False)
-    item_isExpired = models.BooleanField(default=False)
-    item_location = models.CharField(verbose_name="item_location", max_length=240)
-    item_pic = models.CharField(verbose_name="item_pic", max_length=240, default="PATH")
-    item_shared_times = models.PositiveIntegerField()
-    item_last_updated = models.DateTimeField(auto_now=True)
 
 
 class Order(models.Model):

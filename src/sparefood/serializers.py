@@ -2,12 +2,23 @@ from rest_framework import serializers
 from .models import *
 
 
-class ItemsSerializer(serializers.ModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'item_name', 'item_des', 'item_upload_date', 'item_expiration_date',
-                  'item_provider', 'item_isPrivate', 'item_location', 'item_isExpired', 'item_isDeleted',
-                  'item_pic']
+        fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'status', 'is_private', 'location',
+                  'picture']
+
+    def save(self):
+        item = Item(
+            name=self.validated_data['name'],
+            description=self.validated_data['description'],
+            expiration_date=self.validated_data['expiration_date'],
+            location=self.validated_data['location'],
+            is_private=self.validated_data['is_private'],
+            picture=self.validated_data['picture']
+        )
+        item.save()
+        return item
 
 
 class OrdersSerializer(serializers.ModelSerializer):
@@ -28,14 +39,13 @@ class UsersSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'password', 'is_business']
+        fields = ['full_name', 'email', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def save(self):
-        user = User(full_name=self.validated_data['full_name'], email=self.validated_data['email'],
-                    is_business=self.validated_data['is_business'])
+        user = User(full_name=self.validated_data['full_name'], email=self.validated_data['email'])
         password = self.validated_data['password']
         user.set_password(password)
         user.save()

@@ -5,28 +5,41 @@ import AuthContext from "../AuthContext";
 function ProfileFramework () {
     let {logoutUser} = useContext(AuthContext)
 
-    return(
-        <div className="sidebar">
-            <div className="sidebar-text">
-                <a href='../profile'>My Profile</a>
+    return (
+        <div className="page-content">
+            <div className="sidebar">
+                <div>
+                    <a href='../profile'>
+                        My Profile
+                    </a>
+                </div>
+                <div>
+                    <a>
+                        Items
+                    </a>
+                </div>
+                <div>
+                    <a href='../profile/orders'>
+                        Orders
+                    </a>
+                </div>
+                <div>
+                    <a href='../profile/upload'>
+                        Upload
+                    </a>
+                </div>
+                <div>
+                    <a onClick={logoutUser} href={'../login'}>
+                        Logout
+                    </a>
+                </div>
             </div>
-            <div className="sidebar-text">
-                <a>My Items</a>
-            </div>
-            <div className="sidebar-text">
-                <a>Chat</a>
-            </div>
-            <div className="sidebar-text">
-                <a>Upload</a>
-            </div>
-            <div className="sidebar-text">
-                <a>Edit Profile</a>
-            </div>
-            <div className="sidebar-text">
-                <a onClick={logoutUser} href={'../login'}>Log Out</a>
+
+            <div className="page-value">
+
             </div>
         </div>
-    )
+    );
 }
 
 export default ProfileFramework;

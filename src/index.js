@@ -33,7 +33,12 @@ export default function App() {
                             }
                         />
                         <Route path="item/:item_id" element={<Item />} />
-                        <Route path="upload" element={<Upload />} />
+                        <Route path="profile/upload" element={
+                                <PrivateRouteProfile>
+                                    <Upload />
+                                </PrivateRouteProfile>
+                            }
+                        />
                         <Route path="profile" element={
                                 <PrivateRouteProfile>
                                         <MyProfile />

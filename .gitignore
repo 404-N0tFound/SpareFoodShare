@@ -138,6 +138,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+src/media/
 
 # Spyder project settings
 .spyderproject
@@ -162,3 +163,6 @@ src/sparefood/templates/app/build/
 
 # To stop changing the README
 README.md
+
+# Migrations are irrelavent for now
+/src/sparefood/migrations
