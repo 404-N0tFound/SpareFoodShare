@@ -5,8 +5,8 @@ from .models import *
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'status', 'is_private', 'location',
-                  'picture']
+        fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'is_private', 'location',
+                  'provider_id', 'picture']
 
     def save(self):
         item = Item(
@@ -15,7 +15,8 @@ class ItemSerializer(serializers.ModelSerializer):
             expiration_date=self.validated_data['expiration_date'],
             location=self.validated_data['location'],
             is_private=self.validated_data['is_private'],
-            picture=self.validated_data['picture']
+            picture=self.validated_data['picture'],
+            provider_id=self.validated_data['provider_id']
         )
         item.save()
         return item

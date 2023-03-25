@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
+from datetime import datetime
+
 from .serializers import *
 from .models import *
 
@@ -26,6 +28,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
         token['is_business'] = user.is_business
@@ -73,7 +76,7 @@ class CreateOrderView(APIView):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.filter(is_private__lte=False).count():
+    if int(offset) >= Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -82,7 +85,7 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[offset: max_index]
+    return Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 class InfiniteItemsView(ListAPIView):
@@ -99,6 +102,23 @@ class InfiniteItemsView(ListAPIView):
             "items": serializer.data,
             "has_more": is_more_items(request)
         })
+
+    def get(self, request):
+        item = Item.objects.get(id__exact=request.GET.get('uuid'))
+        if item is not None:
+            return Response({
+                "id": item.id,
+                "name": item.name,
+                "description": item.description,
+                "upload_date": item.upload_date,
+                "expiration_date": item.expiration_date,
+                "status": item.status,
+                "location": item.location,
+                "picture": str(item.picture),
+                "shared_times": item.shared_times,
+                "last_updated": item.last_updated
+            }, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrdersView(ListAPIView):
