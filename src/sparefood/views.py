@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
+from datetime import datetime
+
 from .serializers import *
 from .models import *
 
@@ -26,6 +28,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
         return token
@@ -75,7 +78,7 @@ def create_order(request):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.filter(is_private__lte=False).count():
+    if int(offset) >= Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -84,7 +87,7 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[offset: max_index]
+    return Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 class InfiniteItemsView(ListAPIView):

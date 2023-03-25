@@ -11,25 +11,6 @@ from django.conf import settings
 from django.db import models
 
 
-class Item(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField("name", max_length=240)
-    description = models.TextField("description", max_length=10000)
-    upload_date = models.DateField(default=timezone.now)
-    expiration_date = models.DateField()
-    status = models.CharField("status", max_length=30, default="Available")
-    is_private = models.BooleanField(default=False)
-    location = models.CharField("location", max_length=240)
-    is_expired = models.BooleanField(default=False)
-    picture = models.ImageField(verbose_name="picture", upload_to='items')
-    item_shared_times = models.PositiveIntegerField(default=0)
-    item_last_updated = models.DateTimeField(auto_now=True)
-
-    @property
-    def get_absolute_image_url(self):
-        return '%s%s' % (settings.MEDIA_URL, self.image.url)
-
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
@@ -83,6 +64,25 @@ class User(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+class Item(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("name", max_length=240)
+    description = models.TextField("description", max_length=10000)
+    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    upload_date = models.DateField(default=timezone.now)
+    expiration_date = models.DateField()
+    status = models.CharField("status", max_length=30, default="Available")
+    is_private = models.BooleanField(default=False)
+    location = models.CharField("location", max_length=240)
+    picture = models.ImageField(verbose_name="picture", upload_to='items')
+    item_shared_times = models.PositiveIntegerField(default=0)
+    item_last_updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_absolute_image_url(self):
+        return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
 
 class Order(models.Model):
