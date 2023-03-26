@@ -1,5 +1,8 @@
+import json
+
 from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -83,20 +86,28 @@ def user_details(request, pk):
         return JsonResponse(serializer.data)
 
 
-@csrf_exempt
-@api_view(['POST'])
-def upload_new(request):
-    """
-        Add new item to database
-    """
-    if request.method == "POST":
-        serializer = ItemsSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return HttpResponseRedirect('/browse')
-        else:
-            return Response(serializer.errors, status=400)
+# @csrf_exempt
+# @api_view(['POST'])
+# def upload_new(request):
+#     """
+#         Add new item to database
+#     """
+#     if request.method == "POST":
+#         serializer = ItemsSerializer(data=request.POST)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return HttpResponseRedirect('/browse')
+#         else:
+#             return Response(serializer.errors, status=400)
 
+
+@csrf_exempt
+def upload_new(request):
+    data = json.loads(request.body.POST)
+    print(data)
+
+    response_data = {'status': 'success'}
+    return HttpResponseRedirect('/')
 
 # def send_message(email):
 #     code = "1234"

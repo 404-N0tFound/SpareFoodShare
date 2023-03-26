@@ -2,7 +2,7 @@
 
 function Upload(){
   return(
-      <form action="/upload_new" method="post">
+      <form action='/upload_new' encType='application/json' method='POST'>
         <label>
           <p>Item name</p>
         </label>
