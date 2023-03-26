@@ -77,7 +77,8 @@ class CreateOrderView(APIView):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+    if int(offset) >= Item.objects.filter(
+            Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -86,7 +87,33 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+    return Item.objects.filter(
+        Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+
+
+def infinite_myitems_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(
+        Q(provider_id_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(
+            expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+
+
+class InfiniteMyItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_myitems_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
 
 
 class InfiniteItemsView(ListAPIView):

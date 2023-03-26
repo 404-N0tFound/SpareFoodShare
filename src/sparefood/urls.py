@@ -14,6 +14,7 @@ urlpatterns = [
     path('register/', RegistrationView.as_view()),
     path('item/', SingleItemView.as_view()),
     path('items/', InfiniteItemsView.as_view()),
+    path('myitems/', InfiniteMyItemsView.as_view()),
     path('items/upload/', CreateItemView.as_view()),
     path('orders/create/', CreateOrderView.as_view()),
     path('orders/', OrdersView.as_view()),

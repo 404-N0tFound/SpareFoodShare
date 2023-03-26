@@ -14,7 +14,7 @@ function ProfileFramework () {
                     </a>
                 </div>
                 <div>
-                    <a>
+                    <a href='../profile/myitems'>
                         Items
                     </a>
                 </div>
