@@ -1,3 +1,8 @@
 .profile-page {
-    display: inline;
+  display: inline;
+}
+
+.myprofile-page {
+  text-align: center;
+  height: 100vh;
 }

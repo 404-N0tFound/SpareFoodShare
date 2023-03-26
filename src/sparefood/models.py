@@ -50,6 +50,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_business = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']
@@ -70,7 +71,7 @@ class Item(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("name", max_length=240)
     description = models.TextField("description", max_length=10000)
-    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', default="8ba97d61-4c1b-4d43-bcea-da0bd3653a7a")
     upload_date = models.DateField(default=timezone.now)
     expiration_date = models.DateField()
     status = models.CharField("status", max_length=30, default="Available")
@@ -86,14 +87,16 @@ class Item(models.Model):
 
 
 class Order(models.Model):
-    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
-    order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
 
-    order_created_date = models.DateTimeField(auto_now_add=True)
-    order_donation_amount = models.FloatField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
-    order_isCollected = models.BooleanField(default=False)
-    order_isDeleted = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    donation_amount = models.FloatField()
 
-    order_collected_date = models.DateTimeField(null=True, blank=True)
-    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)
+    is_collected = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+
+    collected_date = models.DateTimeField(null=True, blank=True)
+    collection_location = models.CharField(verbose_name="order_location", max_length=240, default="Sheffield")

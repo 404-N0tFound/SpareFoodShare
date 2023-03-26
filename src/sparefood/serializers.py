@@ -25,9 +25,18 @@ class ItemSerializer(serializers.ModelSerializer):
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'order_initiator', 'order_item_id', 'order_created_date',
-                  'order_donation_amount', 'order_isCollected', 'order_isDeleted', 'order_collected_date',
-                  'order_collection_location']
+        fields = ['id', 'initiator', 'item', 'created_date',
+                  'donation_amount', 'is_collected', 'is_deleted', 'collected_date',
+                  'collection_location']
+
+    def save(self):
+        order = Order(
+            initiator=self.validated_data['initiator'],
+            item=self.validated_data['item'],
+            donation_amount=self.validated_data['donation_amount'],
+        )
+        order.save()
+        return order
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -40,13 +49,14 @@ class UsersSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'password']
+        fields = ['full_name', 'email', 'password', 'is_business']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def save(self):
-        user = User(full_name=self.validated_data['full_name'], email=self.validated_data['email'])
+        user = User(full_name=self.validated_data['full_name'], email=self.validated_data['email'],
+                    is_business=self.validated_data['is_business'])
         password = self.validated_data['password']
         user.set_password(password)
         user.save()

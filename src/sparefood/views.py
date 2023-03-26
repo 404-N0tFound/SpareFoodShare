@@ -31,6 +31,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
+        token['is_business'] = user.is_business
         return token
 
 
@@ -64,12 +65,9 @@ class CreateItemView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def create_order(request):
-    """
-        Method to create an order
-    """
-    if request.method == "POST":
+class CreateOrderView(APIView):
+    @classmethod
+    def post(cls, request):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -132,26 +130,24 @@ class SingleItemView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def my_orders_list(request):
-    """
-        Method to get the orders of current user
-    """
-    if request.method == 'POST':
-        user = request.data['user']
-        snippets = Order.objects.filter(order_initiator=user)
+class OrdersView(ListAPIView):
+    def get(self, request):
+        snippets = Order.objects.filter(initiator_id=request.GET.get('user_id'))
         serializer = OrdersSerializer(snippets, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
-def my_orders_check(request):
-    """
-        Method to check duplicate order
-    """
-    if request.method == 'POST':
-        user = request.data['user']
-        item = request.data['item']
-        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
+class OrdersCheckView(ListAPIView):
+    def get(self, request):
+        """
+            Method to check duplicate order
+        """
+        flag = False
+        snippets = Order.objects.filter(initiator_id=request.GET.get('user'),
+                                        item_id=request.GET.get('item'))
         serializer = OrdersSerializer(snippets, many=True)
-        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
+        if (len(serializer.data)) > 0:
+            flag = True
+            return Response(flag, status=status.HTTP_200_OK)
+        else:
+            return Response(flag, status=status.HTTP_200_OK)

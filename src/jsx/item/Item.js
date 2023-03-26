@@ -2,7 +2,6 @@ import Navbar from "../components/Navbar";
 import pic from "../pics/test.jpg"
 import "./Item.css";
 import "../components/Theme.css";
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
 import { useContext } from "react";
@@ -10,7 +9,6 @@ import AuthContext from "../AuthContext";
 import Footer from "../components/Footer";
 
 function Item(){
-    const { item_id }  = useParams();
     const [item, setItem] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isDuplicate, setIsDuplicate] = useState(false);
@@ -18,23 +16,19 @@ function Item(){
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
     let button;
-
+    let item_id = "3ac6c650-1ec7-4c04-b71e-2055b9759694";
     const getItemData = () => {
-        return fetch('http://127.0.0.1:8000/api/items/'+item_id+'/')
+        return fetch('http://127.0.0.1:8000/api/items/?uuid=3ac6c650-1ec7-4c04-b71e-2055b9759694')
             .then((response) => response.json())
             .then((data) => {
                             setIsLoaded(true);
                             setItem(data);})
     }
     const checkDuplicateOrder = () => {
-        const request = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user: user.email, item: item_id})}
-
-        return fetch('http://127.0.0.1:8000/api/orders/check/', request)
-            .then((response) => response.json())
-            .then((data) => {if(data!=0)setIsDuplicate(true)})
+        return fetch(`http://127.0.0.1:8000/api/orders/check/?user=${user.user_id}&item=${item_id}`, {
+            method:'GET'
+            }).then((response) => response.json())
+            .then((data) => {if(data==true)setIsDuplicate(true)})
     }
     useEffect(() => {
         getItemData();
@@ -42,29 +36,31 @@ function Item(){
     },[])
 
     if(isLoaded){
-        if(item.item_isPrivate || item.item_isExpired || item.item_isDeleted){
-            alert("Sorry, this item is not available anymore!")
-            navigate('../browse')
-        }else{
-            const btn_clicked = async(id) => {
-            const orderDetails = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ order_item_id: id, order_initiator: user.email,
-                                       order_donation_amount: donation, order_collection_location: 'location'})}
-            let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
-            await response.json()
-            alert("You order has been created!")
+        if(item == false)
+        {
+            alert("This item is not available anymore");
             navigate('../browse');
+        }else{
+            const btn_clicked = async() => {
+                const orderDetails = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ item: item.id, initiator: user.user_id,
+                                           donation_amount: donation})}
+                let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
+                await response.json()
+                alert("You order has been created!")
+                navigate('../browse');
             }
+
             const handleDonations = event =>{
                 setDonation(event.target.value);
             };
 
-            if(isDuplicate){
-                button = <button disabled className="item-collected-btn">Collected</button>
-            }else
-                button = <button className="item-collect-btn" onClick={() => btn_clicked( item_id )}>Collect</button>
+            if(isDuplicate)
+                button = <button disabled className="item-collected-btn">Interested</button>
+            else
+                button = <button className="item-collect-btn" onClick={() => btn_clicked()}>Register</button>
 
             return(
                 <div className="page-content">
@@ -74,12 +70,11 @@ function Item(){
                             <img className="item-pic" src={ pic } />
                             <div className="item-vl"></div>
                             <div className="item_info">
-                                <h3>Name:  { item.item_name }</h3>
-                                <p><b>Description:</b>  { item.item_des }</p>
-                                <p><b>Provider:</b> { item.item_provider }</p>
-                                <p><b>Upload Date:</b>  { item.item_upload_date }</p>
-                                <p><b>Expiration Date:</b>  { item.item_expiration_date }</p>
-                                <p><b>Location:</b>  { item.item_location }</p>
+                                <h3>Name:  { item.name }</h3>
+                                <p><b>Description:</b>  { item.description }</p>
+                                <p><b>Upload Date:</b>  { item.upload_date }</p>
+                                <p><b>Expiration Date:</b>  { item.expiration_date }</p>
+                                <p><b>Location:</b>  { item.location }</p>
                                 <p><b>Donations:</b><input type="number" onChange={ handleDonations } placeholder="0~10" min="0" max="10"/>  You made a ￡{ donation } donation:)</p>
                             </div>
                             {button}
@@ -89,7 +84,6 @@ function Item(){
                     <Footer />
                 </div>
             );
-
         }
     }
 

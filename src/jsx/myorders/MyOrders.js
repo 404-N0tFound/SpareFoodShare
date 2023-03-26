@@ -6,16 +6,11 @@ import { useContext } from "react";
 import AuthContext from "../AuthContext";
 
 function MyOrders() {
+    let {user} = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    let {user} = useContext(AuthContext);
     useEffect(() => {
-        const request = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json','Authorization': user},
-                    body: JSON.stringify({ user: user.email })}
-
-        fetch('http://127.0.0.1:8000/api/orders/', request)
+        fetch('http://127.0.0.1:8000/api/orders/?user_id='+user.user_id)
             .then((response) => response.json())
             .then((data) => {
                              setIsLoaded(true);

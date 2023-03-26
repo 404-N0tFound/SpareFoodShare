@@ -15,8 +15,8 @@ urlpatterns = [
     path('item/', SingleItemView.as_view()),
     path('items/', InfiniteItemsView.as_view()),
     path('items/upload/', CreateItemView.as_view()),
-    path('api/orders/create/', create_order),
-    path('api/orders/', my_orders_list),
-    path('api/orders/check/', my_orders_check),
+    path('orders/create/', CreateOrderView.as_view()),
+    path('orders/', OrdersView.as_view()),
+    path('orders/check/', OrdersCheckView.as_view()),
     # path('items/<int:pk>/', ItemView.as_view()),
 ]
