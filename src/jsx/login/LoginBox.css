@@ -34,6 +34,7 @@ h6 span{
 [type="checkbox"]:not(:checked){
   position: absolute;
   left: -9999px;
+  display: none;
 }
 
 .checkbox:checked + label,
@@ -53,7 +54,7 @@ h6 span{
 
 .checkbox:checked + label:before,
 .checkbox:not(:checked) + label:before{
-  position: absolute;
+  position: relative;
   display: block;
   width: 36px;
   height: 36px;
