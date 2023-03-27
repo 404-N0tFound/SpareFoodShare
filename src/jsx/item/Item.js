@@ -1,5 +1,4 @@
 import Navbar from "../components/Navbar";
-import pic from "../pics/test.jpg"
 import "./Item.css";
 import "../components/Theme.css";
 import { useState, useEffect } from 'react';
@@ -16,9 +15,9 @@ function Item(){
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
     let button;
-    let item_id = "3ac6c650-1ec7-4c04-b71e-2055b9759694";
+    let item_id = "f7f60471-59bb-491f-b8e5-bc61be9fd0fb";
     const getItemData = () => {
-        return fetch('http://127.0.0.1:8000/api/items/?uuid=3ac6c650-1ec7-4c04-b71e-2055b9759694')
+        return fetch('http://127.0.0.1:8000/api/item/?uuid=' + item_id)
             .then((response) => response.json())
             .then((data) => {
                             setIsLoaded(true);
@@ -34,7 +33,7 @@ function Item(){
         getItemData();
         checkDuplicateOrder();
     },[])
-
+    console.log(item)
     if(isLoaded){
         if(item == false)
         {
@@ -67,7 +66,7 @@ function Item(){
                     <Navbar />
                     <body className="item-body">
                         <div className="item-content">
-                            <img className="item-pic" src={ pic } />
+                            <img className="item-pic" src={`http://127.0.0.1:8000${item.picture}`} />
                             <div className="item-vl"></div>
                             <div className="item_info">
                                 <h3>Name:  { item.name }</h3>

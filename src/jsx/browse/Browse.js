@@ -58,7 +58,6 @@ class Browse extends PureComponent {
     }
 
     render() {
-        console.log(this.state.items)
         return (
             <div className="page-content">
                 <Navbar/>

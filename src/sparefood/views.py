@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
+
 from .serializers import *
 from .models import *
 
@@ -150,7 +151,7 @@ class SingleItemView(APIView):
                     "expiration_date": item.expiration_date,
                     "status": item.status,
                     "location": item.location,
-                    "picture": str(item.picture),
+                    "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
                     "last_updated": item.last_updated
                 }, status=status.HTTP_200_OK)
