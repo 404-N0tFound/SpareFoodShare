@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
 .page-content {
-  background-color: #e3fbe9;
+  background: linear-gradient(#E3FBE9FF 0%, #c3ffcf 50%, #a3ffae 100%);
   font-family: 'Poppins', sans-serif;
 }

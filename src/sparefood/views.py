@@ -1,25 +1,36 @@
-import json
-
-from django.core.mail import send_mail
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.generics import ListAPIView
 
-from .serializers import ItemsSerializer, UsersSerializer
+from datetime import datetime
+
+from .serializers import *
 from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
+class RegistrationView(APIView):
+    @classmethod
+    def post(cls, request):
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        token['username'] = user.username
+        token['user_id'] = str(user.id)
+        token['email'] = user.email
+        token['full_name'] = user.full_name
         return token
 
 
@@ -30,98 +41,117 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['GET'])
 def getApiRoutes(request):
     routes = [
+        '/api/register',
         '/api/token',
         '/api/token/refresh',
+        '/api/item/',
+        '/api/items/',
+        '/api/items/upload',
+        '/api/orders/',
+        '/api/orders/create/',
+        '/api/orders/check/'
     ]
     return Response(routes)
 
 
-# SELECT
-@csrf_exempt
-def items_list(request):
-    if request.method == 'GET':
-        snippets = Items.objects.all()
-        print(snippets.query)
-        serializer = ItemsSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
+class CreateItemView(APIView):
+    @classmethod
+    def post(cls, request):
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-def items_details(request, pk):
+@api_view(['POST'])
+def create_order(request):
     """
-    Retrieve, update or delete a code snippet.
+        Method to create an order
     """
-    try:
-        snippet = Items.objects.get(pk=pk)
-    except Items.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = ItemsSerializer(snippet)
-        print(serializer.data)
-        return JsonResponse(serializer.data)
+    if request.method == "POST":
+        serializer = OrdersSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-def users_list(request):
-    if request.method == 'GET':
-        snippets = Users.objects.all()
-        print(snippets.query)
-        serializer = UsersSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
+def is_more_items(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+        return False
+    return True
 
 
-@csrf_exempt
-def user_details(request, pk):
+def infinite_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+
+
+class InfiniteItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
+
+
+class SingleItemView(APIView):
+    serializer_class = ItemSerializer
+
+    @classmethod
+    def get(cls, request):
+        try:
+            item = Item.objects.get(id__exact=request.GET.get('uuid'))
+            if item is not None:
+                return Response({
+                    "id": item.id,
+                    "name": item.name,
+                    "description": item.description,
+                    "upload_date": item.upload_date,
+                    "expiration_date": item.expiration_date,
+                    "status": item.status,
+                    "location": item.location,
+                    "picture": str(item.picture),
+                    "shared_times": item.shared_times,
+                    "last_updated": item.last_updated
+                }, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def my_orders_list(request):
     """
-    Retrieve, update or delete a code snippet.
+        Method to get the orders of current user
     """
-    try:
-        snippet = Users.objects.get(pk=pk)
-    except Users.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = UsersSerializer(snippet)
-        return JsonResponse(serializer.data)
+    if request.method == 'POST':
+        user = request.data['user']
+        snippets = Order.objects.filter(order_initiator=user)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-# @csrf_exempt
-# @api_view(['POST'])
-# def upload_new(request):
-#     """
-#         Add new item to database
-#     """
-#     if request.method == "POST":
-#         serializer = ItemsSerializer(data=request.POST)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return HttpResponseRedirect('/browse')
-#         else:
-#             return Response(serializer.errors, status=400)
-
-
-@csrf_exempt
-def upload_new(request):
-    data = json.loads(request.body.POST)
-    print(data)
-
-    response_data = {'status': 'success'}
-    return HttpResponseRedirect('/')
-
-# def send_message(email):
-#     code = "1234"
-#     message = 'Your verification code is ' + code
-#     emailBox = []
-#     emailBox.append(email)
-#     send_mail('SpareFoodShare', message, 'littlesheepdy@gmail.com', emailBox, fail_silently=False)
-#
-#     return code
-
-
-# @csrf_exempt
-# @api_view(['POST'])
-# def register(request):
-#     email = request.POST.get('email')
-#     send_message(email)
-#     return HttpResponseRedirect('/')
+@api_view(['POST'])
+def my_orders_check(request):
+    """
+        Method to check duplicate order
+    """
+    if request.method == 'POST':
+        user = request.data['user']
+        item = request.data['item']
+        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
+        serializer = OrdersSerializer(snippets, many=True)
+        return Response(len(serializer.data), status=status.HTTP_201_CREATED)

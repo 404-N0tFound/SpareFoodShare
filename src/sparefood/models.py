@@ -1,33 +1,99 @@
+import uuid
+
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractUser
+
+from phonenumber_field.modelfields import PhoneNumberField
+import django.utils.timezone as timezone
+
+from django.conf import settings
 
 from django.db import models
 
 
-# Items details
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        if not email:
+            raise ValueError("User must have an email address.")
 
-class Items(models.Model):
-    item_name = models.CharField("item_name", max_length=240)
-    item_des = models.TextField("item_des", max_length=240)
-    item_upload_date = models.DateField(auto_now_add=True)
-    item_expiration_date = models.DateField()
-    item_provider = models.CharField("item_provider", max_length=240)
-    item_status = models.CharField("item_status", max_length=240)
-    item_isPrivate = models.BooleanField(default=False)
-    item_location = models.CharField("item_location", max_length=240)
-    item_isExpired = models.BooleanField(default=False)
-    item_pic = models.CharField("item_pic", max_length=240, default="PATH")
+        user = self.model(email=self.normalize_email(email))
 
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class Users(models.Model):
-    user_name = models.CharField("user_name", max_length=240)
-    user_account = models.CharField("user_account", max_length=240, unique=True)
-    user_passwd = models.CharField("user_passwd", max_length=240)
-    user_role = models.CharField("user_role", max_length=240)
-    user_phone = models.CharField("user_phone", max_length=240)
-    user_email = models.CharField("user_email", max_length=240, unique=True)
-    user_created_date = models.DateField(auto_now_add=True)
-    user_isVerified = models.BooleanField(default=False)
+    def create_superuser(self, email, password):
+        user = self.create_user(email=self.normalize_email(email),
+                                password=password,
+                                )
+
+        user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
 
-class VerifyCode(models.Model):
-    code = models.CharField(max_length=256)
-    user = models.OneToOneField('Users', on_delete=models.CASCADE)
+class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(verbose_name="email", max_length=120, unique=True)
+    full_name = models.CharField(verbose_name="full_name", max_length=240)
+    phone_number = PhoneNumberField(verbose_name="phone_number", unique=False)
+    # For whatever reason, django wants to create a username field from the inherited abstract user,
+    # so we make it null with this field to solve that issue
+    username = models.CharField(null=True, max_length=240)
+
+    # The following fields are required for every custom User model
+    last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
+    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['full_name']
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return True
+
+
+class Item(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField("name", max_length=240)
+    description = models.TextField("description", max_length=10000)
+    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    upload_date = models.DateField(default=timezone.now)
+    expiration_date = models.DateField()
+    status = models.CharField("status", max_length=30, default="Available")
+    is_private = models.BooleanField(default=False)
+    location = models.CharField("location", max_length=240)
+    picture = models.ImageField(verbose_name="picture", upload_to='items')
+    shared_times = models.PositiveIntegerField(default=0)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    @property
+    def get_absolute_image_url(self):
+        return '%s%s' % (settings.MEDIA_URL, self.image.url)
+
+
+class Order(models.Model):
+    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
+
+    order_created_date = models.DateTimeField(auto_now_add=True)
+    order_donation_amount = models.FloatField()
+
+    order_isCollected = models.BooleanField(default=False)
+    order_isDeleted = models.BooleanField(default=False)
+
+    order_collected_date = models.DateTimeField(null=True, blank=True)
+    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)
