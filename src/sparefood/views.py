@@ -142,6 +142,7 @@ class SingleItemView(APIView):
     def get(cls, request):
         try:
             item = Item.objects.get(id__exact=request.GET.get('uuid'))
+            user = User.objects.get(id__exact=item.provider_id)
             if item is not None:
                 return Response({
                     "id": item.id,
@@ -150,6 +151,7 @@ class SingleItemView(APIView):
                     "upload_date": item.upload_date,
                     "expiration_date": item.expiration_date,
                     "status": item.status,
+                    "provider": user.email,
                     "location": item.location,
                     "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,

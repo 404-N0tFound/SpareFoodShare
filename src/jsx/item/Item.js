@@ -60,8 +60,9 @@ function Item(){
                 button = <button disabled className="item-collected-btn">Interested</button>
             else
                 button = <button className="item-collect-btn" onClick={() => btn_clicked()}>Register</button>
-
+console.log(item.provider)
             return(
+
                 <div className="page-content">
                     <Navbar />
                     <body className="item-body">
@@ -71,6 +72,7 @@ function Item(){
                             <div className="item_info">
                                 <h3>Name:  { item.name }</h3>
                                 <p><b>Description:</b>  { item.description }</p>
+                                <p><a href = {`mailto: ${item.provider}`}>Contact Provider</a></p>
                                 <p><b>Upload Date:</b>  { item.upload_date }</p>
                                 <p><b>Expiration Date:</b>  { item.expiration_date }</p>
                                 <p><b>Location:</b>  { item.location }</p>
