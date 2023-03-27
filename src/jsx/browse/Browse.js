@@ -70,8 +70,9 @@ class Browse extends PureComponent {
                                     <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="item_info">
                                         <h3>Name: {itemsObj.name}</h3>
-                                        <p>Des: {itemsObj.description}</p>
-                                        <p>Provider: { itemsObj.id }</p>
+                                        <p>Des: {itemsObj.description}</p><br />
+                                        <p>Upload Date: { itemsObj.upload_date }</p>
+                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
                                     <button className="item_btn">Details</button>

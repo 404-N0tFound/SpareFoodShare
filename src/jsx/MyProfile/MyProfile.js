@@ -19,10 +19,10 @@ function MyProfile() {
           <div className="myprofile-page">
             <div>
               <p>
+                {role}
                  Master Windu, <b><i>you survived...</i></b>
               </p>
                  {user && <p>It&apos;s over {user.full_name}, I have the high ground!</p>}
-                 {role}
             </div>
           </div>
 

@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
+
 from .serializers import *
 from .models import *
 
@@ -78,7 +79,8 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -88,7 +90,8 @@ def infinite_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+        Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 def infinite_myitems_filter(request):
@@ -96,8 +99,8 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(
-            expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(is_deleted__lte=False) &
+        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -139,6 +142,7 @@ class SingleItemView(APIView):
     def get(cls, request):
         try:
             item = Item.objects.get(id__exact=request.GET.get('uuid'))
+            user = User.objects.get(id__exact=item.provider_id)
             if item is not None:
                 return Response({
                     "id": item.id,
@@ -147,8 +151,9 @@ class SingleItemView(APIView):
                     "upload_date": item.upload_date,
                     "expiration_date": item.expiration_date,
                     "status": item.status,
+                    "provider": user.email,
                     "location": item.location,
-                    "picture": str(item.picture),
+                    "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
                     "last_updated": item.last_updated
                 }, status=status.HTTP_200_OK)

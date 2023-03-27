@@ -20,14 +20,14 @@
  .listings-content .item_info h3{
 	font-size: 25px;
 	color: black;
-	margin-top: 20px;
+	margin-top: 15px;
 	margin-left: 55%;
 }
 
 .listings-content .item_info p{
     font-size: 15px;
-	line-height: 25px;
-	margin-top: 20px;
+	line-height: 18px;
+	margin-top: 5px;
 	margin-left: 55%;
 }
 
