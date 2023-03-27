@@ -5,7 +5,6 @@ import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
-import upload_pic from "../pics/upload-icon.jpeg";
 
 function Upload() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -113,7 +112,8 @@ function Upload() {
                                                 <input type="file" className="img-input"
                                                        id="picture"
                                                        accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
-                                                <img src={upload_pic} className="upload_pic"/>
+                                                <label htmlFor="picture">Upload picture(s)</label>
+                                                <p>Upload picture(s)</p>
                                             </div>
                                     </div>
                                 </div>

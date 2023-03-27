@@ -151,6 +151,27 @@
     display: flex;
 }
 
+.display-item-image{
+    margin-top: 50px;
+    margin-left: 100px;
+    width: 250px;
+    height: 100px;
+    background-image: url(../pics/upload-solid.svg);
+}
+
+.img-input {
+    display: none;
+}
+
+.display-item-image label{
+    opacity: 0;
+}
+
+.display-item-image p{
+    margin-top: 30px;
+    font-size: 15px;
+}
+
 .button-div {
     text-align: right;
     padding-top: 0px;
