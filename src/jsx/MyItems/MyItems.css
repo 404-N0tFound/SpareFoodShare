@@ -1,8 +1,11 @@
 .my_items-body {
-    min-height: 75vh;
-    align-items: center;
-    text-align: left;
-    color: black;
+	min-height: 75vh;
+}
+
+.my_item_content {
+	align-items: center;
+	text-align: left;
+	color: black;
 }
 
 .my_items-content ul li{
