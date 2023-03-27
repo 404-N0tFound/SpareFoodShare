@@ -108,7 +108,7 @@ function Upload() {
                                 </div>
                                 <div className="column">
                                     <div className="pic-field">
-                                            <div className="display-item-image">
+                                            <div className="upload-display-item-image">
                                                 <input type="file" className="img-input"
                                                        id="picture"
                                                        accept="image/png, image/jpeg"  onChange={handleImageChange} required/>

@@ -151,7 +151,7 @@
     display: flex;
 }
 
-.display-item-image{
+.upload-display-item-image{
     margin-top: 50px;
     margin-left: 100px;
     width: 250px;
@@ -163,11 +163,11 @@
     display: none;
 }
 
-.display-item-image label{
+.upload-display-item-image label{
     opacity: 0;
 }
 
-.display-item-image p{
+.upload-display-item-image p{
     margin-top: 40px;
     font-size: 15px;
     text-align: center;
