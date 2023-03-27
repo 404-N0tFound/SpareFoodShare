@@ -78,7 +78,8 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -88,7 +89,8 @@ def infinite_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+        Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 def infinite_myitems_filter(request):
@@ -96,8 +98,8 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(
-            expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+        Q(provider_id_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(is_deleted__lte=False) &
+        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
