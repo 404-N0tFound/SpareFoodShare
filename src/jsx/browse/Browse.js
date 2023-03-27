@@ -1,4 +1,6 @@
 import {PureComponent} from "react";
+import { Link } from "react-router-dom";
+
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
@@ -75,7 +77,7 @@ class Browse extends PureComponent {
                                         <p>Expiration Date: { itemsObj.expiration_date }</p>
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
-                                    <button className="item_btn">Details</button>
+                                    <Link to={`/item/${itemsObj.id}`} params={{ id: itemsObj.id }} className="item_btn">Details</Link>
                                 </li>
                             </div>
                             )

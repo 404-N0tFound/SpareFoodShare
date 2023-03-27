@@ -3,6 +3,7 @@ import "./Item.css";
 import "../components/Theme.css";
 import { useState, useEffect } from 'react';
 import {useNavigate} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../AuthContext";
 import Footer from "../components/Footer";
@@ -12,10 +13,12 @@ function Item(){
     const [isLoaded, setIsLoaded] = useState(false);
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [donation, setDonation] = useState(0);
+
     let {user} = useContext(AuthContext);
     let navigate = useNavigate();
+    const { item_id } = useParams();
     let button;
-    let item_id = "f7f60471-59bb-491f-b8e5-bc61be9fd0fb";
+
     const getItemData = () => {
         return fetch('http://127.0.0.1:8000/api/item/?uuid=' + item_id)
             .then((response) => response.json())
@@ -33,7 +36,7 @@ function Item(){
         getItemData();
         checkDuplicateOrder();
     },[])
-    console.log(item)
+
     if(isLoaded){
         if(item == false)
         {
@@ -60,7 +63,7 @@ function Item(){
                 button = <button disabled className="item-collected-btn">Interested</button>
             else
                 button = <button className="item-collect-btn" onClick={() => btn_clicked()}>Register</button>
-console.log(item.provider)
+
             return(
 
                 <div className="page-content">
