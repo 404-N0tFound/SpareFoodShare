@@ -68,13 +68,16 @@ class DisplayList extends Component {
                                 <div className="display-item-text">
                                     <div>
                                         <p>
-                                            Join 
+                                            Help spread the benefit with the wider community by sharing on social media
                                         </p>
                                     </div>
                                     <div>
-                                        <a className="loginButton" type="button">
-                                            *THIS WILL BE SOCIAL MEDIA BUTTONS*
-                                        </a>
+                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                                        <a href="#" className="fa fa-facebook"></a>
+                                        <a href="#" className="fa fa-snapchat-ghost"></a>
+                                        <a href="#" className="fa fa-linkedin"></a>
+                                        <a href="#" className="fa fa-reddit"></a>
+                                        <a href="#" className="fa fa-twitter"></a>
                                     </div>
                                 </div>
                             </div>
