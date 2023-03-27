@@ -1,10 +1,14 @@
 .sidebar {
     height: 400px;
     width: 200px;
-    left: 0;
+    left: 10px;
+    top: 22%;
     padding-top: 50px;
     position: absolute;
-    background: rgba(21, 102, 29, 0.7);
+    background: rgba(21, 102, 29, 0.6);
+    border-radius: 25px;
+    border: solid;
+    border-color: white;
 }
 
 .sidebar-text {

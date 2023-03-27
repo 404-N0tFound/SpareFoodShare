@@ -6,7 +6,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'is_private', 'is_deleted', 'location',
-                  'provider_id', 'picture']
+                  'provider', 'picture']
 
     def save(self):
         item = Item(
@@ -17,7 +17,7 @@ class ItemSerializer(serializers.ModelSerializer):
             is_private=self.validated_data['is_private'],
             is_deleted=self.validated_data['is_deleted'],
             picture=self.validated_data['picture'],
-            provider_id=self.validated_data['provider_id']
+            provider_id=self.validated_data['provider']
         )
         item.save()
         return item
