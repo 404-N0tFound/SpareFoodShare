@@ -168,8 +168,9 @@
 }
 
 .display-item-image p{
-    margin-top: 30px;
+    margin-top: 40px;
     font-size: 15px;
+    text-align: center;
 }
 
 .button-div {
