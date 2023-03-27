@@ -76,17 +76,17 @@ class MyItems extends PureComponent{
                                     <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="my_item_info">
                                         <h3>Name: {itemsObj.name}</h3>
-                                        <p>Des: {itemsObj.description}</p>
-                                        <p>Provider: { itemsObj.provider_id }</p>
+                                        <p>Des: {itemsObj.description}</p><br />
+                                        <p>Upload Date: { itemsObj.upload_date }</p>
+                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
-                                    <button className="my_item_btn">Details</button>
                                 </li>
                             </div>
                             )
                         )}
                         {this.state.items.length === 0 &&
-                            <div>
+                            <div className="no_items_msg">
                                 There are no items to display at this time.
                             </div>
                         }

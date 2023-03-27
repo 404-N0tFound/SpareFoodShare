@@ -1,7 +1,6 @@
 .my_items-body {
     min-height: 75vh;
     align-items: center;
-    font-size: calc(10px + 2vmin);
     text-align: left;
     color: black;
 }
@@ -11,7 +10,7 @@
 	float: left;
 	list-style: none;
 	background-color: #FFFFFF;
-	margin-top: 0%;
+	margin-top: 1%;
 	margin-left: 13%;
 	height: 350px;
 	-webkit-box-shadow: 0 0 5px 3px #ccc;
@@ -20,13 +19,13 @@
  .my_items-content .my_item_info h3{
 	font-size: 25px;
 	color: black;
-	margin-top: 20px;
+	margin-top: 30px;
 	margin-left: 55%;
 }
 
 .my_items-content .my_item_info p{
-    font-size: 15px;
-	line-height: 25px;
+    font-size: 18px;
+	line-height: 20px;
 	margin-top: 20px;
 	margin-left: 55%;
 }
@@ -42,6 +41,10 @@
     width: 50%;
     height: 100%;
     float: left;
+}
+
+.no_items_msg{
+    margin-left: 13%;
 }
 
 .my_item_btn{

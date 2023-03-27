@@ -19,11 +19,6 @@ function ProfileFramework () {
                     </a>
                 </div>
                 <div>
-                    <a href='../profile/orders'>
-                        Orders
-                    </a>
-                </div>
-                <div>
                     <a href='../profile/upload'>
                         Upload
                     </a>
