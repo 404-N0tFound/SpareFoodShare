@@ -14,12 +14,12 @@ function Navbar () {
                     </div>
                     <div className="links-list">
                         <ul>
+                            <a href="../browse" className="browse-a">Browse</a>
                             {user ? (
                                 <a href="../profile" className="login-a">My Profile</a>
                             ) : (
                                 <a href="../login" className="login-a">Login</a>
                             ) }
-                            <a href="../browse" className="browse-a">Browse</a>
                         </ul>
                     </div>
                 </div>

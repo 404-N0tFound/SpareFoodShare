@@ -1,0 +1,9 @@
+[type="checkbox"]:not(:checked) {
+    position: relative;
+    left: 0;
+}
+
+[type="checkbox"]:is(:checked) {
+    position: relative;
+    left: 0;
+}

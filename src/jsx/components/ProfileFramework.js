@@ -15,6 +15,16 @@ function ProfileFramework () {
                 </div>
                 <div>
                     <a>
+                        Items
+                    </a>
+                </div>
+                <div>
+                    <a href='../profile/orders'>
+                        Orders
+                    </a>
+                </div>
+                <div>
+                    <a href='../profile/upload'>
                         Upload
                     </a>
                 </div>
