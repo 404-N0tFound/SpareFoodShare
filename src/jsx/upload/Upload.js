@@ -5,6 +5,8 @@ import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import Footer from "../components/Footer";
+import upload_pic from "../pics/upload-icon.jpeg";
 
 function Upload() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -33,7 +35,7 @@ function Upload() {
             form_data.append('expiration_date', e.target.expiration.value);
             form_data.append('is_private', e.target.is_private.checked);
             form_data.append('location', e.target.location.value);
-            form_data.append('provider_id', user_id.toString());
+            form_data.append('provider', user_id.toString());
             console.log(form_data);
             let url = 'http://127.0.0.1:8000/api/items/upload/';
             axios.post(url, form_data, {
@@ -51,49 +53,59 @@ function Upload() {
 
     return (
         <div className="page-content">
-            <div className="my-profile">
+            <div className="my-uploads">
                 <Navbar/>
-                <div className="profile-page">
+                <div className="upload-page">
                     <ProfileFramework/>
-                    <div>
-                        <form onSubmit={createItem}>
-                            <label>
-                                <p>Item name</p>
-                            </label>
-                            <input type="text" name="name" id="name"/>
-                            <br/><br/>
-                            <label>
-                                <p>Description</p>
-                            </label>
-                            <input type="text" name="description" id="description"/>
-                            <br/><br/>
-                            <label>
-                                <p>Expiry date</p>
-                            </label>
-                            <input type="date" name="expiration" id="expiration_date"/>
-                            <br/><br/>
-                            <label>
-                                <p>Is is private</p>
-                            </label>
-                            <input type="checkbox" name="is_private" id="is_private"/>
-                            <br/><br/>
-                            <label>
-                                <p>Location</p>
-                            </label>
-                            <input type="text" name="location" id="location"/>
-                            <br/><br/>
-                            <label>
-                                <p>Picture</p>
-                            </label>
-                            <input type="file"
-                                   id="picture"
-                                   accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
-                            <br/><br/>
-                            <input type="submit"/>
+                    <div className="upload-box">
+                        <form className="upload-form" onSubmit={createItem}>
+                            <h2 className="form-title">
+                                Upload Item
+                            </h2>
+                            <div className="row">
+                                <div className="column">
+                                    <div className="form-field">
+                                        <label className="upload-label-top"><p>Item name</p></label>
+                                        <input type="text" name="name" className="form-style" id="name"/>
+                                    </div>
+                                    <div className="form-field">
+                                        <label className="upload-label"><p>Expiry date</p></label>
+                                        <input type="date" name="expiration" className="form-style" id="expiration_date"/>
+                                    </div>
+                                    <div className="private-check">
+                                        <label className="upload-label"><p>Is it private?</p>
+                                        <input type="checkbox" name="is_private" id="is_private"/>
+                                            <span className="private-checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div className="form-field">
+                                        <label className="upload-label"><p>Location</p></label>
+                                        <input type="text" name="location" className="form-style" id="location"/>
+                                    </div>
+                                    <div className="form-field">
+                                        <label className="upload-label"><p>Description</p></label>
+                                            <textarea name="description" className="form-style-descr" id="description"/>
+                                    </div>
+                                </div>
+                                <div className="column">
+                                    <div className="pic-field">
+                                            <div className="display-item-image">
+                                                <input type="file" className="img-input"
+                                                       id="picture"
+                                                       accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
+                                                <img src={upload_pic} className="upload_pic"/>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="button-div">
+                                <button className="submit-button">submit</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 }
