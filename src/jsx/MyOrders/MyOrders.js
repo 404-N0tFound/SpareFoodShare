@@ -1,5 +1,5 @@
 import "../components/Theme.css";
-import "./MyItems.css";
+import "./MyOrders.css";
 import ProfileFramework from "../components/ProfileFramework";
 import Navbar from "../components/Navbar";
 import AuthContext from "../AuthContext";
@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
 
-class MyItems extends PureComponent{
+class MyOrders extends PureComponent{
     static contextType = AuthContext
 
     constructor(props) {
@@ -15,7 +15,7 @@ class MyItems extends PureComponent{
         this.state = {
             error: false,
             loading: false,
-            items: [],
+            orders: [],
             has_more: true,
             offset: 0,
             limit: 20,
@@ -37,23 +37,23 @@ class MyItems extends PureComponent{
     }
 
     componentDidMount() {
-        this.loadItems()
+        this.loadOrders()
     }
 
-    loadItems = () => {
+    loadOrders = () => {
         this.setState({loading: true, user: this.context.user}, async () => {
             const { offset, limit, user } = this.state;
-            let response = await fetch(`http://127.0.0.1:8000/api/myitems/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
+            let response = await fetch(`http://127.0.0.1:8000/api/orders/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
                 method:'GET'
             })
             let data = await response.json()
             if (response.status === 200) {
-                const newItems = data.items;
+                const newOrders = data.orders;
                 const has_more = data.has_more;
                 this.setState({
                     has_more: has_more,
                     loading: false,
-                    items: [...this.state.items, ...newItems],
+                    orders: [...this.state.orders, ...newOrders],
                     offset: offset + limit
                 })
             } else {
@@ -63,31 +63,29 @@ class MyItems extends PureComponent{
     }
 
     render() {
+    console.log(this.state.orders)
         return (
             <div className="page-content">
                 <Navbar/>
-                <body className="my_items-body">
+                <body className="my_orders-body">
                 <ProfileFramework />
-                <div className="my_items-content">
+                <div className="my_orders-content">
                     <ul>
-                        {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id} className="my_items-card">
+                        {this.state.orders && this.state.orders.map((ordersObj) => (
+                            <div key={ordersObj.id} className="my_orders-card">
                                 <li>
-                                    <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
-                                    <div className="my_items_info">
-                                        <h3>Name: {itemsObj.name}</h3>
-                                        <p>Des: {itemsObj.description}</p><br />
-                                        <p>Upload Date: { itemsObj.upload_date }</p>
-                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
-                                        <p>Location: { itemsObj.location }</p>
+                                    <div className="my_orders_info">
+                                        <h3>Name: {ordersObj.item} </h3>
+                                        <p>Create Date: {ordersObj.created_date}</p>
+                                        <p>Location: </p>
                                     </div>
                                 </li>
                             </div>
                             )
                         )}
-                        {this.state.items.length === 0 &&
-                            <div className="no_items_msg">
-                                There are no items to display at this time.
+                        {this.state.orders.length === 0 &&
+                            <div className="no_orders_msg">
+                                There are no orders to display at this time.
                             </div>
                         }
                     </ul>
@@ -100,4 +98,4 @@ class MyItems extends PureComponent{
 
 }
 
-export default MyItems;
+export default MyOrders;
