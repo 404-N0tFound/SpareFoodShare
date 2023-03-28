@@ -1,0 +1,67 @@
+<!--
+We are going to keep this file for now since it will eventually get converted into a react component for the user information page.
+A lot of this is test data but will get used and styled accordingly as time goes on to the personal details page.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            }
+        .button {
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 css>Personal Details</h1>
+        <div class="form-group">
+            <label for="username">Name：</label>
+            <input type="text" readonly="readonly" name="username" class="form-control" id="username" placeholder=""/>
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Phone number：</label>
+            <input type="text" readonly="readonly" name="phone_number" class="form-control" id="phone_number" placeholder="+44"/>
+        </div>
+
+        <div class="form-group">
+            <label for="email">email：</label>
+            <input type="text" readonly="readonly" name="email" class="form-control" id="email" placeholder=""/>
+        </div>
+
+        <div class="form-group">
+            <label for="password">password：</label>
+            <input type="text" readonly="readonly" name="password" class="form-control" id="password" placeholder=""/>
+        </div>
+
+        <div class="form-group">
+            <label for="location">location：</label>
+            <input type="text" readonly="readonly" name="location" class="form-control" id="location" placeholder=""/>
+        </div>
+
+        <div class="form-group">
+            <label for="Description">Description：</label>
+            <input type="text" readonly="readonly" name="Description" class="form-control" id="Description" placeholder=""/>
+        </div>
+        <hr/>
+
+    </div>
+</body>
+</html>
