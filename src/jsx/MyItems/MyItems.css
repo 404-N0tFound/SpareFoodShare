@@ -9,7 +9,7 @@
 }
 
 .my_items-content ul li{
-	width: 30%;
+	width: 35%;
 	float: left;
 	list-style: none;
 	background-color: #FFFFFF;
@@ -23,14 +23,14 @@
 	font-size: 25px;
 	color: black;
 	margin-top: 30px;
-	margin-left: 55%;
+	margin-left: 0%;
 }
 
 .my_items-content .my_item_info p{
     font-size: 18px;
 	line-height: 20px;
 	margin-top: 20px;
-	margin-left: 55%;
+	margin-left: 0%;
 }
 
 .my_item_info{
@@ -41,7 +41,7 @@
 }
 
 .my_items-pic{
-    width: 50%;
+    width: 40%;
     height: 100%;
     float: left;
 }

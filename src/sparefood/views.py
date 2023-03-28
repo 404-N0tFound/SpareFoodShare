@@ -99,8 +99,7 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(is_deleted__lte=False) &
-        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):

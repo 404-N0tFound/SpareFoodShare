@@ -1,4 +1,6 @@
 import {PureComponent} from "react";
+import { Link } from "react-router-dom";
+
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
@@ -14,8 +16,7 @@ class Browse extends PureComponent {
             items: [],
             has_more: true,
             offset: 0,
-            limit: 20,
-            active_item: null
+            limit: 20
         };
 
         window.onscroll = () => {
@@ -28,13 +29,6 @@ class Browse extends PureComponent {
             var difference = document.documentElement.clientHeight + 100;
             if (changeHeight <= difference) {
                 this.loadItems();
-            }
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
             }
         }
     }
@@ -65,19 +59,6 @@ class Browse extends PureComponent {
         })
     }
 
-    openModal = (selectedItem) => {
-        this.setState({
-            active_item: selectedItem
-        });
-        const modal = document.getElementById("myModal");
-        modal.style.display = "block";
-    }
-
-    closeModal = () => {
-        const modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
-
     render() {
         return (
             <div className="page-content">
@@ -86,14 +67,17 @@ class Browse extends PureComponent {
                 <div className="listings-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id}>
+                            <div key={itemsObj.id} className="item-card">
                                 <li>
-                                    <a className="item-card" id="myBtn" onClick={() => this.openModal(itemsObj)}>
-                                        <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
-                                        <h1>{itemsObj.name}</h1>
-                                        <p>Expiry Date: {itemsObj.expiration_date}</p>
-                                        <p><button>Register Interest</button></p>
-                                    </a>
+                                    <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
+                                    <div className="item_info">
+                                        <h3>Name: {itemsObj.name}</h3>
+                                        <p>Des: {itemsObj.description}</p>
+                                        <p>Upload Date: { itemsObj.upload_date }</p>
+                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
+                                        <p>Location: { itemsObj.location }</p>
+                                    </div>
+                                    <Link to={`/item/${itemsObj.id}`} params={{ id: itemsObj.id }} className="item_btn">Details</Link>
                                 </li>
                             </div>
                             )
@@ -105,25 +89,12 @@ class Browse extends PureComponent {
                         }
                     </ul>
                 </div>
-                <div className="modal" id="myModal">
-                    <div className="modal-content">
-                        <span onClick={this.closeModal} className="close">&times;</span>
-                        {this.state.active_item != null ?
-                            <div>
-                                <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
-                                <h1>{this.state.active_item.name}</h1>
-                                <p>Description: {this.state.active_item.description}</p>
-                                <p>Location: {this.state.active_item.location}</p>
-                                <p>Expiry Date: {this.state.active_item.expiration_date}</p>
-                                <p><button>Register Interest</button></p>
-                            </div>
-                        : <p>No item selected</p> }
-                    </div>
-                </div>
                 </body>
                 <Footer id="foot_id"/>
             </div>
         )
     }
 }
+
 export default Browse;
+
