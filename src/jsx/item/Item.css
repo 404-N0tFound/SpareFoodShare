@@ -18,15 +18,11 @@
 .item-content .item_info p, h3{
 	margin-left: 50%;
 }
-b{
-    margin-left: 10%;
-}
 .item-content .item_info p{
     font-size: 25px;
 	line-height: 25px;
 	margin-top: 20px;
 }
-
 .item_info{
 	margin-left: 30px;
 	margin-right: 30px;
@@ -49,7 +45,17 @@ b{
     padding: 0.6% 2.2%;
     border-radius: 5px;
     float: right;
-    margin-right: 30%;
+    margin-right: 20%;
+    margin-top: 4%;
+}
+.item-collected-btn{
+    background-color: red;
+    color: white;
+    font-size: 15px;
+    padding: 0.6% 2.2%;
+    border-radius: 5px;
+    float: right;
+    margin-right: 20%;
     margin-top: 4%;
 }
 .item-vl {

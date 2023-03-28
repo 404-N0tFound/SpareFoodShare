@@ -1,0 +1,173 @@
+.upload-page {
+    text-align: center;
+}
+
+.upload-box {
+    padding-top: 25px;
+    text-align: left;
+}
+
+.upload-form {
+  position: relative;
+  width: 78%;
+  height: 100%;
+  background: rgba(21, 102, 29, 0.2);
+  border-radius: 25px;
+  left: 18%;
+  border: solid;
+  border-color: white;
+}
+
+.form-title {
+    margin-left: 3%;
+    padding-top: 0%;
+}
+
+.upload-label-top {
+    margin-top: 5px;
+    position: relative;
+    text-align: left;
+    color: black;
+    margin-left: 50px;
+    display: inline-flex;
+    width: 150px;
+    font-weight: 500;
+}
+
+.upload-label {
+    position: relative;
+    text-align: left;
+    color: black;
+    margin-left: 50px;
+    display: inline-flex;
+    width: 150px;
+    font-weight: 500;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.form-style {
+  padding: 5px 2px;
+  padding-left: 20px;
+  height: 40px;
+  width: 300px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 1px;
+  outline: none;
+  color: black;
+  background-color: #F0FFF2;
+  border: none;
+}
+
+.form-style-descr {
+  padding: 5px 2px;
+  padding-left: 20px;
+  padding-top: 10px;
+  height: 100px;
+  width: 300px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 1px;
+  outline: none;
+  color: black;
+  background-color: #F0FFF2;
+  border: none;
+}
+
+.private-check {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.private-check input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.private-checkmark {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  left: 100%;
+  top: 35%;
+  border-radius: 25%;
+  background-color: white;
+}
+
+.private-check:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.private-check input:checked ~ .checkmark {
+  background-color: black;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.private-check input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.private-check .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.pic-field {
+    position: relative;
+    color: black;
+    margin-left: 100px;
+    margin-top: 0px;
+    display: inline-block;
+    width: 200px;
+    color: black;
+    display: flex;
+}
+
+.button-div {
+    text-align: right;
+    padding-top: 0px;
+}
+
+.submit-button {
+  border-radius: 25px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 200ms linear;
+  padding: 10px 30px;
+  margin: 5%;
+  letter-spacing: 1px;
+  display: inline-flex;
+  text-align: center;
+  background-color: #ffea75;
+  color: #5e2d1d;
+}
