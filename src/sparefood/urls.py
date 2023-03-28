@@ -1,11 +1,13 @@
 from .views import *
-from django.urls import path
+from django.urls import path, include
 
 from .views import MyTokenObtainPairView
 
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
+
+from . import views
 
 urlpatterns = [
     path('', getApiRoutes),
@@ -18,5 +20,6 @@ urlpatterns = [
     path('api/orders/create/', create_order),
     path('api/orders/', my_orders_list),
     path('api/orders/check/', my_orders_check),
+    path('activate/<uidb64>/<token>', views.activate, name='activate'),
     # path('items/<int:pk>/', ItemView.as_view()),
 ]

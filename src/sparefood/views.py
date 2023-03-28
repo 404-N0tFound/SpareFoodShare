@@ -1,4 +1,12 @@
+from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.checks import messages
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -13,6 +21,10 @@ from .models import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from verify_email.email_handler import send_verification_email
+from django.core.mail import EmailMessage
+from .tokens import account_activation_token
+
 
 class RegistrationView(APIView):
     @classmethod
@@ -20,6 +32,7 @@ class RegistrationView(APIView):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            # activateEmail(request, serializer, serializer.cleaned_data.get('email'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -79,7 +92,8 @@ def create_order(request):
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+    if int(offset) >= Item.objects.filter(
+            Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -88,7 +102,8 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+    return Item.objects.filter(
+        Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
 class InfiniteItemsView(ListAPIView):
@@ -155,3 +170,31 @@ def my_orders_check(request):
         snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
         serializer = OrdersSerializer(snippets, many=True)
         return Response(len(serializer.data), status=status.HTTP_201_CREATED)
+
+
+def activateEmail(request, user, toEmail):
+    mail_subject = "Activate your user account."
+    message = render_to_string("activate_account.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.PK)),
+        'token': account_activation_token.make_token(user),
+        "protocol": 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(mail_subject, message, to=[toEmail])
+    # messages.success(request, f'Dear {user}, {toEmail}')
+
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+    return HttpResponseRedirect('/')

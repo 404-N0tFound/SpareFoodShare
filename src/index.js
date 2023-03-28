@@ -12,7 +12,7 @@ import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
 import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
-import Register from "./jsx/register/Register";
+// import Register from "./jsx/register/Register";
 import MyProfile from "./jsx/MyProfile/MyProfile";
 import MyOrders from "./jsx/myorders/MyOrders";
 
