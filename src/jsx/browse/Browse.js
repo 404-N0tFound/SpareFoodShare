@@ -1,12 +1,13 @@
+/* eslint-disable */
 import {PureComponent} from "react";
-import { Link } from "react-router-dom";
-
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import jwtDecode from "jwt-decode";
+import {useNavigate, useParams} from 'react-router-dom';
 
-class Browse extends PureComponent {
+class BrowseScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -16,7 +17,8 @@ class Browse extends PureComponent {
             items: [],
             has_more: true,
             offset: 0,
-            limit: 20
+            limit: 20,
+            active_item: null
         };
 
         window.onscroll = () => {
@@ -29,6 +31,13 @@ class Browse extends PureComponent {
             var difference = document.documentElement.clientHeight + 100;
             if (changeHeight <= difference) {
                 this.loadItems();
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
     }
@@ -59,6 +68,32 @@ class Browse extends PureComponent {
         })
     }
 
+    openModal = (selectedItem) => {
+        this.setState({
+            active_item: selectedItem
+        });
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+    }
+
+    closeModal = () => {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    registerInterest = async () => {
+        const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+        const orderDetails = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
+                donation_amount: 0.00})}
+        let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
+        await response.json()
+        alert("You order has been created!")
+        this.props.navigation('../')
+    }
+
     render() {
         return (
             <div className="page-content">
@@ -67,17 +102,14 @@ class Browse extends PureComponent {
                 <div className="listings-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id} className="item-card">
+                            <div key={itemsObj.id}>
                                 <li>
-                                    <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
-                                    <div className="item_info">
-                                        <h3>Name: {itemsObj.name}</h3>
-                                        <p>Des: {itemsObj.description}</p>
-                                        <p>Upload Date: { itemsObj.upload_date }</p>
-                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
-                                        <p>Location: { itemsObj.location }</p>
-                                    </div>
-                                    <Link to={`/item/${itemsObj.id}`} params={{ id: itemsObj.id }} className="item_btn">Details</Link>
+                                    <a className="item-card" id="myBtn" onClick={() => this.openModal(itemsObj)}>
+                                        <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
+                                        <h1>{itemsObj.name}</h1>
+                                        <p>Expiry Date: {itemsObj.expiration_date}</p>
+                                        <p><button>Register Interest</button></p>
+                                    </a>
                                 </li>
                             </div>
                             )
@@ -89,6 +121,21 @@ class Browse extends PureComponent {
                         }
                     </ul>
                 </div>
+                <div className="modal" id="myModal">
+                    <div className="modal-content">
+                        <span onClick={this.closeModal} className="close">&times;</span>
+                        {this.state.active_item != null ?
+                            <div>
+                                <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
+                                <h1>{this.state.active_item.name}</h1>
+                                <p>Description: {this.state.active_item.description}</p>
+                                <p>Location: {this.state.active_item.location}</p>
+                                <p>Expiry Date: {this.state.active_item.expiration_date}</p>
+                                <p><button onClick={this.registerInterest}>Register Interest</button></p>
+                            </div>
+                        : <p>No item selected</p> }
+                    </div>
+                </div>
                 </body>
                 <Footer id="foot_id"/>
             </div>
@@ -96,5 +143,11 @@ class Browse extends PureComponent {
     }
 }
 
-export default Browse;
+const Browse = (Component) => {
+    return (props) => {
+        const navigation = useNavigate();
+        return <Component navigation={navigation} {...props} />
+    }
+}
 
+export default Browse(BrowseScreen);
