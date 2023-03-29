@@ -3,6 +3,8 @@ import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+//import {useNavigate} from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 class Browse extends PureComponent {
     constructor(props) {
@@ -78,6 +80,20 @@ class Browse extends PureComponent {
         modal.style.display = "none";
     }
 
+    registerInterest = async () => {
+        const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+        //const navigate = useNavigate()
+        const orderDetails = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
+                donation_amount: 0.00})}
+        let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
+        await response.json()
+        alert("You order has been created!")
+        //navigate('../browse');
+    }
+
     render() {
         return (
             <div className="page-content">
@@ -115,7 +131,7 @@ class Browse extends PureComponent {
                                 <p>Description: {this.state.active_item.description}</p>
                                 <p>Location: {this.state.active_item.location}</p>
                                 <p>Expiry Date: {this.state.active_item.expiration_date}</p>
-                                <p><button>Register Interest</button></p>
+                                <p><button onClick={this.registerInterest}>Register Interest</button></p>
                             </div>
                         : <p>No item selected</p> }
                     </div>
