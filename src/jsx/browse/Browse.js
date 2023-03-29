@@ -1,12 +1,13 @@
+/* eslint-disable */
 import {PureComponent} from "react";
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-//import {useNavigate} from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import {useNavigate, useParams} from 'react-router-dom';
 
-class Browse extends PureComponent {
+class BrowseScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -82,7 +83,6 @@ class Browse extends PureComponent {
 
     registerInterest = async () => {
         const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
-        //const navigate = useNavigate()
         const orderDetails = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -91,7 +91,7 @@ class Browse extends PureComponent {
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
         await response.json()
         alert("You order has been created!")
-        //navigate('../browse');
+        this.props.navigation('../')
     }
 
     render() {
@@ -142,4 +142,12 @@ class Browse extends PureComponent {
         )
     }
 }
-export default Browse;
+
+const Browse = (Component) => {
+    return (props) => {
+        const navigation = useNavigate();
+        return <Component navigation={navigation} {...props} />
+    }
+}
+
+export default Browse(BrowseScreen);
