@@ -70,14 +70,14 @@ class MyItems extends PureComponent{
         this.setState({context: false});
     }
 
-    showNav = (event) => {
+    showNav = (selectedItem, event) => {
         event.preventDefault();
         this.setState({context: false});
         const positionChange = {
             x: event.pageX,
             y: event.pageY,
         }
-        this.setState({xYPosition: positionChange});
+        this.setState({xYPosition: positionChange, active_item: selectedItem});
         this.setState({context: true});
     };
 
@@ -87,7 +87,7 @@ class MyItems extends PureComponent{
 
     initMenu = (chosen) => {
         this.setState({chosen: chosen});
-        alert(chosen);
+        alert(chosen + " : " + this.state.active_item.name);
     }
 
     render() {
@@ -99,7 +99,7 @@ class MyItems extends PureComponent{
                 <div className="my_items-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id} className="my_items-card"  onContextMenu = {this.showNav}>
+                            <div key={itemsObj.id} className="my_items-card"  onContextMenu = {this.showNav.bind(this, itemsObj)}>
                                 <li>
                                     <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="my_items_info">
@@ -125,7 +125,7 @@ class MyItems extends PureComponent{
                     {this.state.context && (
                         <div
                             style={{ top: this.state.xYPosition.y, left: this.state.xYPosition.x }}
-                            className="rightClick"
+                            className="rightClick_menu"
                         >
                              <div className="menuElement" onClick={() => this.initMenu("Details")}>Details</div>
                              <div className="menuElement" onClick={() => this.initMenu("Delete")}>Delete</div>
