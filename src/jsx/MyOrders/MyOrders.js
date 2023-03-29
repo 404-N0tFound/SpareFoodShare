@@ -75,9 +75,13 @@ class MyOrders extends PureComponent{
                             <div key={ordersObj.id} className="my_orders-card">
                                 <li>
                                     <div className="my_orders_info">
-                                        <h3>Name: {ordersObj.item} </h3>
+                                        <h3>Item Name: {ordersObj.item} </h3>
                                         <p>Create Date: {ordersObj.created_date}</p>
-                                        <p>Location: </p>
+                                        <p>Initiator Email: {ordersObj.initiator}</p>
+                                        <p>Pickup Location: {ordersObj.collection_location} </p>
+                                        <p>Created Date: {ordersObj.created_date } </p>
+                                        <p>Donation: ￡{ordersObj.donation_amount} </p>
+                                        <p>Collect Date: {ordersObj.collect_date} </p>
                                     </div>
                                 </li>
                             </div>
