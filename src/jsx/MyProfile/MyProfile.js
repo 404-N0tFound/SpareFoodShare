@@ -11,12 +11,9 @@ function MyProfile() {
     //let role;
     if (user.is_business)
         //role = <p>Role: Business</p>
-
     return (
         <div className="page-content">
             <Navbar/>
-            <div className="MyProfile_page">
-
             <ProfileFramework/>
                 <div className="Personal_Details">
                     <div className="reg_form">
@@ -53,12 +50,8 @@ function MyProfile() {
                             </div>
                         </form>
                     </div>
-
                 </div>
-
-            </div>
             <Footer/>
-
         </div>
     );
 }

@@ -1,20 +1,12 @@
-
-
 .Personal_Details {
-
   height: 550px;
-  margin-top: 20px;
+  margin-top: 60px;
   border: 1px solid #dfdfdf;
-
   height: 75vh;
 }
 
 
 .Personal_Details .reg_form {
-  /*width: 600px;*/
-  /*margin: 50px auto 0;*/
-  /*position: relative;*/
-
 }
 .Personal_Details .reg_form ul li {
   margin: 20px 0;
@@ -64,15 +56,9 @@
 .button {
   border:0.5px solid green;
   border-radius: 10px;
-  /*top:40%;*/
-  /*left:52%;*/
   width:200px;
   height:35px;
-  /*position: absolute;*/
-  /*top: 10px;*/
-  /*z-index: 2;*/
   position: relative;
-  /*top: 10px;*/
   left: 170px;
   background: #D4F0CA;
   cursor: pointer
@@ -91,13 +77,10 @@ input::placeholder {
 .upload-box {
   padding-top: 25px;
   text-align: left;
-
 }
 
 .upload-form {
-  /*position: relative;*/
   position: relative;
-
   width: 50%;
   height: 100%;
   background: rgba(21, 102, 29, 0.2);
@@ -110,12 +93,8 @@ input::placeholder {
 Footer{
   position:relative;
   top:30px
-
 }
 
 
-.MyProfile_page {
-  text-align: center;
 
-}
 
