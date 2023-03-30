@@ -139,8 +139,7 @@ class SingleItemView(APIView):
 def is_more_myitems(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
-            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+            Q(is_deleted__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -182,19 +181,18 @@ def infinite_myorders_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
-        Q(initiator_id=request.GET.get('user_id')) or
-        Q(provider_id=request.GET.get('user_id'))).values("id",
-                                                          "created_date",
-                                                          "donation_amount",
-                                                          "is_collected",
-                                                          "is_deleted",
-                                                          "collection_location",
-                                                          "initiator",
-                                                          "initiator__email",
-                                                          "initiator__full_name",
-                                                          "item",
-                                                          "item__name"
-                                                          )[offset: max_index]
+        Q(initiator_id=request.GET.get('user_id'))).values("id",
+                                                           "created_date",
+                                                           "donation_amount",
+                                                           "is_collected",
+                                                           "is_deleted",
+                                                           "collection_location",
+                                                           "initiator",
+                                                           "initiator__email",
+                                                           "initiator__full_name",
+                                                           "item",
+                                                           "item__name"
+                                                           )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
