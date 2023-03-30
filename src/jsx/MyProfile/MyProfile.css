@@ -2,7 +2,7 @@
   height: 550px;
   margin-top: 60px;
   border: 1px solid #dfdfdf;
-  height: 75vh;
+  height: 70vh;
 }
 
 
@@ -90,10 +90,7 @@ input::placeholder {
   border-color: white;
 }
 
-Footer{
-  position:relative;
-  top:30px
-}
+
 
 
 
