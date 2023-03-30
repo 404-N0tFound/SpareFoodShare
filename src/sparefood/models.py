@@ -74,9 +74,8 @@ class Item(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
     upload_date = models.DateField(default=timezone.now)
     expiration_date = models.DateField()
-    status = models.CharField("status", max_length=30, default="Available")
-    is_private = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
+    is_collected = models.BooleanField(default=False)
     location = models.CharField("location", max_length=240)
     picture = models.ImageField(verbose_name="picture", upload_to='items')
     shared_times = models.PositiveIntegerField(default=0)
@@ -85,6 +84,16 @@ class Item(models.Model):
     @property
     def get_absolute_image_url(self):
         return '%s%s' % (settings.MEDIA_URL, self.image.url)
+
+    @property
+    def is_registrable(self) -> bool:
+        return self._is_registrable
+
+    @is_registrable.setter
+    def is_registrable(self, value: bool):
+        if not (type(value) == bool):
+            raise ValueError(f"Value {value} must be a bool.")
+        self._is_registrable = value
 
     def __str__(self):
         return self.name

@@ -70,6 +70,14 @@ class CreateOrderView(APIView):
     def post(cls, request):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
+            try:
+                item = Item.objects.get(id__exact=serializer.initial_data.get("item"))
+                if str(item.provider_id) == str(request.data['initiator']):
+                    return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
+                item.is_collected = True
+                item.save()
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -78,8 +86,7 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
-            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+            Q(is_deleted__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -88,9 +95,16 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+    filtered_items = Item.objects.filter(
+        Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
         Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+    for item in filtered_items:
+        user_id = request.GET.get('user_id')
+        if str(item.provider_id) == str(user_id):
+            item.is_registrable = False
+        else:
+            item.is_registrable = True
+    return filtered_items
 
 
 class InfiniteItemsView(ListAPIView):
@@ -129,11 +143,16 @@ class SingleItemView(APIView):
                     "location": item.location,
                     "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
-                    "last_updated": item.last_updated
+                    "last_updated": item.last_updated,
+                    "is_registrable": is_item_registrable(item, request.data)
                 }, status=status.HTTP_200_OK)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+def is_item_registrable(item, request_user) -> bool:
+    return True
 
 
 def is_more_myitems(request):
