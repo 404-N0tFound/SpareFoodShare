@@ -20,6 +20,6 @@ urlpatterns = [
     path('api/orders/create/', create_order),
     path('api/orders/', my_orders_list),
     path('api/orders/check/', my_orders_check),
-    path('activate/<uidb64>/<token>', views.activate, name='activate'),
+    path('activate/<uidb64>/<token>', views.activate_account, name='activate'),
     # path('items/<int:pk>/', ItemView.as_view()),
 ]

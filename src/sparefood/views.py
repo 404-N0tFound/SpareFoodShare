@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -19,7 +18,7 @@ from .models import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 from .tokens import account_activation_token
 
 
@@ -28,25 +27,31 @@ class RegistrationView(APIView):
     def post(cls, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            # serializer.save()
-            print(serializer.data['email'])
-            activateEmail(request, serializer.data, serializer.data['email'])
+            serializer.save()
+            activate_email(request, serializer.data, serializer.data['email'])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def activateEmail(request, user, toEmail):
-    print(user, toEmail)
+def activate_email(request, user, toEmail):
     mail_subject = "Activate your user account."
-    message = render_to_string("activate_account.html", {
+    message = render_to_string("app/activate_account.html", {
         'user': user['full_name'],
         'domain': get_current_site(request).domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.PK)),
+        'uid': urlsafe_base64_encode(force_bytes(user['email'])),
         'token': account_activation_token.make_token(user),
         "protocol": 'https' if request.is_secure() else 'http'
     })
-    email = EmailMessage(mail_subject, message, to=[toEmail])
-    # messages.success(request, f'Dear {user}, {toEmail}')
+
+    send_mail(mail_subject, message, None, [toEmail])
+
+
+def activate_account(request, uidb64, token):
+
+    uid = force_str(urlsafe_base64_decode(uidb64))
+    User.objects.filter(email=uid).update(is_active=True)
+
+    return HttpResponseRedirect('http://localhost:3000/')
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -56,6 +61,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
+
         return token
 
 
@@ -182,21 +188,3 @@ def my_orders_check(request):
         snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
         serializer = OrdersSerializer(snippets, many=True)
         return Response(len(serializer.data), status=status.HTTP_201_CREATED)
-
-
-
-
-
-def activate(request, uidb64, token):
-    User = get_user_model()
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except:
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-
-    return HttpResponseRedirect('/')
