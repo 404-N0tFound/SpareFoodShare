@@ -6,7 +6,7 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'name', 'description', 'upload_date', 'expiration_date', 'is_deleted', 'location', 'provider',
-                  'is_collected', 'picture']
+                  'is_collected', 'picture', 'is_registrable']
 
     def save(self):
         item = Item(
@@ -23,10 +23,6 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class OrdersSerializer(serializers.ModelSerializer):
-
-    item = serializers.CharField(required=False)
-    initiator = serializers.EmailField(required=False)
-
     class Meta:
         model = Order
         fields = ['id', 'initiator', 'item', 'created_date',

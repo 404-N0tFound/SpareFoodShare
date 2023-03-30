@@ -85,6 +85,16 @@ class Item(models.Model):
     def get_absolute_image_url(self):
         return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
+    @property
+    def is_registrable(self) -> bool:
+        return self._is_registrable
+
+    @is_registrable.setter
+    def is_registrable(self, value: bool):
+        if not (type(value) == bool):
+            raise ValueError(f"Value {value} must be a bool.")
+        self._is_registrable = value
+
     def __str__(self):
         return self.name
 
