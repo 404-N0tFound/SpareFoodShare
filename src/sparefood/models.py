@@ -85,6 +85,9 @@ class Item(models.Model):
     def get_absolute_image_url(self):
         return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

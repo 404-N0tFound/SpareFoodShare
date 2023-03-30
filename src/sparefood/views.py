@@ -7,7 +7,6 @@ from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
-
 from .serializers import *
 from .models import *
 
@@ -99,30 +98,6 @@ def infinite_filter(request):
         Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
 
 
-def infinite_myitems_filter(request):
-    limit = int(request.GET.get('limit'))
-    offset = int(request.GET.get('offset'))
-    max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_deleted__lte=False))[offset: max_index]
-
-
-class InfiniteMyItemsView(ListAPIView):
-    serializer_class = ItemSerializer
-
-    def get_queryset(self):
-        qs = infinite_myitems_filter(self.request)
-        return qs
-
-    def list(self, request):
-        query_set = self.get_queryset()
-        serializer = self.serializer_class(query_set, many=True)
-        return Response({
-            "items": serializer.data,
-            "has_more": is_more_items(request)
-        })
-
-
 class InfiniteItemsView(ListAPIView):
     serializer_class = ItemSerializer
 
@@ -166,11 +141,70 @@ class SingleItemView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+def is_more_myitems(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Item.objects.filter(
+            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+        return False
+    return True
+
+
+def infinite_myitems_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(
+        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
+
+
+class InfiniteMyItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_myitems_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
+
+
+def is_more_orders(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+def infinite_myorders_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Order.objects.filter(
+        Q(initiator_id=request.GET.get('user_id')) or
+        Q(provider_id=request.GET.get('user_id')))[offset: max_index]
+
+
 class OrdersView(ListAPIView):
-    def get(self, request):
-        snippets = Order.objects.filter(initiator_id=request.GET.get('user_id'))
-        serializer = OrdersSerializer(snippets, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = OrdersSerializer
+
+    def get_queryset(self):
+        qs = infinite_myorders_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "orders": serializer.data,
+            "has_more": is_more_orders(request)
+        })
 
 
 class OrdersCheckView(ListAPIView):

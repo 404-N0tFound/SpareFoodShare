@@ -23,6 +23,10 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class OrdersSerializer(serializers.ModelSerializer):
+
+    item = serializers.CharField(required=False)
+    initiator = serializers.EmailField(required=False)
+
     class Meta:
         model = Order
         fields = ['id', 'initiator', 'item', 'created_date',
