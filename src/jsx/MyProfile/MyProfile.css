@@ -52,6 +52,17 @@
   padding-top: 20px;
 }
 
+.upload-form {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background: rgba(21, 102, 29, 0.2);
+  border-radius: 25px;
+  left: 25%;
+  border: solid;
+  border-color: white;
+}
+
 
 .button {
   border:0.5px solid green;
@@ -79,16 +90,6 @@ input::placeholder {
   text-align: left;
 }
 
-.upload-form {
-  position: relative;
-  width: 50%;
-  height: 100%;
-  background: rgba(21, 102, 29, 0.2);
-  border-radius: 25px;
-  left: 25%;
-  border: solid;
-  border-color: white;
-}
 
 
 
