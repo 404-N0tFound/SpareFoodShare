@@ -91,7 +91,7 @@ class BrowseScreen extends PureComponent {
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
         await response.json()
         alert("You order has been created!")
-        this.props.navigation('../')
+        this.props.navigation('../browse')
     }
 
     render() {
