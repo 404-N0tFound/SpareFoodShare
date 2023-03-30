@@ -1,32 +1,64 @@
 import "./MyProfile.css";
 import "../components/Theme.css";
 import ProfileFramework from "../components/ProfileFramework";
-import { useContext } from "react";
+import {useContext} from "react";
 import AuthContext from "../AuthContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function MyProfile() {
     let {user} = useContext(AuthContext)
-    let role;
-    if(user.is_business)
-        role = <p>Role: Business</p>
+    //let role;
+    if (user.is_business)
+        //role = <p>Role: Business</p>
 
-    return(
+    return (
         <div className="page-content">
-          <Navbar />
-          <ProfileFramework />
-          <div className="myprofile-page">
-            <div>
-              <p>
-                {role}
-                 Master Windu, <b><i>you survived...</i></b>
-              </p>
-                 {user && <p>It&apos;s over {user.full_name}, I have the high ground!</p>}
-            </div>
-          </div>
+            <Navbar/>
+            <div className="MyProfile_page">
 
-          <Footer />
+            <ProfileFramework/>
+                <div className="Personal_Details">
+                    <div className="reg_form">
+                        <form className="upload-form" action="">
+                            <ul>
+                                <h2>Personal Details</h2>
+                                <li className="li1">
+                                    <label htmlFor="username">Name：</label>
+                                    <input type="text" className="inp" name="username" id="username" placeholder=""/>
+                                </li>
+                                <li>
+                                    <label htmlFor="phone_number">Phone&nbsp;&nbsp;number：</label>
+                                    <input type="text" className="inp" name="username" id="phone_number" placeholder="+44"/>
+                                </li>
+                                <li>
+                                    <label htmlFor="email">Email：</label>
+                                    <input type="email" className="inp" name="username" id="email" placeholder=""/>
+                                </li>
+                                <li>
+                                    <label htmlFor="password">Password：</label>
+                                    <input type="password" className="inp" name="username" id="password" placeholder=""/>
+                                </li>
+                                <li>
+                                    <label htmlFor="location">Location：</label>
+                                    <input type="text" className="inp" name="username" id="location" placeholder=""/>
+                                </li>
+                                <li>
+                                    <label htmlFor="description">My&nbsp;&nbsp;Introduction：</label>
+                                    <input type="text" className="inp" name="username" id="description" placeholder="Some words to introduce yourself!" />
+                                </li>
+                            </ul>
+                            <div>
+                                <button className="button" type="submit">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+            <Footer/>
+
         </div>
     );
 }

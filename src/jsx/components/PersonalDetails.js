@@ -62,4 +62,5 @@ class PersonalDetails extends Component {
         );
     }
 }
+
 export default PersonalDetails;

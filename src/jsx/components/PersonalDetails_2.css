@@ -7,17 +7,9 @@
 i {
     font-style: normal
 }
-li {
+.li {
     list-style: none
 }
-
-/*img {*/
-/*    border: 0;*/
-/*    vertical-align: middle*/
-/*}*/
-
-
-
 
 body {
     -webkit-font-smoothing: antialiased;
@@ -42,8 +34,27 @@ header {
     height: 550px;
     margin-top: 20px;
     border: 1px solid #dfdfdf;
-}
 
+}
+.Personal_Details .reg_hd {
+    position: relative;
+    height: 41px;
+    width: 1198px;
+    border-bottom: 1px solid #dfdfdf;
+    background-color: #ececec;
+}
+.Personal_Details .reg_hd h3 {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 90px;
+    height: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    color: #333;
+    text-align: center;
+    line-height: 20px;
+}
 
 .Personal_Details .reg_form {
     width: 600px;
@@ -53,10 +64,11 @@ header {
 .Personal_Details .reg_form ul li {
     margin: 20px 0;
 }
+
 .Personal_Details .reg_form label {
     display: inline-block;
     width: 88px;
-    text-align: center;
+    text-align: right;
     font-size: 14px;
     padding-right: 3px;
     color: #4c4c4c;
@@ -68,7 +80,21 @@ header {
     margin-left: 90px;
     border: 1px solid #999;
 }
+.Personal_Details .reg_form li .inp2 {
+    width: 240px;
+    height: 50px;
+    margin-left: 90px;
+    border: 1px solid #999;
+}
 
+.Personal_Details .reg_form li .error .cha,
+.gou {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -4px;
+    width: 20px;
+    height: 20px;
+}
 .Personal_Details .reg_form li .success {
     color: green;
 }
@@ -83,26 +109,18 @@ input {
     outline: none;
 }
 
-textarea{
-    border-radius: 10px;
 
-}
 
 .button {
-    border: 0.5px solid green;
+    border:0.5px solid green;
     border-radius: 10px;
-    top: 40%;
-    left: 52%;
-    width: 100px;
-    height: 35px;
+    top:40%;
+    left:52%;
+    width:100px;
+    height:35px;
     position: relative;
     z-index: 2;
     background: #D4F0CA;
     cursor: pointer
+
 }
-
-
-
-
-
-

@@ -1,8 +1,121 @@
-.profile-page {
-  display: inline;
+
+
+.Personal_Details {
+
+  height: 550px;
+  margin-top: 20px;
+  border: 1px solid #dfdfdf;
+
+  height: 75vh;
 }
 
-.myprofile-page {
-  text-align: center;
-  height: 100vh;
+
+.Personal_Details .reg_form {
+  /*width: 600px;*/
+  /*margin: 50px auto 0;*/
+  /*position: relative;*/
+
 }
+.Personal_Details .reg_form ul li {
+  margin: 20px 0;
+  list-style-type: none;
+}
+
+.Personal_Details .reg_form label {
+  display: inline-block;
+  width: 88px;
+  text-align: right;
+  font-size: 20px;
+  padding-right: 3px;
+  color: #4c4c4c;
+
+}
+.Personal_Details .reg_form li .inp {
+  width: 240px;
+  height: 36px;
+  margin-left: 90px;
+  border: 1px solid #999;
+  border-radius:10px;
+}
+.Personal_Details .reg_form li .inp2 {
+  width: 240px;
+  height: 50px;
+  margin-left: 90px;
+  border: 1px solid #999;
+}
+
+.Personal_Details .reg_form li .error .cha,
+.gou {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -4px;
+  width: 20px;
+  height: 20px;
+}
+.Personal_Details .reg_form li .success {
+  color: green;
+}
+
+.li1 {
+  padding-top: 20px;
+}
+
+
+.button {
+  border:0.5px solid green;
+  border-radius: 10px;
+  /*top:40%;*/
+  /*left:52%;*/
+  width:200px;
+  height:35px;
+  /*position: absolute;*/
+  /*top: 10px;*/
+  /*z-index: 2;*/
+  position: relative;
+  /*top: 10px;*/
+  left: 170px;
+  background: #D4F0CA;
+  cursor: pointer
+}
+
+input{
+  position:relative;
+  left: 40px;
+}
+
+input::placeholder {
+  font: 16px/3 sans-serif;
+}
+
+
+.upload-box {
+  padding-top: 25px;
+  text-align: left;
+
+}
+
+.upload-form {
+  /*position: relative;*/
+  position: relative;
+
+  width: 50%;
+  height: 100%;
+  background: rgba(21, 102, 29, 0.2);
+  border-radius: 25px;
+  left: 25%;
+  border: solid;
+  border-color: white;
+}
+
+Footer{
+  position:relative;
+  top:30px
+
+}
+
+
+.MyProfile_page {
+  text-align: center;
+
+}
+
