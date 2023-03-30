@@ -61,17 +61,6 @@
   left: 25%;
   border: solid;
   border-color: white;
-}
-
-
-.button {
-  border:0.5px solid green;
-  border-radius: 10px;
-  width:200px;
-  height:35px;
-  position: relative;
-  left: 170px;
-  background: #D4F0CA;
   cursor: pointer
 }
 
@@ -85,10 +74,18 @@ input::placeholder {
 }
 
 
-.upload-box {
-  padding-top: 25px;
-  text-align: left;
+
+.button {
+  border: 0.5px solid green;
+  border-radius: 10px;
+  width: 200px;
+  height: 35px;
+  position: relative;
+  left: 170px;
+  background: #D4F0CA;
 }
+
+
 
 
 
