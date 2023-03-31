@@ -229,19 +229,3 @@ class OrdersView(ListAPIView):
             "orders": data,
             "has_more": is_more_orders(request)
         })
-
-
-class OrdersCheckView(ListAPIView):
-    def get(self, request):
-        """
-            Method to check duplicate order
-        """
-        flag = False
-        snippets = Order.objects.filter(initiator_id=request.GET.get('user'),
-                                        item_id=request.GET.get('item'))
-        serializer = OrdersSerializer(snippets, many=True)
-        if (len(serializer.data)) > 0:
-            flag = True
-            return Response(flag, status=status.HTTP_200_OK)
-        else:
-            return Response(flag, status=status.HTTP_200_OK)
