@@ -1,12 +1,11 @@
-/* eslint-disable */
 import {PureComponent} from "react";
 import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import jwtDecode from "jwt-decode";
-import {useNavigate, useParams} from 'react-router-dom';
-import AuthContext from "../AuthContext";
+import {useNavigate} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class BrowseScreen extends PureComponent {
     constructor(props) {
@@ -53,7 +52,9 @@ class BrowseScreen extends PureComponent {
             let user_id = 0;
             try {
                 user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+                /* eslint-disable no-empty */
             } catch (ignored) {}
+            /* eslint-enable */
             let response = await fetch(`http://127.0.0.1:8000/api/items/?limit=${limit}&offset=${offset}&user_id=${user_id}`, {
                 method:'GET'
             })
@@ -162,11 +163,17 @@ class BrowseScreen extends PureComponent {
     }
 }
 
+/* eslint-disable react/display-name */
 const Browse = (Component) => {
     return (props) => {
         const navigation = useNavigate();
         return <Component navigation={navigation} {...props} />
     }
 }
+/* eslint-enable */
+
+BrowseScreen.propTypes = {
+    navigation: PropTypes.any.isRequired,
+};
 
 export default Browse(BrowseScreen);
