@@ -138,13 +138,12 @@ class SingleItemView(APIView):
                     "description": item.description,
                     "upload_date": item.upload_date,
                     "expiration_date": item.expiration_date,
-                    "status": item.status,
                     "provider": user.email,
                     "location": item.location,
                     "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
                     "last_updated": item.last_updated,
-                    "is_registrable": is_item_registrable(item, request.data)
+                    "is_registrable": is_item_registrable(item, request.GET.get('user'))
                 }, status=status.HTTP_200_OK)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except Exception:
@@ -152,7 +151,9 @@ class SingleItemView(APIView):
 
 
 def is_item_registrable(item, request_user) -> bool:
-    return True
+    if request_user is None:
+        return False
+    return False if str(item.provider_id) == str(request_user) else True
 
 
 def is_more_myitems(request):
