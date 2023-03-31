@@ -1,56 +1,56 @@
 .my_orders-body {
-	min-height: 75vh;
+    min-height: 75vh;
 }
 
 .my_orders_content {
-	align-items: center;
-	text-align: left;
-	color: black;
+    align-items: center;
+    text-align: left;
+    color: black;
 }
 
-.my_orders-content ul li{
-	width: 35%;
-	float: left;
-	list-style: none;
-	background-color: #FFFFFF;
-	margin-top: 3%;
-	margin-left: 13%;
-	height: 350px;
-	-webkit-box-shadow: 0 0 5px 3px #ccc;
+.my_orders-content ul li {
+    width: 35%;
+    float: left;
+    list-style: none;
+    background-color: #FFFFFF;
+    margin-top: 3%;
+    margin-left: 13%;
+    height: 350px;
+    -webkit-box-shadow: 0 0 5px 3px #ccc;
 }
 
- .my_orders-content .my_orders_info h3{
-	font-size: 25px;
-	color: black;
-	margin-top: 30px;
-	margin-left: 0%;
+.my_orders-content .my_orders_info h3 {
+    font-size: 25px;
+    color: black;
+    margin-top: 30px;
+    margin-left: 0%;
 }
 
-.my_orders-content .my_orders_info p{
+.my_orders-content .my_orders_info p {
     font-size: 18px;
-	line-height: 20px;
-	margin-top: 20px;
-	margin-left: 0%;
+    line-height: 20px;
+    margin-top: 20px;
+    margin-left: 0%;
 }
 
-.my_orders_info{
-	margin-left: 10px;
-	margin-right: 30px;
-	align: left;
-	height: 50%;
+.my_orders_info {
+    margin-left: 10px;
+    margin-right: 30px;
+    align: left;
+    height: 50%;
 }
 
-.my_orders-pic{
+.my_orders-pic {
     width: 40%;
     height: 100%;
     float: left;
 }
 
-.no_orders_msg{
+.no_orders_msg {
     margin-left: 13%;
 }
 
-.my_orders_btn{
+.my_orders_btn {
     background-color: black;
     color: white;
     font-size: 15px;

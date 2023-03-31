@@ -80,7 +80,6 @@ class BrowseScreen extends PureComponent {
         });
         const modal = document.getElementById("myModal");
         modal.style.display = "block";
-        console.log(selectedItem);
     }
 
     closeModal = () => {
