@@ -86,7 +86,8 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_deleted__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -159,7 +160,7 @@ def is_item_registrable(item, request_user) -> bool:
 def is_more_myitems(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
             Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
