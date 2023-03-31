@@ -18,7 +18,10 @@ class DisplayList extends Component {
                                 </div>
                                 <div className="display-item-text">
                                     <div>
-                                        <p>Shop for your groceries, meals, and food at lowered rates than in store.</p>
+                                        <h2>
+                                        Who are we?
+                                        </h2>
+                                        <p>We are a charitable organisation helping individuals and businesses redistribute their excess food supplies.</p>
                                     </div>
                                     <div>
                                         <a className="browseButton" type="button" href="../browse">
@@ -38,10 +41,13 @@ class DisplayList extends Component {
                                 </div>
                                 <div className="display-item-text">
                                     <div>
-                                        <p>Join the community and help fight back against food wastage.</p>
+                                        <h2>
+                                        What can you do to help?
+                                        </h2>
+                                        <p>Join the community and help fight back against food wastage. Browse through the existing listings - or post an item of your own!</p>
                                     </div>
                                     <div>
-                                        <a className="loginButton" type="button">
+                                        <a className="loginButton" type="button" href="../login">
                                             Sign up
                                         </a>
                                         <a className="browseButton" type="button" href="../login">
@@ -61,12 +67,17 @@ class DisplayList extends Component {
                                 </div>
                                 <div className="display-item-text">
                                     <div>
-                                        <p>Both large and small companies have the ability to prevent food wastage. Save food from going bad from your local retailers.</p>
+                                        <p>
+                                            Help spread the benefit with the wider community by sharing on social media
+                                        </p>
                                     </div>
                                     <div>
-                                        <a className="loginButton" type="button">
-                                            Sign up
-                                        </a>
+                                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                                        <a href="#" className="fa fa-facebook"></a>
+                                        <a href="#" className="fa fa-snapchat-ghost"></a>
+                                        <a href="#" className="fa fa-linkedin"></a>
+                                        <a href="#" className="fa fa-reddit"></a>
+                                        <a href="#" className="fa fa-twitter"></a>
                                     </div>
                                 </div>
                             </div>

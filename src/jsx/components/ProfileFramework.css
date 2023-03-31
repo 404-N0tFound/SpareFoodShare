@@ -1,21 +1,21 @@
 .sidebar {
-    height: 100%;
-    width: 150px;
-    position: sticky;
-    left: 0;
-    padding-top: 40px;
-    background-color: lightblue;
+    height: 400px;
+    width: 200px;
+    left: 10px;
+    top: 22%;
+    padding-top: 50px;
+    position: absolute;
+    background: rgba(21, 102, 29, 0.6);
+    border-radius: 25px;
+    border: solid;
+    border-color: white;
 }
 
-.sidebar div {
-    padding: 8px;
+.sidebar-text {
+    padding: 5px;
     font-size: 24px;
+    color: black;
     display: block;
-}
-
-.body-text {
-    margin-left: 150px;
-    font-size: 18px;
 }
 
 .page-value {

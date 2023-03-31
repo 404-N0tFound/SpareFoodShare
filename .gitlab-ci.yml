@@ -39,9 +39,6 @@ test_py:
 test_js:
   image: node:latest
 
-  services:
-      - postgres:latest
-
   cache:
       paths:
           - node_modules/
