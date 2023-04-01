@@ -203,19 +203,18 @@ def infinite_myorders_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
-        Q(initiator_id=request.GET.get('user_id')) or
-        Q(provider_id=request.GET.get('user_id'))).values("id",
-                                                          "created_date",
-                                                          "donation_amount",
-                                                          "is_collected",
-                                                          "is_deleted",
-                                                          "collection_location",
-                                                          "initiator",
-                                                          "initiator__email",
-                                                          "initiator__full_name",
-                                                          "item",
-                                                          "item__name"
-                                                          )[offset: max_index]
+        Q(initiator_id=request.GET.get('user_id'))).values("id",
+                                                           "created_date",
+                                                           "donation_amount",
+                                                           "is_collected",
+                                                           "is_deleted",
+                                                           "collection_location",
+                                                           "initiator",
+                                                           "initiator__email",
+                                                           "initiator__full_name",
+                                                           "item",
+                                                           "item__name"
+                                                           )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -230,4 +229,46 @@ class OrdersView(ListAPIView):
         return Response({
             "orders": data,
             "has_more": is_more_orders(request)
+        })
+
+
+def is_more_sales(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+def infinite_mysales_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Order.objects.filter(
+        Q(item__provider_id=request.GET.get('user_id'))).values("id",
+                                                                "created_date",
+                                                                "donation_amount",
+                                                                "is_collected",
+                                                                "is_deleted",
+                                                                "collection_location",
+                                                                "initiator",
+                                                                "initiator__email",
+                                                                "initiator__full_name",
+                                                                "item",
+                                                                "item__name"
+                                                                )[offset: max_index]
+
+
+class SalesView(ListAPIView):
+    serializer_class = OrdersSerializer
+
+    def get_queryset(self):
+        qs = infinite_mysales_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "sales": data,
+            "has_more": is_more_sales(request)
         })
