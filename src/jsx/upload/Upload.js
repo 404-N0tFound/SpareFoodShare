@@ -10,10 +10,12 @@ import upload_pic from "../pics/upload-icon.jpeg";
 
 function Upload() {
     const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedPreImage, setSelectedPreImage] = useState(null);
     const navigator = useNavigate();
 
     let handleImageChange = (e) => {
         setSelectedImage(e.target.files[0])
+        setSelectedPreImage(URL.createObjectURL(event.target.files[0]));
     };
 
     let createItem = async (e) => {
@@ -86,7 +88,8 @@ function Upload() {
                                                 <input type="file" className="img-input"
                                                        id="picture"
                                                        accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
-                                                <img src={upload_pic} className="upload_pic"/>
+                                                {selectedImage != null && <img src={selectedPreImage} className="upload_pic_preview"/>}
+                                                {selectedImage == null && <img src={upload_pic} className="upload_pic"/>}
                                             </div>
                                     </div>
                                 </div>

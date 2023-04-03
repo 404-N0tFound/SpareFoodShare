@@ -173,8 +173,7 @@ class MyItems extends PureComponent{
         this.setState(
               {reload: true},
                 () => this.setState({reload: false})
-    )
-
+        )
     }
 
     render() {
