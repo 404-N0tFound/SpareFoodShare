@@ -20,6 +20,7 @@ class MyOrders extends PureComponent{
             offset: 0,
             limit: 20,
             user: {},
+            reload: false,
         };
 
         window.onscroll = () => {
@@ -61,6 +62,16 @@ class MyOrders extends PureComponent{
             }
         })
     }
+    handleFilterChange = (e) => {
+        if(e.target.value == 'created_date'){
+            this.setState({items: this.state.orders.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))});
+        }else if(e.target.value == 'donation_amount'){
+            this.setState({items: this.state.items.sort((a, b) => a.donation_amount - b.donation_amount)});
+        }
+        this.setState(
+              {reload: true},
+                () => this.setState({reload: false})
+    )}
 
     render() {
         return (
@@ -68,6 +79,13 @@ class MyOrders extends PureComponent{
                 <Navbar/>
                 <body className="my_orders-body">
                 <ProfileFramework />
+                <div className="my_orders-filter">
+                    <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
+                        <option value="default" disabled>None</option>
+                        <option value="created_date">Created Date</option>
+                        <option value="donation_amount">Donation</option>
+                    </select>
+                </div>
                 <div className="my_orders-content">
                     <ul>
                         {this.state.orders && this.state.orders.map((ordersObj) => (
@@ -75,7 +93,6 @@ class MyOrders extends PureComponent{
                                 <li>
                                     <div className="my_orders_info">
                                         <h3>Item Name: {ordersObj.item__name} </h3>
-                                        <p>Create Date: {ordersObj.created_date}</p>
                                         <p>Initiator Email: {ordersObj.initiator__email}</p>
                                         <p>Pickup Location: {ordersObj.collection_location} </p>
                                         <p>Created Date: {ordersObj.created_date } </p>

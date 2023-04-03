@@ -20,6 +20,7 @@ class MySales extends PureComponent{
             offset: 0,
             limit: 20,
             user: {},
+            reload: false,
         };
 
         window.onscroll = () => {
@@ -61,6 +62,16 @@ class MySales extends PureComponent{
             }
         })
     }
+    handleFilterChange = (e) => {
+        if(e.target.value == 'created_date'){
+            this.setState({sales: this.state.sales.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))});
+        }else if(e.target.value == 'donation_amount'){
+            this.setState({sales: this.state.sales.sort((a, b) => a.donation_amount - b.donation_amount)});
+        }
+        this.setState(
+              {reload: true},
+                () => this.setState({reload: false})
+    )}
 
     render() {
         return (
@@ -68,6 +79,13 @@ class MySales extends PureComponent{
                 <Navbar/>
                 <body className="my_sales-body">
                 <ProfileFramework />
+                <div className="my_sales-filter">
+                    <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
+                        <option value="default" disabled>None</option>
+                        <option value="created_date">Created Date</option>
+                        <option value="donation_amount">Donation</option>
+                    </select>
+                </div>
                 <div className="my_sales-content">
                     <ul>
                         {this.state.sales && this.state.sales.map((salesObj) => (

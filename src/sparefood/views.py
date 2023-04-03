@@ -184,6 +184,7 @@ class InfiniteMyItemsView(ListAPIView):
     def list(self, request):
         query_set = self.get_queryset()
         serializer = self.serializer_class(query_set, many=True)
+        print(serializer.data)
         return Response({
             "items": serializer.data,
             "has_more": is_more_items(request)

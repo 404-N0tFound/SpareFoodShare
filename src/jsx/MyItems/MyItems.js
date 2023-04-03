@@ -1,5 +1,6 @@
 import "../components/Theme.css";
 import "./MyItems.css";
+
 import ProfileFramework from "../components/ProfileFramework";
 import Navbar from "../components/Navbar";
 import AuthContext from "../AuthContext";
@@ -27,6 +28,7 @@ class MyItems extends PureComponent{
             edit_item: null,
             delete_item: null,
             anyChanges: false,
+            reload: false,
         };
 
         window.onscroll = () => {
@@ -97,7 +99,10 @@ class MyItems extends PureComponent{
             const dialog = document.getElementById("myitems-edit-div");
             dialog.style.display = "block";
         }else if(chosen=="Delete"){
-            this.deleteItem();
+            this.setState({delete_item: this.state.active_item}, () => {
+                this.deleteItem();
+            });
+
         }
     }
 
@@ -120,16 +125,15 @@ class MyItems extends PureComponent{
     }
 
     deleteItem = async() => {
-        if(confirm("Are you sure that you want to delete Item : " + this.state.active_item.name)){
+        if(confirm("Are you sure that you want to delete Item : " + this.state.delete_item.name)){
             let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({'id': this.state.active_item.id, 'operation': 'delete'})
+                body: JSON.stringify({'id': this.state.delete_item.id, 'operation': 'delete'})
             })
             if(response.status === 200)
-                    alert("Deleted Successfully :)");
                     window.location.reload(false);
             }
     }
@@ -140,29 +144,37 @@ class MyItems extends PureComponent{
         let item_location = e.target[2].value;
         let item_expiration_date = e.target[3].value;
         if(this.state.anyChanges){
-            try{
-                let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({'id': this.state.edit_item.id,
-                                            'name': item_name,
-                                            "des": item_des,
-                                            "location": item_location,
-                                            "expiration_date": item_expiration_date,
-                                            "operation": "update",
-                                            })
-                })
-                if(response.status === 200)
-                    alert("Update Successfully :)");
-            }
-            catch(e){
-                alert("Update Failed :(");
-            }
-        }else
-            alert("No changes");
+            let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'id': this.state.edit_item.id,
+                                        'name': item_name,
+                                        "des": item_des,
+                                        "location": item_location,
+                                        "expiration_date": item_expiration_date,
+                                        "operation": "update",
+                                        })
+            })
+            if(response.status === 200)
+                console.log("Update Successfully :)");
+            }else
+                alert("No changes");
         e.preventDefault();
+    }
+
+    handleFilterChange = (e) => {
+        if(e.target.value == 'upload_date'){
+            this.setState({items: this.state.items.sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date))});
+        }else if(e.target.value == 'expiration_date'){
+            this.setState({items: this.state.items.sort((a, b) => new Date(a.expiration_date) - new Date(b.expiration_date))});
+        }
+        this.setState(
+              {reload: true},
+                () => this.setState({reload: false})
+    )
+
     }
 
     render() {
@@ -171,6 +183,13 @@ class MyItems extends PureComponent{
                 <Navbar/>
                 <body className="my_items-body">
                 <ProfileFramework />
+                <div className="my_items-filter">
+                    <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
+                        <option value="default" disabled>None</option>
+                        <option value="upload_date">Upload Date</option>
+                        <option value="expiration_date">Expiration Date</option>
+                    </select>
+                </div>
                 <div className="my_items-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
