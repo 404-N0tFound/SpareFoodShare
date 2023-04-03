@@ -274,17 +274,26 @@ class SalesView(ListAPIView):
         })
 
 
-class EditItem(APIView):
+class ItemOperations(APIView):
     @classmethod
     def post(cls, request):
         data = request.data
-        try:
-            Item.objects.filter(id=request.data['id']).update(name=data['name'],
-                                                              description=data['des'],
-                                                              location=data['location'],
-                                                              expiration_date=data['expiration_date']
-                                                              )
-            return Response(status=status.HTTP_200_OK)
+        if data['operation'] == 'update':
+            try:
+                Item.objects.filter(id=data['id']).update(name=data['name'],
+                                                                  description=data['des'],
+                                                                  location=data['location'],
+                                                                  expiration_date=data['expiration_date']
+                                                                  )
+                return Response(status=status.HTTP_200_OK)
 
-        except Exception as e:
-            return Response(e, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                return Response(e, status=status.HTTP_400_BAD_REQUEST)
+
+        elif data['operation'] == 'delete':
+            try:
+                Item.objects.filter(id=data['id']).delete()
+                return Response(status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response(e, status=status.HTTP_400_BAD_REQUEST)
+

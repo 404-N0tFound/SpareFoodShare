@@ -25,6 +25,7 @@ class MyItems extends PureComponent{
             chosen: null,
             active_item: null,
             edit_item: null,
+            delete_item: null,
             anyChanges: false,
         };
 
@@ -90,15 +91,16 @@ class MyItems extends PureComponent{
     initMenu = (chosen) => {
         this.setState({
                 chosen: chosen,
-                edit_item: this.state.active_item,
         });
-
         if(chosen=="Edit"){
+            this.setState({edit_item: this.state.active_item});
             const dialog = document.getElementById("myitems-edit-div");
             dialog.style.display = "block";
-        }else if(chosen=="Delete")
-            alert("Delete");
+        }else if(chosen=="Delete"){
+            this.deleteItem();
+        }
     }
+
 
     closeDialog = () => {
         if(this.state.anyChanges){
@@ -117,6 +119,21 @@ class MyItems extends PureComponent{
         this.setState({anyChanges: true});
     }
 
+    deleteItem = async() => {
+        if(confirm("Are you sure that you want to delete Item : " + this.state.active_item.name)){
+            let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'id': this.state.active_item.id, 'operation': 'delete'})
+            })
+            if(response.status === 200)
+                    alert("Deleted Successfully :)");
+                    window.location.reload(false);
+            }
+    }
+
     saveItemChanges = async(e) => {
         let item_name = e.target[0].value;
         let item_des = e.target[1].value;
@@ -124,7 +141,7 @@ class MyItems extends PureComponent{
         let item_expiration_date = e.target[3].value;
         if(this.state.anyChanges){
             try{
-                let response = await fetch('http://127.0.0.1:8000/api/edit_item/', {
+                let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -133,7 +150,8 @@ class MyItems extends PureComponent{
                                             'name': item_name,
                                             "des": item_des,
                                             "location": item_location,
-                                            "expiration_date": item_expiration_date
+                                            "expiration_date": item_expiration_date,
+                                            "operation": "update",
                                             })
                 })
                 if(response.status === 200)
