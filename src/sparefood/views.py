@@ -171,7 +171,7 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
+        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_deleted__lte=False))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -281,10 +281,10 @@ class ItemOperations(APIView):
         if data['operation'] == 'update':
             try:
                 Item.objects.filter(id=data['id']).update(name=data['name'],
-                                                                  description=data['des'],
-                                                                  location=data['location'],
-                                                                  expiration_date=data['expiration_date']
-                                                                  )
+                                                          description=data['des'],
+                                                          location=data['location'],
+                                                          expiration_date=data['expiration_date']
+                                                          )
                 return Response(status=status.HTTP_200_OK)
 
             except Exception as e:
@@ -292,8 +292,7 @@ class ItemOperations(APIView):
 
         elif data['operation'] == 'delete':
             try:
-                Item.objects.filter(id=data['id']).delete()
+                Item.objects.filter(id=data['id']).update(is_deleted=True)
                 return Response(status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(e, status=status.HTTP_400_BAD_REQUEST)
-
