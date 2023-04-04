@@ -10,11 +10,11 @@ import {AuthProvider} from "./jsx/AuthContext";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
-import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
 import MyOrders from "./jsx/MyOrders/MyOrders";
 import MyItems from './jsx/MyItems/MyItems';
+import MySales from './jsx/MySales/MySales';
 
 export default function App() {
     return (
@@ -33,7 +33,6 @@ export default function App() {
                                 </PrivateRouteLogin>
                             }
                         />
-                        <Route path="item/:item_id" element={<Item />} />
                         <Route path="profile/upload" element={
                                 <PrivateRouteProfile>
                                     <Upload />
@@ -49,6 +48,12 @@ export default function App() {
                         <Route path="profile/orders" element={
                                 <PrivateRouteProfile>
                                         <MyOrders />
+                                </PrivateRouteProfile>
+                            }
+                        />
+                        <Route path="profile/sales" element={
+                                <PrivateRouteProfile>
+                                        <MySales />
                                 </PrivateRouteProfile>
                             }
                         />

@@ -171,3 +171,8 @@
   background-color: #ffea75;
   color: #5e2d1d;
 }
+
+.upload_pic_preview {
+    width: 100%;
+    height: 100%;
+}
