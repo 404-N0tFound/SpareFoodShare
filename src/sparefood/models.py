@@ -112,3 +112,14 @@ class Order(models.Model):
 
     collected_date = models.DateField(null=True, blank=True)
     collection_location = models.CharField(verbose_name="order_location", max_length=240, default="Sheffield")
+
+
+class ChatRoom(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.RESTRICT, to_field='id')
+    user_1 = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_1')
+    user_2 = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_2')
+
+    @property
+    def order_name(self) -> str:
+        return 'HELLO'

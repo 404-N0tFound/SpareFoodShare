@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -45,12 +45,13 @@ def getApiRoutes(request):
         '/api/register',
         '/api/token',
         '/api/token/refresh',
-        '/api/item/',
-        '/api/items/',
+        '/api/item',
+        '/api/items',
         '/api/items/upload',
-        '/api/orders/',
-        '/api/orders/create/',
-        '/api/orders/check/'
+        '/api/orders',
+        '/api/orders/create',
+        '/api/orders/check',
+        '/api/chat'
     ]
     return Response(routes)
 
@@ -231,3 +232,43 @@ class OrdersView(ListAPIView):
             "orders": data,
             "has_more": is_more_orders(request)
         })
+
+
+class ChatsView(ListAPIView):
+    serializer_class = ChatsSerializer
+
+    def get_queryset(self):
+        qs = infinite_chats_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "chats": data,
+            "has_more": is_more_chats(request)
+        })
+
+
+def infinite_chats_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return ChatRoom.objects.filter(
+        Q(user_1=request.GET.get('user_id')) and
+        Q(user_2=request.GET.get('user_id'))).annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')[offset: max_index]
+
+
+def is_more_chats(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= ChatRoom.objects.filter(
+            Q(user_1=request.GET.get('user_id')) or
+            Q(user_2=request.GET.get('user_id'))).count():
+        return False
+    return True

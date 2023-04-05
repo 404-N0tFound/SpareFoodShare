@@ -19,7 +19,7 @@ class MyOrders extends PureComponent{
             has_more: true,
             offset: 0,
             limit: 20,
-            user: {},
+            user: {}
         };
 
         window.onscroll = () => {
