@@ -20,6 +20,10 @@ class MyItems extends PureComponent{
             offset: 0,
             limit: 20,
             user: {},
+            context: false,
+            xYPosition: { x: 0, y: 0 },
+            chosen: null,
+            active_item: null,
         };
 
         window.onscroll = () => {
@@ -62,19 +66,43 @@ class MyItems extends PureComponent{
         })
     }
 
+    handleClick = () => {
+        this.setState({context: false});
+    }
+
+    showNav = (selectedItem, event) => {
+        event.preventDefault();
+        this.setState({context: false});
+        const positionChange = {
+            x: event.pageX,
+            y: event.pageY,
+        }
+        this.setState({xYPosition: positionChange, active_item: selectedItem});
+        this.setState({context: true});
+    };
+
+    hideContext = () => {
+        this.setState({context: false});
+    }
+
+    initMenu = (chosen) => {
+        this.setState({chosen: chosen});
+        alert(chosen + " : " + this.state.active_item.name);
+    }
+
     render() {
         return (
-            <div className="page-content">
+            <div className="page-content" onClick={this.handleClick}>
                 <Navbar/>
                 <body className="my_items-body">
                 <ProfileFramework />
                 <div className="my_items-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id} className="my_item-card">
+                            <div key={itemsObj.id} className="my_items-card"  onContextMenu = {this.showNav.bind(this, itemsObj)}>
                                 <li>
                                     <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
-                                    <div className="my_item_info">
+                                    <div className="my_items_info">
                                         <h3>Name: {itemsObj.name}</h3>
                                         <p>Des: {itemsObj.description}</p><br />
                                         <p>Upload Date: { itemsObj.upload_date }</p>
@@ -92,6 +120,19 @@ class MyItems extends PureComponent{
                         }
                     </ul>
                 </div>
+
+                <div onClick={this.hideContext} className="contextContainer">
+                    {this.state.context && (
+                        <div
+                            style={{ top: this.state.xYPosition.y, left: this.state.xYPosition.x }}
+                            className="rightClick_menu"
+                        >
+                             <div className="menuElement" onClick={() => this.initMenu("Details")}>Details</div>
+                             <div className="menuElement" onClick={() => this.initMenu("Delete")}>Delete</div>
+                        </div>
+                    )}
+                </div>
+
                 </body>
                 <Footer id="foot_id"/>
             </div>

@@ -7,7 +7,6 @@ from rest_framework.generics import ListAPIView
 
 from datetime import datetime
 
-
 from .serializers import *
 from .models import *
 
@@ -71,6 +70,14 @@ class CreateOrderView(APIView):
     def post(cls, request):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
+            try:
+                item = Item.objects.get(id__exact=serializer.initial_data.get("item"))
+                if str(item.provider_id) == str(request.data['initiator']):
+                    return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
+                item.is_collected = True
+                item.save()
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -79,7 +86,7 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-            Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
             Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
@@ -89,34 +96,16 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(is_deleted__lte=False) & Q(is_private__lte=False) &
+    filtered_items = Item.objects.filter(
+        Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
         Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
-
-
-def infinite_myitems_filter(request):
-    limit = int(request.GET.get('limit'))
-    offset = int(request.GET.get('offset'))
-    max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_private__lte=False) & Q(is_deleted__lte=False) &
-        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
-
-
-class InfiniteMyItemsView(ListAPIView):
-    serializer_class = ItemSerializer
-
-    def get_queryset(self):
-        qs = infinite_myitems_filter(self.request)
-        return qs
-
-    def list(self, request):
-        query_set = self.get_queryset()
-        serializer = self.serializer_class(query_set, many=True)
-        return Response({
-            "items": serializer.data,
-            "has_more": is_more_items(request)
-        })
+    for item in filtered_items:
+        user_id = request.GET.get('user_id')
+        if str(item.provider_id) == str(user_id):
+            item.is_registrable = False
+        else:
+            item.is_registrable = True
+    return filtered_items
 
 
 class InfiniteItemsView(ListAPIView):
@@ -150,36 +139,95 @@ class SingleItemView(APIView):
                     "description": item.description,
                     "upload_date": item.upload_date,
                     "expiration_date": item.expiration_date,
-                    "status": item.status,
                     "provider": user.email,
                     "location": item.location,
                     "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
-                    "last_updated": item.last_updated
+                    "last_updated": item.last_updated,
+                    "is_registrable": is_item_registrable(item, request.GET.get('user'))
                 }, status=status.HTTP_200_OK)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+def is_item_registrable(item, request_user) -> bool:
+    if request_user is None:
+        return False
+    return False if str(item.provider_id) == str(request_user) else True
+
+
+def is_more_myitems(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Item.objects.filter(
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+        return False
+    return True
+
+
+def infinite_myitems_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(
+        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
+
+
+class InfiniteMyItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_myitems_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
+
+
+def is_more_orders(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+def infinite_myorders_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Order.objects.filter(
+        Q(initiator_id=request.GET.get('user_id')) or
+        Q(provider_id=request.GET.get('user_id'))).values("id",
+                                                          "created_date",
+                                                          "donation_amount",
+                                                          "is_collected",
+                                                          "is_deleted",
+                                                          "collection_location",
+                                                          "initiator",
+                                                          "initiator__email",
+                                                          "initiator__full_name",
+                                                          "item",
+                                                          "item__name"
+                                                          )[offset: max_index]
+
+
 class OrdersView(ListAPIView):
-    def get(self, request):
-        snippets = Order.objects.filter(initiator_id=request.GET.get('user_id'))
-        serializer = OrdersSerializer(snippets, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_class = OrdersSerializer
 
+    def get_queryset(self):
+        qs = infinite_myorders_filter(self.request)
+        return qs
 
-class OrdersCheckView(ListAPIView):
-    def get(self, request):
-        """
-            Method to check duplicate order
-        """
-        flag = False
-        snippets = Order.objects.filter(initiator_id=request.GET.get('user'),
-                                        item_id=request.GET.get('item'))
-        serializer = OrdersSerializer(snippets, many=True)
-        if (len(serializer.data)) > 0:
-            flag = True
-            return Response(flag, status=status.HTTP_200_OK)
-        else:
-            return Response(flag, status=status.HTTP_200_OK)
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "orders": data,
+            "has_more": is_more_orders(request)
+        })
