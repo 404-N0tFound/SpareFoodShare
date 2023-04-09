@@ -24,6 +24,17 @@ In order to run the project on your local machine, you will need to compile and 
 To run a live copy of the front end, it can be started with `npm run start`.
 NOTE: This will only run the front end code and much of the functionality will be missing.
 This is more of for development purposes.
+##### Paypal SandBox Configurations
+###### Client Id: 
+ASG-a1qMtj_wQ6Zi80FjFx2MlvEXynOvicYMkO94C-YvMzewNpAP8u0kQMpFz5p0dCgYi0I-el62gFNr
+###### Secret: 
+EBH48lN7B1Lzw9tzQdVofzJcfEM6py8DaS30raUGMHEdwqJ06MUUo2p56U2siTqR1Za7UkgfcwNlrzX_
+###### Personal Account: 
+sb-u5fvj25485920@personal.example.com
+###### Business Account: 
+sb-stwxy25483186@business.example.com
+###### Password(Both): 
+sparefood
 ### Back End
 ##### Database Setup
 To run the complete web application, start your postgres database. 
