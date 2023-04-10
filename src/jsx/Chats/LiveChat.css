@@ -1,0 +1,44 @@
+.live-chat-body {
+    min-height: 500px;
+}
+
+.live-chat-list {
+    height: 400px;
+    width: 80%;
+    left: 225px;
+    list-style: none;
+    padding-top: 50px;
+    position: relative;
+    background: #fefefe;
+    border-radius: 25px;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-top: 33px;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
+.messageInput {
+    width: 90%;
+    align-content: center;
+}
+
+.messages {
+    background-color: #3B5998;
+    height: 300px;
+    border-radius: 30px;
+    width: 95%;
+    overflow: auto;
+}
+
+.single_message {
+    background-color: #fefefe;
+    max-width: 400px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.single_message p {
+    margin: 0;
+}

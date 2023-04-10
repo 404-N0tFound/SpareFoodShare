@@ -16,6 +16,7 @@ import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
 import MyOrders from "./jsx/MyOrders/MyOrders";
 import Chats from "./jsx/Chats/Chats";
+import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
 
 export default function App() {
@@ -53,9 +54,14 @@ export default function App() {
                                 </PrivateRouteProfile>
                             }
                         />
-                        <Route path="profile/chats" element={
+                        <Route path ="profile/chats" element={
                             <PrivateRouteProfile>
                                 <Chats />
+                            </PrivateRouteProfile>
+                        } />
+                        <Route path="profile/chat" element={
+                            <PrivateRouteProfile>
+                                <LiveChat />
                             </PrivateRouteProfile>
                         }
                         />

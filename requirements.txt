@@ -7,3 +7,5 @@ django-phonenumber-field~=7.0.2
 phonenumbers~=8.13.7
 Pillow~=9.4.0
 psycopg2~=2.9.5
+channels~=4.0.0b1
+daphne~=4.0.0b1

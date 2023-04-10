@@ -122,4 +122,12 @@ class ChatRoom(models.Model):
 
     @property
     def order_name(self) -> str:
-        return 'HELLO'
+        return ''
+
+
+class Message(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    value = models.CharField(max_length=10000)
+    date = models.DateField(default=timezone.now, blank=True)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, to_field='id')
+    chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, to_field='id')

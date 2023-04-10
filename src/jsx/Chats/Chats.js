@@ -1,3 +1,4 @@
+/* eslint-disable */
 import "../components/Theme.css";
 import "./Chats.css";
 import ProfileFramework from "../components/ProfileFramework";
@@ -7,7 +8,9 @@ import Footer from "../components/Footer";
 import {PureComponent} from "react";
 import jwtDecode from "jwt-decode";
 
-class Chats extends PureComponent {
+import {useNavigate} from 'react-router-dom';
+
+class ChatsRender extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -36,7 +39,6 @@ class Chats extends PureComponent {
 
     componentDidMount() {
         this.loadChats()
-        console.log(this.state.chats)
     }
 
     loadChats = () => {
@@ -63,6 +65,7 @@ class Chats extends PureComponent {
     }
 
     render() {
+        const { navigate } = this.props;
         return (
             <div className="page-content">
                 <Navbar/>
@@ -73,7 +76,10 @@ class Chats extends PureComponent {
                         {this.state.chats && this.state.chats.map((chatObj) => (
                             <div key={chatObj.id} className="chats-entry">
                                 <li>
-                                    <h4>Item Name: {chatObj.item_name}</h4>
+                                    <div className="chat-selection">
+                                        <h2>Item Name: {chatObj.item_name}</h2>
+                                        <button onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>Chat</button>
+                                    </div>
                                 </li>
                             </div>
                             )
@@ -93,4 +99,7 @@ class Chats extends PureComponent {
 
 }
 
-export default Chats;
+export default function(props) {
+    const navigate = useNavigate();
+    return <ChatsRender {...props} navigate={navigate} />
+}
