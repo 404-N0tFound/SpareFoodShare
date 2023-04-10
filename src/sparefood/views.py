@@ -254,8 +254,16 @@ def infinite_chats_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return ChatRoom.objects.filter(
-        Q(user_1=request.GET.get('user_id')) and
+    first_rooms = ChatRoom.objects.filter(
+        Q(user_1=request.GET.get('user_id'))).annotate(
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')
+    second_rooms = ChatRoom.objects.filter(
         Q(user_2=request.GET.get('user_id'))).annotate(
         order_name=Subquery(
             Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
@@ -263,7 +271,9 @@ def infinite_chats_filter(request):
         item_name=Subquery(
             Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
         )
-    ).values('id', 'item_name')[offset: max_index]
+    ).values('id', 'item_name')
+    total_rooms = (first_rooms | second_rooms)[offset: max_index]
+    return total_rooms
 
 
 def is_more_chats(request):
