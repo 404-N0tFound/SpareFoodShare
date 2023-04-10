@@ -1,4 +1,3 @@
-/* eslint-disable */
 import "../components/Theme.css";
 import "./LiveChat.css";
 import ProfileFramework from "../components/ProfileFramework";
@@ -8,6 +7,7 @@ import Footer from "../components/Footer";
 import {PureComponent} from "react";
 import jwtDecode from "jwt-decode";
 import {useLocation} from "react-router-dom";
+import PropTypes from "prop-types";
 
 class LiveChatRender extends PureComponent {
     ws = null;
@@ -100,6 +100,10 @@ class LiveChatRender extends PureComponent {
     }
 
 }
+
+LiveChatRender.propTypes = {
+    location: PropTypes.node.isRequired,
+};
 
 export default function LiveChat(props) {
     const location = useLocation();

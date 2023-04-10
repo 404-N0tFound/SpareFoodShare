@@ -1,4 +1,3 @@
-/* eslint-disable */
 import "../components/Theme.css";
 import "./Chats.css";
 import ProfileFramework from "../components/ProfileFramework";
@@ -9,6 +8,7 @@ import {PureComponent} from "react";
 import jwtDecode from "jwt-decode";
 
 import {useNavigate} from 'react-router-dom';
+import PropTypes from "prop-types";
 
 class ChatsRender extends PureComponent {
 
@@ -99,7 +99,11 @@ class ChatsRender extends PureComponent {
 
 }
 
-export default function(props) {
+ChatsRender.propTypes = {
+    navigate: PropTypes.node.isRequired,
+};
+
+export default function Chats(props) {
     const navigate = useNavigate();
     return <ChatsRender {...props} navigate={navigate} />
 }
