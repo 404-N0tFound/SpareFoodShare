@@ -48,18 +48,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event):
         message = event['message']
-        user_id = event['user_id']
-        room = event['room']
+        username = await self.get_username(event['user_id'])
 
         await self.send(text_data=json.dumps({
+            'username': username,
             'message': message,
-            'user_id': user_id,
-            'room': room
         }))
 
     @sync_to_async
     def save_message(self, user_id, room, message):
         user = User.objects.get(id=user_id)
         chatroom = ChatRoom.objects.get(id=room)
-
         Message.objects.create(user=user, chat_room=chatroom, value=message)
+
+    @sync_to_async
+    def get_username(self, user_id):
+        return (User.objects.get(id=user_id)).full_name

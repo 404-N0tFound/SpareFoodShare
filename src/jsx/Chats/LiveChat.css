@@ -42,3 +42,7 @@
 .single_message p {
     margin: 0;
 }
+
+.message_author {
+    color: #ff5700;
+}

@@ -1,4 +1,5 @@
 from django.db.models import Q, OuterRef, Subquery
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -256,13 +257,13 @@ def infinite_chats_filter(request):
     return ChatRoom.objects.filter(
         Q(user_1=request.GET.get('user_id')) and
         Q(user_2=request.GET.get('user_id'))).annotate(
-            order_name=Subquery(
-                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
-            ),
-            item_name=Subquery(
-                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-            )
-        ).values('id', 'item_name')[offset: max_index]
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')[offset: max_index]
 
 
 def is_more_chats(request):
@@ -277,7 +278,16 @@ def is_more_chats(request):
 class MessagesView(APIView):
     @classmethod
     def get(cls, request):
-        data = [[message.user.full_name, message.value] for message in Message.objects.filter(
-            Q(chat_room=request.GET.get('room'))
-        ).order_by('date')]
+        data = [[f'username: {message.user.full_name}', f'message: {message.value}']
+                for message in Message.objects.filter(
+                Q(chat_room=request.GET.get('room'))
+            ).order_by('date')]
         return Response(data=data, status=status.HTTP_200_OK)
+
+    @classmethod
+    def get(cls, request):
+        data = [{
+            'username': message.user.full_name,
+            'message': message.value,
+        } for message in Message.objects.filter(Q(chat_room=request.GET.get('room'))).order_by('date')]
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)

@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
 import jwtDecode from "jwt-decode";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 class LiveChatRender extends PureComponent {
     ws = null;
@@ -18,10 +18,24 @@ class LiveChatRender extends PureComponent {
         };
     }
 
-    componentDidMount() {
-        const { chatId } = this.props.location.state;
+    async componentDidMount() {
+        const {chatId} = this.props.location.state;
+        let response = await fetch(`http://127.0.0.1:8000/api/chats/messages/?room=${chatId}`, {
+            method: 'GET'
+        })
+        let data = await response.json()
+        if (response.status === 200) {
+            this.setState({
+                messages: [...this.state.messages, ...data]
+            })
+        }
         this.ws = new WebSocket(`ws://127.0.0.1:8000/ws/${chatId}/`);
         this.ws.addEventListener('message', this.onMessage);
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
     componentWillUnmount() {
@@ -43,8 +57,13 @@ class LiveChatRender extends PureComponent {
 
     onMessage = (event) => {
         const message = JSON.parse(event.data);
+        console.log(event.data)
         this.setState({ messages: [...this.state.messages, message] });
     };
+
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
 
     render() {
         return (
@@ -56,7 +75,7 @@ class LiveChatRender extends PureComponent {
                     <div className="messages">
                         {this.state.messages.map((item, index) => (
                             <div key={index} className="single_message">
-                                <p className="message_author">{item.user_id}</p>
+                                <p className="message_author">{item.username}</p>
                                 <p className="message_content">{item.message}</p>
                             </div>
                         ))}
@@ -65,6 +84,9 @@ class LiveChatRender extends PureComponent {
                                 <p>Be the first to message! There are currently no messages.</p>
                             </div>
                         }
+                        <div style={{ float:"left", clear: "both" }}
+                             ref={(el) => { this.messagesEnd = el; }}>
+                        </div>
                     </div>
                     <form onSubmit={this.sendMessage}>
                         <input type="text" className="messageInput" id="messageInput" name="messageInput" />
