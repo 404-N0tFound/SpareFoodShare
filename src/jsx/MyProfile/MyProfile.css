@@ -17,20 +17,20 @@
   font-size: 20px;
   padding-right: 3px;
   color: #4c4c4c;
-
 }
+
 .Personal_Details .reg_form li .inp {
   width: 240px;
   height: 36px;
   margin-left: 90px;
   border: 1px solid #999;
   border-radius:10px;
+  position:relative;
+  left: 40px;
 }
-.Personal_Details .reg_form li .inp2 {
-  width: 240px;
-  height: 50px;
-  margin-left: 90px;
-  border: 1px solid #999;
+
+.Personal_Details .reg_form li.inp::placeholder {
+  font: 16px/3 sans-serif;
 }
 
 .Personal_Details .reg_form li .error .cha,
@@ -63,15 +63,6 @@
   cursor: pointer
 }
 
-input{
-  position:relative;
-  left: 40px;
-}
-
-input::placeholder {
-  font: 16px/3 sans-serif;
-}
-
 .button {
   border: 0.5px solid green;
   border-radius: 10px;
@@ -81,7 +72,3 @@ input::placeholder {
   left: 170px;
   background: #D4F0CA;
 }
-
-
-
-

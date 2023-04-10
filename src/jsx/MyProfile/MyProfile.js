@@ -11,13 +11,13 @@ function MyProfile() {
     //let role;
     if (user.is_business)
         //role = <p>Role: Business</p>
-    return (
-        <div className="page-content">
-            <Navbar/>
-            <ProfileFramework/>
+        return (
+            <div className="page-content">
+                <Navbar/>
+                <ProfileFramework/>
                 <div className="Personal_Details">
                     <div className="reg_form">
-                        <form className="upload-form" action="">
+                        <form className="upload-form" action="src/jsx/MyProfile">
                             <ul>
                                 <h2>Personal Details</h2>
                                 <li className="li1">
@@ -51,9 +51,10 @@ function MyProfile() {
                         </form>
                     </div>
                 </div>
-            <Footer/>
-        </div>
-    );
+                <Footer/>
+            </div>
+        );
 }
 
 export default MyProfile;
+
