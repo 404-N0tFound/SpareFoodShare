@@ -32,10 +32,11 @@ class LiveChatRender extends PureComponent {
     sendMessage = (e) => {
         e.preventDefault();
         const user_id = (jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id).toString();
+        const { chatId } = this.props.location.state;
         this.ws.send(JSON.stringify({
             'message': e.target.messageInput.value,
             'user_id': user_id,
-            'ChatRoom': this.props.location.state
+            'ChatRoom': chatId
         }))
         e.target.messageInput.value = "";
     }
