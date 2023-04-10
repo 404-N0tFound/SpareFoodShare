@@ -128,6 +128,6 @@ class ChatRoom(models.Model):
 class Message(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     value = models.CharField(max_length=10000)
-    date = models.DateField(default=timezone.now, blank=True)
+    date = models.DateField(verbose_name='date', auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.RESTRICT, to_field='id')
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, to_field='id')

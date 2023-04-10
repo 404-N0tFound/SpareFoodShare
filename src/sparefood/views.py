@@ -272,3 +272,12 @@ def is_more_chats(request):
             Q(user_2=request.GET.get('user_id'))).count():
         return False
     return True
+
+
+class MessagesView(APIView):
+    @classmethod
+    def get(cls, request):
+        data = [[message.user.full_name, message.value] for message in Message.objects.filter(
+            Q(chat_room=request.GET.get('room'))
+        ).order_by('date')]
+        return Response(data=data, status=status.HTTP_200_OK)

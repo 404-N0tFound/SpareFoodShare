@@ -19,4 +19,5 @@ urlpatterns = [
     path('orders/create/', CreateOrderView.as_view()),
     path('orders/', OrdersView.as_view()),
     path('chats/', ChatsView.as_view()),
+    path('chats/messages/', MessagesView.as_view()),
 ]
