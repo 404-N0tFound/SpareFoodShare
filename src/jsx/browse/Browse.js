@@ -105,7 +105,7 @@ class BrowseScreen extends PureComponent {
         await response.json();
         if (response.status === 200 || response.status === 201) {
             alert("Your order has been created!");
-            this.props.navigate('../browse');
+            this.props.navigate(0);
         } else if (response.status === 400) {
             alert("You must sign in before you can register interest in an item!");
         } else {
