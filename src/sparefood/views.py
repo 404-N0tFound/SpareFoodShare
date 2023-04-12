@@ -52,7 +52,8 @@ def getApiRoutes(request):
         '/api/orders',
         '/api/orders/create',
         '/api/orders/check',
-        '/api/chat'
+        '/api/chats',
+        '/api/chats/messages'
     ]
     return Response(routes)
 
@@ -77,10 +78,18 @@ class CreateOrderView(APIView):
                 if str(item.provider_id) == str(request.data['initiator']):
                     return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
                 item.is_collected = True
-                item.save()
+                if serializer.save():
+                    new_order = Order.objects.get(Q(item_id__exact=serializer.initial_data.get("item")) |
+                                                  Q(initiator__exact=serializer.initial_data.get("item")))
+                    chat_data = {'order': new_order.id,
+                                 'user_1': serializer.data['initiator'],
+                                 'user_2': item.provider_id}
+                    room_serializer = ChatsSerializer(data=chat_data)
+                    if room_serializer.is_valid():
+                        item.save()
+                        room_serializer.save()
             except Exception as e:
-                return Response(e, status=status.HTTP_500_BAD_REQUEST)
-            serializer.save()
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
