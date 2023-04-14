@@ -1,4 +1,3 @@
-/* eslint-disable */
 import "./jsx/components/meyerwebCSSreset.css";
 
 import { createRoot } from "react-dom/client";
