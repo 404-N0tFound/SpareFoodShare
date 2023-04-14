@@ -297,14 +297,6 @@ def is_more_chats(request):
 class MessagesView(APIView):
     @classmethod
     def get(cls, request):
-        data = [[f'username: {message.user.full_name}', f'message: {message.value}']
-                for message in Message.objects.filter(
-                Q(chat_room=request.GET.get('room'))
-            ).order_by('date')]
-        return Response(data=data, status=status.HTTP_200_OK)
-
-    @classmethod
-    def get(cls, request):
         data = [{
             'username': message.user.full_name,
             'message': message.value,
