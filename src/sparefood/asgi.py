@@ -7,7 +7,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 
 from . import routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'monolith.settings')
 
 django_asgi_app = get_asgi_application()
 
