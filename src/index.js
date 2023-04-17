@@ -1,7 +1,8 @@
+import "./jsx/components/meyerwebCSSreset.css";
+
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import {} from "./index.css";
 import Layout from "./jsx/Layout";
 import PrivateRouteLogin from "./jsx/components/PrivateRouteLogin";
 import PrivateRouteProfile from "./jsx/components/PrivateRouteProfile";
@@ -13,8 +14,9 @@ import Login from "./jsx/login/Login";
 import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
 import MyOrders from "./jsx/MyOrders/MyOrders";
+import Chats from "./jsx/Chats/Chats";
+import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
-import MySales from './jsx/MySales/MySales';
 
 export default function App() {
     return (
@@ -51,11 +53,16 @@ export default function App() {
                                 </PrivateRouteProfile>
                             }
                         />
-                        <Route path="profile/sales" element={
-                                <PrivateRouteProfile>
-                                        <MySales />
-                                </PrivateRouteProfile>
-                            }
+                        <Route path ="profile/chats" element={
+                            <PrivateRouteProfile>
+                                <Chats />
+                            </PrivateRouteProfile>
+                        } />
+                        <Route path="profile/chat" element={
+                            <PrivateRouteProfile>
+                                <LiveChat />
+                            </PrivateRouteProfile>
+                        }
                         />
                         <Route path="profile/myitems" element={
                                 <PrivateRouteProfile>
