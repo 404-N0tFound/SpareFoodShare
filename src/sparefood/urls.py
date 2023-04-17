@@ -20,4 +20,6 @@ urlpatterns = [
     path('orders/', OrdersView.as_view()),
     path('chats/', ChatsView.as_view()),
     path('chats/messages/', MessagesView.as_view()),
+    path('sales/', SalesView.as_view()),
+    path('item_operations/', ItemOperationsView.as_view()),
 ]
