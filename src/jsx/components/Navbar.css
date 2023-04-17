@@ -1,6 +1,7 @@
 .navbar {
     color: black;
     min-height: 139px;
+    min-width: 1140px;
     border-bottom: 3px solid black;
 }
 
