@@ -8,6 +8,10 @@ import Footer from "../components/Footer";
 
 function MyProfile() {
     let {user} = useContext(AuthContext)
+    let role;
+    if(user.is_business)
+        role = <p>Role: Business</p>
+
     return(
         <div className="page-content">
           <Navbar />
@@ -15,6 +19,7 @@ function MyProfile() {
           <div className="myprofile-page">
             <div>
               <p>
+                {role}
                  Master Windu, <b><i>you survived...</i></b>
               </p>
                  {user && <p>It&apos;s over {user.full_name}, I have the high ground!</p>}

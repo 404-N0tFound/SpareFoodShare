@@ -1,9 +1,12 @@
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
+
+from datetime import datetime
 
 from .serializers import *
 from .models import *
@@ -26,8 +29,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
+        token['is_business'] = user.is_business
         return token
 
 
@@ -41,11 +46,14 @@ def getApiRoutes(request):
         '/api/register',
         '/api/token',
         '/api/token/refresh',
-        '/api/items/',
+        '/api/item',
+        '/api/items',
         '/api/items/upload',
-        '/api/orders/',
-        '/api/orders/create/',
-        '/api/orders/check/'
+        '/api/orders',
+        '/api/orders/create',
+        '/api/orders/check',
+        '/api/chats',
+        '/api/chats/messages'
     ]
     return Response(routes)
 
@@ -60,22 +68,37 @@ class CreateItemView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def create_order(request):
-    """
-        Method to create an order
-    """
-    if request.method == "POST":
+class CreateOrderView(APIView):
+    @classmethod
+    def post(cls, request):
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            try:
+                item = Item.objects.get(id__exact=serializer.initial_data.get("item"))
+                if str(item.provider_id) == str(request.data['initiator']):
+                    return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
+                item.is_collected = True
+                if serializer.save():
+                    new_order = Order.objects.get(Q(item_id__exact=serializer.initial_data.get("item")) |
+                                                  Q(initiator__exact=serializer.initial_data.get("item")))
+                    chat_data = {'order': new_order.id,
+                                 'user_1': serializer.data['initiator'],
+                                 'user_2': item.provider_id}
+                    room_serializer = ChatsSerializer(data=chat_data)
+                    if room_serializer.is_valid():
+                        item.save()
+                        room_serializer.save()
+            except Exception as e:
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def is_more_items(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Item.objects.filter(is_private__lte=False).count():
+    if int(offset) >= Item.objects.filter(
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
         return False
     return True
 
@@ -84,7 +107,16 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(Q(is_private__lte=False) & Q(is_expired__lte=False))[offset: max_index]
+    filtered_items = Item.objects.filter(
+        Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+        Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
+    for item in filtered_items:
+        user_id = request.GET.get('user_id')
+        if str(item.provider_id) == str(user_id):
+            item.is_registrable = False
+        else:
+            item.is_registrable = True
+    return filtered_items
 
 
 class InfiniteItemsView(ListAPIView):
@@ -103,26 +135,170 @@ class InfiniteItemsView(ListAPIView):
         })
 
 
-@api_view(['POST'])
-def my_orders_list(request):
-    """
-        Method to get the orders of current user
-    """
-    if request.method == 'POST':
-        user = request.data['user']
-        snippets = Order.objects.filter(order_initiator=user)
-        serializer = OrdersSerializer(snippets, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class SingleItemView(APIView):
+    serializer_class = ItemSerializer
+
+    @classmethod
+    def get(cls, request):
+        try:
+            item = Item.objects.get(id__exact=request.GET.get('uuid'))
+            user = User.objects.get(id__exact=item.provider_id)
+            if item is not None:
+                return Response({
+                    "id": item.id,
+                    "name": item.name,
+                    "description": item.description,
+                    "upload_date": item.upload_date,
+                    "expiration_date": item.expiration_date,
+                    "provider": user.email,
+                    "location": item.location,
+                    "picture": settings.MEDIA_URL + str(item.picture),
+                    "shared_times": item.shared_times,
+                    "last_updated": item.last_updated,
+                    "is_registrable": is_item_registrable(item, request.GET.get('user'))
+                }, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def my_orders_check(request):
-    """
-        Method to check duplicate order
-    """
-    if request.method == 'POST':
-        user = request.data['user']
-        item = request.data['item']
-        snippets = Order.objects.filter(order_initiator=user, order_item_id_id=item)
-        serializer = OrdersSerializer(snippets, many=True)
-        return Response(len(serializer.data), status=status.HTTP_201_CREATED)
+def is_item_registrable(item, request_user) -> bool:
+    if request_user is None:
+        return False
+    return False if str(item.provider_id) == str(request_user) else True
+
+
+def is_more_myitems(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Item.objects.filter(
+            Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+            Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
+        return False
+    return True
+
+
+def infinite_myitems_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Item.objects.filter(
+        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
+
+
+class InfiniteMyItemsView(ListAPIView):
+    serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        qs = infinite_myitems_filter(self.request)
+        return qs
+
+    def list(self, request):
+        query_set = self.get_queryset()
+        serializer = self.serializer_class(query_set, many=True)
+        return Response({
+            "items": serializer.data,
+            "has_more": is_more_items(request)
+        })
+
+
+def is_more_orders(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+def infinite_myorders_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Order.objects.filter(
+        Q(initiator_id=request.GET.get('user_id')) or
+        Q(provider_id=request.GET.get('user_id'))).values("id",
+                                                          "created_date",
+                                                          "donation_amount",
+                                                          "is_collected",
+                                                          "is_deleted",
+                                                          "collection_location",
+                                                          "initiator",
+                                                          "initiator__email",
+                                                          "initiator__full_name",
+                                                          "item",
+                                                          "item__name"
+                                                          )[offset: max_index]
+
+
+class OrdersView(ListAPIView):
+    serializer_class = OrdersSerializer
+
+    def get_queryset(self):
+        qs = infinite_myorders_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "orders": data,
+            "has_more": is_more_orders(request)
+        })
+
+
+class ChatsView(ListAPIView):
+    serializer_class = ChatsSerializer
+
+    def get_queryset(self):
+        qs = infinite_chats_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "chats": data,
+            "has_more": is_more_chats(request)
+        })
+
+
+def infinite_chats_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    first_rooms = ChatRoom.objects.filter(
+        Q(user_1=request.GET.get('user_id'))).annotate(
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')
+    second_rooms = ChatRoom.objects.filter(
+        Q(user_2=request.GET.get('user_id'))).annotate(
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')
+    total_rooms = (first_rooms | second_rooms)[offset: max_index]
+    return total_rooms
+
+
+def is_more_chats(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= ChatRoom.objects.filter(
+            Q(user_1=request.GET.get('user_id')) or
+            Q(user_2=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+class MessagesView(APIView):
+    @classmethod
+    def get(cls, request):
+        data = [{
+            'username': message.user.full_name,
+            'message': message.value,
+        } for message in Message.objects.filter(Q(chat_room=request.GET.get('room'))).order_by('date')]
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)

@@ -23,22 +23,26 @@ export const AuthProvider = ({children}) => {
         } else if (!e.target.password.value) {
             alert("Don't forget to enter your password")
         } else {
-            let response = await fetch('http://127.0.0.1:8000/api/token/', {
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({'email':e.target.email.value, 'password':e.target.password.value})
-            })
-            let data = await response.json()
-            if (response.status === 200) {
-                setAuthTokens(data)
-                setUser(jwtDecode(data.access))
-                localStorage.setItem('authTokens', JSON.stringify(data))
-                navigator('../profile')
-            } else if (response.status === 401) {
-                alert('Invalid email or password.')
-            } else {
+            try {
+                let response = await fetch('http://127.0.0.1:8000/api/token/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({'email': e.target.email.value, 'password': e.target.password.value})
+                })
+                let data = await response.json()
+                if (response.status === 200) {
+                    setAuthTokens(data)
+                    setUser(jwtDecode(data.access))
+                    localStorage.setItem('authTokens', JSON.stringify(data))
+                    navigator('../profile')
+                } else if (response.status === 401) {
+                    alert('Invalid email or password.')
+                } else {
+                    alert('Auth service failed! Is it maybe down?')
+                }
+            } catch (e) {
                 alert('Auth service failed! Is it maybe down?')
             }
         }
@@ -58,7 +62,7 @@ export const AuthProvider = ({children}) => {
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({'full_name':e.target.name.value, 'email':e.target.email.value, 'password':e.target.password.value})
+                body:JSON.stringify({'full_name':e.target.name.value, 'email':e.target.email.value, 'password':e.target.password.value, 'is_business': e.target.is_business.checked})
             })
             let data = await response.json()
             if (response.status === 200 || response.status === 201) {
@@ -80,29 +84,36 @@ export const AuthProvider = ({children}) => {
     }
 
     let updateToken = async () => {
-        let response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({'refresh':authTokens?.refresh})
-        })
-        let data = await response.json()
-        if (response.status === 200) {
-            setAuthTokens(data)
-            setUser(jwtDecode(data.access))
-            localStorage.setItem('authTokens', JSON.stringify(data))
-        } else {
-            setAuthTokens(null)
-            setUser(null)
-            localStorage.removeItem('authTokens')
-            if (!response.status === 400) {
-                navigator('../')
+        try {
+            let response = await fetch('http://127.0.0.1:8000/api/token/refresh/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'refresh': authTokens?.refresh})
+            })
+            let data = await response.json()
+            if (response.status === 200) {
+                setAuthTokens(data)
+                setUser(jwtDecode(data.access))
+                localStorage.setItem('authTokens', JSON.stringify(data))
+            } else {
+                setAuthTokens(null)
+                setUser(null)
+                localStorage.removeItem('authTokens')
+                if (!response.status === 400) {
+                    navigator('../')
+                }
             }
-        }
 
-        if (loading) {
-            setLoading(false)
+            if (loading) {
+                setLoading(false);
+            }
+        } catch (e) {
+            setAuthTokens(null);
+            localStorage.removeItem('authTokens');
+            setLoading(false);
+            console.log("Auth service failed, is it maybe down?");
         }
     }
 

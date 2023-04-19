@@ -2,19 +2,22 @@ import {useContext} from "react";
 import "./ProfileFramework.css";
 import AuthContext from "../AuthContext";
 
-function ProfileFramework () {
+function ProfileFramework() {
     let {logoutUser} = useContext(AuthContext)
 
-    return(
+    return (
         <div className="sidebar">
             <div className="sidebar-text">
                 <a href='../profile'>My Profile</a>
             </div>
             <div className="sidebar-text">
-                <a>My Items</a>
+                <a href='../profile/myitems'>My Items</a>
             </div>
             <div className="sidebar-text">
                 <a href='../profile/orders'>Orders</a>
+            </div>
+            <div className="sidebar-text">
+                <a href='../profile/chats'>My Chats</a>
             </div>
             <div className="sidebar-text">
                 <a href='../profile/upload'>Upload</a>
@@ -23,7 +26,7 @@ function ProfileFramework () {
                 <a onClick={logoutUser} href={'../login'}>Log Out</a>
             </div>
         </div>
-    )
+    );
 }
 
 export default ProfileFramework;

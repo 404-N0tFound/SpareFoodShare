@@ -102,7 +102,7 @@
   width: 0;
 }
 
-.checkmark {
+.private-checkmark {
   position: absolute;
   height: 25px;
   width: 25px;
@@ -116,7 +116,7 @@
   background-color: #ccc;
 }
 
-.private-check input: checked ~ .checkmark {
+.private-check input:checked ~ .checkmark {
   background-color: black;
 }
 
