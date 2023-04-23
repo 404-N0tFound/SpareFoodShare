@@ -4,7 +4,7 @@ import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import jwtDecode from "jwt-decode";
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class BrowseScreen extends PureComponent {
@@ -43,7 +43,11 @@ class BrowseScreen extends PureComponent {
     }
 
     componentDidMount() {
-        this.loadItems()
+        this.loadItems();
+        const uuid = new URLSearchParams(location.search).get("uuid");
+        if (uuid) {
+            console.log(uuid);
+        }
     }
 
     loadItems = () => {
@@ -87,13 +91,19 @@ class BrowseScreen extends PureComponent {
         modal.style.display = "none";
     }
 
+    shareItem = () => {
+        /* eslint-disable no-unused-vars*/
+        navigator.clipboard.writeText(`http://localhost:3000/browse/?uuid=${this.state.active_item.id}`).then(ignored => alert("Copied link to clipboard!"));
+        /* eslint-enable */
+    }
+
     registerInterest = async () => {
         let user_id = 0;
         try {
             user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         } catch (Exception) {
             alert("You must sign in before you can register interest in an item!");
-            return
+            return;
         }
 
         const orderDetails = {
@@ -150,6 +160,7 @@ class BrowseScreen extends PureComponent {
                                 <p>Description: {this.state.active_item.description}</p>
                                 <p>Location: {this.state.active_item.location}</p>
                                 <p>Expiry Date: {this.state.active_item.expiration_date}</p>
+                                <p><button onClick={this.shareItem}>Share</button></p>
                                 { this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
                             </div>
                         : <p>No item selected</p> }
@@ -166,13 +177,15 @@ class BrowseScreen extends PureComponent {
 const Browse = (Component) => {
     return (props) => {
         const navigate = useNavigate();
-        return <Component navigate={navigate} {...props} />
+        const location = useLocation();
+        return <Component navigate={navigate} location={location} {...props} />
     }
 }
 /* eslint-enable */
 
 BrowseScreen.propTypes = {
     navigate: PropTypes.any.isRequired,
+    location: PropTypes.any.isRequired,
 };
 
 export default Browse(BrowseScreen);
