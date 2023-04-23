@@ -17,6 +17,9 @@ function ProfileFramework() {
                 <a href='../profile/orders'>Orders</a>
             </div>
             <div className="sidebar-text">
+                <a href='../profile/chats'>My Chats</a>
+            </div>
+            <div className="sidebar-text">
                 <a href='../profile/upload'>Upload</a>
             </div>
             <div className="sidebar-text">

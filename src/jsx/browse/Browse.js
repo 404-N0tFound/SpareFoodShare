@@ -69,7 +69,7 @@ class BrowseScreen extends PureComponent {
                     offset: offset + limit
                 })
             } else {
-                alert('Browse service failed! Is it maybe down?')
+                alert('Browse service failed! Is it maybe down?');
             }
         })
     }
@@ -92,7 +92,7 @@ class BrowseScreen extends PureComponent {
         try {
             user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         } catch (Exception) {
-            alert("You must sign in before you can register interest in an item!")
+            alert("You must sign in before you can register interest in an item!");
             return
         }
 
@@ -102,14 +102,14 @@ class BrowseScreen extends PureComponent {
             body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
                 donation_amount: 0.00})}
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
-        await response.json()
+        await response.json();
         if (response.status === 200 || response.status === 201) {
-            alert("You order has been created!")
-            this.props.navigation('../browse')
+            alert("Your order has been created!");
+            this.props.navigate(0);
         } else if (response.status === 400) {
-            alert("You must sign in before you can register interest in an item!")
+            alert("You must sign in before you can register interest in an item!");
         } else {
-            alert("Failed to create order, is the service maybe down?")
+            alert("Failed to create order, is the service maybe down?");
         }
     }
 
@@ -165,14 +165,14 @@ class BrowseScreen extends PureComponent {
 /* eslint-disable react/display-name */
 const Browse = (Component) => {
     return (props) => {
-        const navigation = useNavigate();
-        return <Component navigation={navigation} {...props} />
+        const navigate = useNavigate();
+        return <Component navigate={navigate} {...props} />
     }
 }
 /* eslint-enable */
 
 BrowseScreen.propTypes = {
-    navigation: PropTypes.any.isRequired,
+    navigate: PropTypes.any.isRequired,
 };
 
 export default Browse(BrowseScreen);

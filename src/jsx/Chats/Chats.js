@@ -1,25 +1,26 @@
 import "../components/Theme.css";
-import "./MyOrders.css";
+import "./Chats.css";
 import ProfileFramework from "../components/ProfileFramework";
 import Navbar from "../components/Navbar";
-import AuthContext from "../AuthContext";
 import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
+import jwtDecode from "jwt-decode";
 
-class MyOrders extends PureComponent{
-    static contextType = AuthContext
+import {useNavigate} from 'react-router-dom';
+import PropTypes from "prop-types";
+
+class ChatsRender extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
             error: false,
             loading: false,
-            orders: [],
+            chats: [],
             has_more: true,
             offset: 0,
-            limit: 20,
-            user: {}
+            limit: 20
         };
 
         window.onscroll = () => {
@@ -31,65 +32,61 @@ class MyOrders extends PureComponent{
             // TODO we need to look at getting the height of the footer instead of a hard coded 100 for now
             var difference = document.documentElement.clientHeight + 100;
             if (changeHeight <= difference) {
-                this.loadItems();
+                this.loadChats();
             }
         }
     }
 
     componentDidMount() {
-        this.loadOrders()
+        this.loadChats()
     }
 
-    loadOrders = () => {
+    loadChats = () => {
         this.setState({loading: true, user: this.context.user}, async () => {
-            const { offset, limit, user } = this.state;
-            let response = await fetch(`http://127.0.0.1:8000/api/orders/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
+            const { offset, limit } = this.state;
+            const user_id = (jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id).toString();
+            let response = await fetch(`http://127.0.0.1:8000/api/chats/?limit=${limit}&offset=${offset}&user_id=${user_id}`, {
                 method:'GET'
             })
             let data = await response.json()
             if (response.status === 200) {
-                const newOrders = data.orders;
+                const newChats = data.chats;
                 const has_more = data.has_more;
                 this.setState({
                     has_more: has_more,
                     loading: false,
-                    orders: [...this.state.orders, ...newOrders],
+                    chats: [...this.state.chats, ...newChats],
                     offset: offset + limit
                 })
             } else {
-                alert('Browse service failed! Is it maybe down?')
+                alert('Chat list service failed! Is it maybe down?')
             }
         })
     }
 
     render() {
+        const { navigate } = this.props;
         return (
             <div className="page-content">
                 <Navbar/>
-                <body className="my_orders-body">
+                <body className="chats-body">
                 <ProfileFramework />
-                <div className="my_orders-content">
+                <div className="chats-list">
                     <ul>
-                        {this.state.orders && this.state.orders.map((ordersObj) => (
-                            <div key={ordersObj.id} className="my_orders-card">
+                        {this.state.chats && this.state.chats.map((chatObj) => (
+                            <div key={chatObj.id} className="chats-entry">
                                 <li>
-                                    <div className="my_orders_info">
-                                        <h3>Item Name: {ordersObj.item__name} </h3>
-                                        <p>Create Date: {ordersObj.created_date}</p>
-                                        <p>Initiator Email: {ordersObj.initiator__email}</p>
-                                        <p>Pickup Location: {ordersObj.collection_location} </p>
-                                        <p>Created Date: {ordersObj.created_date } </p>
-                                        <p>Donation: ￡{ordersObj.donation_amount} </p>
-                                        {ordersObj.is_collected && <p>Collect Date: {ordersObj.collect_date} </p>}
-                                        {!ordersObj.is_collected && <p>Collect Date: Not Collected </p>}
+                                    <div className="chat-selection">
+                                        <h2>Item Name: {chatObj.item_name}</h2>
+                                        <button onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>Chat</button>
                                     </div>
                                 </li>
                             </div>
                             )
                         )}
-                        {this.state.orders.length === 0 &&
-                            <div className="no_orders_msg">
-                                There are no orders to display at this time.
+                        {this.state.chats.length === 0 &&
+                            <div className="no_chats_msg">
+                                You currently have no active chats.
                             </div>
                         }
                     </ul>
@@ -102,4 +99,11 @@ class MyOrders extends PureComponent{
 
 }
 
-export default MyOrders;
+ChatsRender.propTypes = {
+    navigate: PropTypes.node.isRequired,
+};
+
+export default function Chats(props) {
+    const navigate = useNavigate();
+    return <ChatsRender {...props} navigate={navigate} />
+}
