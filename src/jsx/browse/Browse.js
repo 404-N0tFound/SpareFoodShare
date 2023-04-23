@@ -46,7 +46,23 @@ class BrowseScreen extends PureComponent {
         this.loadItems();
         const uuid = new URLSearchParams(location.search).get("uuid");
         if (uuid) {
-            console.log(uuid);
+            this.populateModalSingle(uuid);
+        }
+    }
+
+    populateModalSingle = async (uuid) => {
+        let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}`, {
+            method:'GET'
+        })
+        let data = await response.json()
+        if (response.status === 200) {
+            this.setState({
+                active_item: data
+            });
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        } else {
+            alert("Invalid share link!");
         }
     }
 
