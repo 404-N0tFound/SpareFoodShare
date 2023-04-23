@@ -51,7 +51,13 @@ class BrowseScreen extends PureComponent {
     }
 
     populateModalSingle = async (uuid) => {
-        let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}`, {
+        let user_id = 0;
+        try {
+            user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            /* eslint-disable no-empty */
+        } catch (ignored) {}
+        /* eslint-enable */
+        let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}&user=${user_id}`, {
             method:'GET'
         })
         let data = await response.json()
