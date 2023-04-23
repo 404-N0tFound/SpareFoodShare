@@ -60,13 +60,15 @@ class BrowseScreen extends PureComponent {
         let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}&user=${user_id}`, {
             method:'GET'
         })
-        let data = await response.json()
+        let data = await response.json();
         if (response.status === 200) {
             this.setState({
                 active_item: data
             });
             const modal = document.getElementById("myModal");
             modal.style.display = "block";
+            const newUrl = `${window.location.origin}${window.location.pathname}`;
+            window.history.pushState({}, "", newUrl);
         } else {
             alert("Invalid share link!");
         }
@@ -115,7 +117,7 @@ class BrowseScreen extends PureComponent {
 
     shareItem = () => {
         /* eslint-disable no-unused-vars*/
-        navigator.clipboard.writeText(`http://localhost:3000/browse/?uuid=${this.state.active_item.id}`).then(ignored => alert("Copied link to clipboard!"));
+        navigator.clipboard.writeText(`${window.location.origin}${location.pathname}/?uuid=${this.state.active_item.id}`).then(ignored => alert("Copied link to clipboard!"));
         /* eslint-enable */
     }
 
