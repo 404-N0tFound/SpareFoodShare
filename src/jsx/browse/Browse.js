@@ -116,9 +116,7 @@ class BrowseScreen extends PureComponent {
     }
 
     shareItem = () => {
-        /* eslint-disable no-unused-vars*/
-        navigator.clipboard.writeText(`${window.location.origin}${location.pathname}/?uuid=${this.state.active_item.id}`).then(ignored => alert("Copied link to clipboard!"));
-        /* eslint-enable */
+        navigator.clipboard.writeText(`${window.location.origin}${location.pathname}/?uuid=${this.state.active_item.id}`).then(() => alert("Copied link to clipboard!"));
     }
 
     registerInterest = async () => {
