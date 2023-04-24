@@ -24,7 +24,7 @@ class BrowseScreen extends PureComponent {
             reload: false,
             show: false,
             success: false,
-            CLIENT_ID: process.env.REACT_APP_CLIENT_ID,
+            CLIENT_ID: process.env.REACT_APP_CLIENT_ID, // eslint-disable-line
             donation_amount: 0,
         };
 
