@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import jwtDecode from "jwt-decode";
 import {useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
 
 class BrowseScreen extends PureComponent {
     constructor(props) {
@@ -20,6 +22,10 @@ class BrowseScreen extends PureComponent {
             limit: 20,
             active_item: null,
             reload: false,
+            show: false,
+            success: false,
+            CLIENT_ID: process.env.REACT_APP_CLIENT_ID,
+            donation_amount: 0,
         };
 
         window.onscroll = () => {
@@ -96,22 +102,48 @@ class BrowseScreen extends PureComponent {
             alert("You must sign in before you can register interest in an item!")
             return
         }
+        console.log(user_id);
+        if(this.state.donation_amount == 0)
+            this.createOrder();
+        else
+            this.setState({show: true});
 
+    }
+
+    createPaymentOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    Item: this.state.active_item.id,
+                    amount: {
+                        currency_code: "USD",
+                        value: this.state.donation_amount,
+                    },
+                },
+            ],
+        })
+    }
+
+
+    createOrder = async() => {
+        let user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         const orderDetails = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
-                donation_amount: 0.00})}
+                donation_amount: this.state.donation_amount})}
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
         await response.json()
         if (response.status === 200 || response.status === 201) {
             alert("You order has been created!")
             this.props.navigation('../browse')
+            window.location.reload(false);
         } else if (response.status === 400) {
             alert("You must sign in before you can register interest in an item!")
         } else {
             alert("Failed to create order, is the service maybe down?")
         }
+
     }
 
     handleFilterChange = (e) => {
@@ -125,6 +157,17 @@ class BrowseScreen extends PureComponent {
                 () => this.setState({reload: false})
         )
     }
+
+    // check Approval
+    onApprove = (data, actions) => {
+        this.setState({success: true});
+        this.createOrder();
+        return actions.order.capture().then(function (details) {
+            const { payer } = details;
+            console.log(payer);
+        });
+    };
+
 
     render() {
         return (
@@ -164,14 +207,25 @@ class BrowseScreen extends PureComponent {
                     <div className="modal-content">
                         <span onClick={this.closeModal} className="close">&times;</span>
                         {this.state.active_item != null ?
+                        <PayPalScriptProvider options={{ "client-id": this.state.CLIENT_ID }}>
                             <div>
                                 <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
                                 <h1>{this.state.active_item.name}</h1>
                                 <p>Description: {this.state.active_item.description}</p>
                                 <p>Location: {this.state.active_item.location}</p>
                                 <p>Expiry Date: {this.state.active_item.expiration_date}</p>
-                                { this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
+                                <p>Donations:<input type="number" onChange={ (e) => this.setState({donation_amount: e.target.value}) } placeholder="0~10" min="0" max="10"/></p>
+                                {this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
+                                {this.state.show ? (
+                                <p>
+                                    <PayPalButtons
+                                        style={{ layout: "vertical" }}
+                                        createOrder={this.createPaymentOrder}
+                                        onApprove={this.onApprove}
+                                    />
+                                </p>) : null}
                             </div>
+                        </PayPalScriptProvider>
                         : <p>No item selected</p> }
                     </div>
                 </div>

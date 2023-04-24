@@ -1,4 +1,5 @@
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -45,12 +46,14 @@ def getApiRoutes(request):
         '/api/register',
         '/api/token',
         '/api/token/refresh',
-        '/api/item/',
-        '/api/items/',
+        '/api/item',
+        '/api/items',
         '/api/items/upload',
-        '/api/orders/',
-        '/api/orders/create/',
-        '/api/orders/check/'
+        '/api/orders',
+        '/api/orders/create',
+        '/api/orders/check',
+        '/api/chats',
+        '/api/chats/messages'
     ]
     return Response(routes)
 
@@ -75,10 +78,18 @@ class CreateOrderView(APIView):
                 if str(item.provider_id) == str(request.data['initiator']):
                     return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
                 item.is_collected = True
-                item.save()
+                if serializer.save():
+                    new_order = Order.objects.get(Q(item_id__exact=serializer.initial_data.get("item")) |
+                                                  Q(initiator__exact=serializer.initial_data.get("item")))
+                    chat_data = {'order': new_order.id,
+                                 'user_1': serializer.data['initiator'],
+                                 'user_2': item.provider_id}
+                    room_serializer = ChatsSerializer(data=chat_data)
+                    if room_serializer.is_valid():
+                        item.save()
+                        room_serializer.save()
             except Exception as e:
-                return Response(e, status=status.HTTP_500_BAD_REQUEST)
-            serializer.save()
+                return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -184,7 +195,6 @@ class InfiniteMyItemsView(ListAPIView):
     def list(self, request):
         query_set = self.get_queryset()
         serializer = self.serializer_class(query_set, many=True)
-        print(serializer.data)
         return Response({
             "items": serializer.data,
             "has_more": is_more_items(request)
@@ -233,12 +243,64 @@ class OrdersView(ListAPIView):
         })
 
 
-def is_more_sales(request):
+class ChatsView(ListAPIView):
+    serializer_class = ChatsSerializer
+
+    def get_queryset(self):
+        qs = infinite_chats_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "chats": data,
+            "has_more": is_more_chats(request)
+        })
+
+
+def infinite_chats_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    first_rooms = ChatRoom.objects.filter(
+        Q(user_1=request.GET.get('user_id'))).annotate(
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')
+    second_rooms = ChatRoom.objects.filter(
+        Q(user_2=request.GET.get('user_id'))).annotate(
+        order_name=Subquery(
+            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+        ),
+        item_name=Subquery(
+            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+        )
+    ).values('id', 'item_name')
+    total_rooms = (first_rooms | second_rooms)[offset: max_index]
+    return total_rooms
+
+
+def is_more_chats(request):
     offset = request.GET.get('offset')
-    if int(offset) >= Order.objects.filter(
-            Q(id__exact=request.GET.get('user_id'))).count():
+    if int(offset) >= ChatRoom.objects.filter(
+            Q(user_1=request.GET.get('user_id')) or
+            Q(user_2=request.GET.get('user_id'))).count():
         return False
     return True
+
+
+class MessagesView(APIView):
+    @classmethod
+    def get(cls, request):
+        data = [{
+            'username': message.user.full_name,
+            'message': message.value,
+        } for message in Message.objects.filter(Q(chat_room=request.GET.get('room'))).order_by('date')]
+        return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
 
 def infinite_mysales_filter(request):
@@ -275,25 +337,28 @@ class SalesView(ListAPIView):
         })
 
 
-class ItemOperations(APIView):
+def is_more_sales(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+class ItemOperationsView(APIView):
     @classmethod
     def post(cls, request):
         data = request.data
-        if data['operation'] == 'update':
-            try:
+        try:
+            if data['operation'] == 'update':
                 Item.objects.filter(id=data['id']).update(name=data['name'],
                                                           description=data['des'],
                                                           location=data['location'],
                                                           expiration_date=data['expiration_date']
                                                           )
-                return Response(status=status.HTTP_200_OK)
-
-            except Exception as e:
-                return Response(e, status=status.HTTP_400_BAD_REQUEST)
-
-        elif data['operation'] == 'delete':
-            try:
+            elif data['operation'] == 'delete':
                 Item.objects.filter(id=data['id']).update(is_deleted=True)
-                return Response(status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response(e, status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
