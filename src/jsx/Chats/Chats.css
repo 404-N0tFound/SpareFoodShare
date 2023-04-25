@@ -1,0 +1,40 @@
+.chats-body {
+    min-height: 75vh;
+}
+
+.chats-list h4 {
+    all: unset;
+}
+
+.chats-list ul li {
+    height: 75px;
+    width: 80%;
+    left: 225px;
+    list-style: none;
+    padding-top: 50px;
+    position: relative;
+    background: #fefefe;
+    border-radius: 25px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.chats-list ul:first-child {
+    margin-top: 33px;
+}
+
+.chats-list ul li + li {
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+.chat-selection {
+    margin-top: -40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 98%;
+    margin-left: 1%;
+    max-height: 40px;
+}

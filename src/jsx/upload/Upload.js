@@ -33,7 +33,6 @@ function Upload() {
             form_data.append('name', e.target.name.value);
             form_data.append('description', e.target.description.value);
             form_data.append('expiration_date', e.target.expiration.value);
-            form_data.append('is_private', e.target.is_private.checked);
             form_data.append('location', e.target.location.value);
             form_data.append('provider', user_id.toString());
             console.log(form_data);
@@ -71,12 +70,6 @@ function Upload() {
                                     <div className="form-field">
                                         <label className="upload-label"><p>Expiry date</p></label>
                                         <input type="date" name="expiration" className="form-style" id="expiration_date"/>
-                                    </div>
-                                    <div className="private-check">
-                                        <label className="upload-label"><p>Is it private?</p>
-                                        <input type="checkbox" name="is_private" id="is_private"/>
-                                            <span className="private-checkmark"></span>
-                                        </label>
                                     </div>
                                     <div className="form-field">
                                         <label className="upload-label"><p>Location</p></label>

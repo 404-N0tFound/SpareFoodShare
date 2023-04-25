@@ -1,7 +1,8 @@
+import "./jsx/components/meyerwebCSSreset.css";
+
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import {} from "./index.css";
 import Layout from "./jsx/Layout";
 import PrivateRouteLogin from "./jsx/components/PrivateRouteLogin";
 import PrivateRouteProfile from "./jsx/components/PrivateRouteProfile";
@@ -10,10 +11,11 @@ import {AuthProvider} from "./jsx/AuthContext";
 import Welcome from "./jsx/welcome/Welcome";
 import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
-import Item from "./jsx/item/Item";
 import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
-import MyOrders from "./jsx/myorders/MyOrders";
+import MyOrders from "./jsx/MyOrders/MyOrders";
+import Chats from "./jsx/Chats/Chats";
+import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
 
 export default function App() {
@@ -33,7 +35,6 @@ export default function App() {
                                 </PrivateRouteLogin>
                             }
                         />
-                        <Route path="item/:item_id" element={<Item />} />
                         <Route path="profile/upload" element={
                                 <PrivateRouteProfile>
                                     <Upload />
@@ -51,6 +52,17 @@ export default function App() {
                                         <MyOrders />
                                 </PrivateRouteProfile>
                             }
+                        />
+                        <Route path ="profile/chats" element={
+                            <PrivateRouteProfile>
+                                <Chats />
+                            </PrivateRouteProfile>
+                        } />
+                        <Route path="profile/chat" element={
+                            <PrivateRouteProfile>
+                                <LiveChat />
+                            </PrivateRouteProfile>
+                        }
                         />
                         <Route path="profile/myitems" element={
                                 <PrivateRouteProfile>
