@@ -14,7 +14,10 @@ function ProfileFramework() {
                 <a href='../profile/myitems'>My Items</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/orders'>Orders</a>
+                <a href='../profile/orders'>My Orders</a>
+            </div>
+            <div className="sidebar-text">
+                <a href='../profile/sales'>My Sales</a>
             </div>
             <div className="sidebar-text">
                 <a href='../profile/chats'>My Chats</a>

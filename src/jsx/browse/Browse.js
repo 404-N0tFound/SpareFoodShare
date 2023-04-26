@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import jwtDecode from "jwt-decode";
 import {useLocation, useNavigate} from 'react-router-dom';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import PropTypes from 'prop-types';
 
 class BrowseScreen extends PureComponent {
@@ -18,7 +19,12 @@ class BrowseScreen extends PureComponent {
             has_more: true,
             offset: 0,
             limit: 20,
-            active_item: null
+            active_item: null,
+            reload: false,
+            show: false,
+            success: false,
+            CLIENT_ID: process.env.REACT_APP_CLIENT_ID, // eslint-disable-line
+            donation_amount: 0
         };
 
         window.onscroll = () => {
@@ -120,36 +126,71 @@ class BrowseScreen extends PureComponent {
     }
 
     registerInterest = async () => {
-        let user_id = 0;
         try {
-            user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         } catch (Exception) {
             alert("You must sign in before you can register interest in an item!");
             return;
         }
+        if(this.state.donation_amount == 0)
+            this.createOrder();
+        else
+            this.setState({show: true});
+    }
 
+    createOrder = async() => {
+        let user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         const orderDetails = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
-                donation_amount: 0.00})}
+                donation_amount: this.state.donation_amount})}
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
-        await response.json();
+        await response.json()
         if (response.status === 200 || response.status === 201) {
-            alert("Your order has been created!");
+            alert("You order has been created!")
             this.props.navigate(0);
+            window.location.reload(false);
         } else if (response.status === 400) {
-            alert("You must sign in before you can register interest in an item!");
+            alert("You must sign in before you can register interest in an item!")
         } else {
-            alert("Failed to create order, is the service maybe down?");
+            alert("Failed to create order, is the service maybe down?")
         }
     }
+
+
+    handleFilterChange = (e) => {
+        if(e.target.value == 'upload_date'){
+            this.setState({items: this.state.items.sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date))});
+        }else if(e.target.value == 'expiration_date'){
+            this.setState({items: this.state.items.sort((a, b) => new Date(a.expiration_date) - new Date(b.expiration_date))});
+        }
+        this.setState(
+              {reload: true},
+                () => this.setState({reload: false})
+        )
+    }
+
+
+    onApprove = (data, actions) => {
+        this.setState({success: true});
+        this.createOrder();
+        return actions.order.capture();
+    };
 
     render() {
         return (
             <div className="page-content">
                 <Navbar/>
                 <body className="listings-body">
+                <div className="items-filter">
+                    <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
+                        <option value="default" disabled>None</option>
+                        <option value="upload_date">Upload Date</option>
+                        <option value="expiration_date">Expiration Date</option>
+                    </select>
+                </div>
+
                 <div className="listings-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
@@ -176,15 +217,26 @@ class BrowseScreen extends PureComponent {
                     <div className="modal-content">
                         <span onClick={this.closeModal} className="close">&times;</span>
                         {this.state.active_item != null ?
+                        <PayPalScriptProvider options={{ "client-id": this.state.CLIENT_ID }}>
                             <div>
                                 <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
                                 <h1>{this.state.active_item.name}</h1>
                                 <p>Description: {this.state.active_item.description}</p>
                                 <p>Location: {this.state.active_item.location}</p>
                                 <p>Expiry Date: {this.state.active_item.expiration_date}</p>
+                                <p>Donations:<input type="number" onChange={ (e) => this.setState({donation_amount: e.target.value}) } placeholder="0~10" min="0" max="10"/></p>
                                 <p><button onClick={this.shareItem}>Share</button></p>
                                 { this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
+                                {this.state.show ? (
+                                <p>
+                                    <PayPalButtons
+                                        style={{ layout: "vertical" }}
+                                        createOrder={this.createPaymentOrder}
+                                        onApprove={this.onApprove}
+                                    />
+                                </p>) : null}
                             </div>
+                            </PayPalScriptProvider>
                         : <p>No item selected</p> }
                     </div>
                 </div>

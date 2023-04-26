@@ -1,5 +1,5 @@
 import "../components/Theme.css";
-import "./MyOrders.css";
+import "./MySales.css";
 import ProfileFramework from "../components/ProfileFramework";
 import Navbar from "../components/Navbar";
 import AuthContext from "../AuthContext";
@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
 
-class MyOrders extends PureComponent{
+class MySales extends PureComponent{
     static contextType = AuthContext
 
     constructor(props) {
@@ -15,7 +15,7 @@ class MyOrders extends PureComponent{
         this.state = {
             error: false,
             loading: false,
-            orders: [],
+            sales: [],
             has_more: true,
             offset: 0,
             limit: 20,
@@ -38,23 +38,23 @@ class MyOrders extends PureComponent{
     }
 
     componentDidMount() {
-        this.loadOrders()
+        this.loadSales()
     }
 
-    loadOrders = () => {
+    loadSales = () => {
         this.setState({loading: true, user: this.context.user}, async () => {
             const { offset, limit, user } = this.state;
-            let response = await fetch(`http://127.0.0.1:8000/api/orders/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
+            let response = await fetch(`http://127.0.0.1:8000/api/sales/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
                 method:'GET'
             })
             let data = await response.json()
             if (response.status === 200) {
-                const newOrders = data.orders;
+                const newSales = data.sales;
                 const has_more = data.has_more;
                 this.setState({
                     has_more: has_more,
                     loading: false,
-                    orders: [...this.state.orders, ...newOrders],
+                    sales: [...this.state.sales, ...newSales],
                     offset: offset + limit
                 })
             } else {
@@ -64,9 +64,9 @@ class MyOrders extends PureComponent{
     }
     handleFilterChange = (e) => {
         if(e.target.value == 'created_date'){
-            this.setState({items: this.state.orders.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))});
+            this.setState({sales: this.state.sales.sort((a, b) => new Date(b.created_date) - new Date(a.created_date))});
         }else if(e.target.value == 'donation_amount'){
-            this.setState({items: this.state.items.sort((a, b) => a.donation_amount - b.donation_amount)});
+            this.setState({sales: this.state.sales.sort((a, b) => a.donation_amount - b.donation_amount)});
         }
         this.setState(
               {reload: true},
@@ -77,36 +77,37 @@ class MyOrders extends PureComponent{
         return (
             <div className="page-content">
                 <Navbar/>
-                <body className="my_orders-body">
+                <body className="my_sales-body">
                 <ProfileFramework />
-                <div className="my_orders-filter">
+                <div className="my_sales-filter">
                     <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
                         <option value="default" disabled>None</option>
                         <option value="created_date">Created Date</option>
                         <option value="donation_amount">Donation</option>
                     </select>
                 </div>
-                <div className="my_orders-content">
+                <div className="my_sales-content">
                     <ul>
-                        {this.state.orders && this.state.orders.map((ordersObj) => (
-                            <div key={ordersObj.id} className="my_orders-card">
+                        {this.state.sales && this.state.sales.map((salesObj) => (
+                            <div key={salesObj.id} className="my_sales-card">
                                 <li>
-                                    <div className="my_orders_info">
-                                        <h3>Item Name: {ordersObj.item__name} </h3>
-                                        <p>Initiator Email: {ordersObj.initiator__email}</p>
-                                        <p>Pickup Location: {ordersObj.collection_location} </p>
-                                        <p>Created Date: {ordersObj.created_date } </p>
-                                        <p>Donation: ￡{ordersObj.donation_amount} </p>
-                                        {ordersObj.is_collected && <p>Collect Date: {ordersObj.collect_date} </p>}
-                                        {!ordersObj.is_collected && <p>Collect Date: Not Collected </p>}
+                                    <div className="my_sales_info">
+                                        <h3>Item Name: {salesObj.item__name} </h3>
+                                        <p>Create Date: {salesObj.created_date}</p>
+                                        <p>Initiator Email: {salesObj.initiator__email}</p>
+                                        <p>Pickup Location: {salesObj.collection_location} </p>
+                                        <p>Created Date: {salesObj.created_date } </p>
+                                        <p>Donation: ￡{salesObj.donation_amount} </p>
+                                        {salesObj.is_collected && <p>Collect Date: {salesObj.collect_date} </p>}
+                                        {!salesObj.is_collected && <p>Collect Date: Not Collected </p>}
                                     </div>
                                 </li>
                             </div>
                             )
                         )}
-                        {this.state.orders.length === 0 &&
-                            <div className="no_orders_msg">
-                                There are no orders to display at this time.
+                        {this.state.sales.length === 0 &&
+                            <div className="no_sales_msg">
+                                There are no sales to display at this time.
                             </div>
                         }
                     </ul>
@@ -119,4 +120,4 @@ class MyOrders extends PureComponent{
 
 }
 
-export default MyOrders;
+export default MySales;
