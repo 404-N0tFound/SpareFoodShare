@@ -126,14 +126,12 @@ class BrowseScreen extends PureComponent {
     }
 
     registerInterest = async () => {
-        let user_id = 0;
         try {
-            user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
         } catch (Exception) {
             alert("You must sign in before you can register interest in an item!");
             return;
         }
-        console.log(user_id);
         if(this.state.donation_amount == 0)
             this.createOrder();
         else
