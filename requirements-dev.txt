@@ -2,3 +2,5 @@
 
 setuptools~=66.1.1
 flake8~=6.0.0
+django-extensions~=3.2.1
+graphviz~=0.20.1
