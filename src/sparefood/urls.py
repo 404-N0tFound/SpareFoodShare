@@ -22,4 +22,5 @@ urlpatterns = [
     path('chats/messages/', MessagesView.as_view()),
     path('sales/', SalesView.as_view()),
     path('item_operations/', ItemOperationsView.as_view()),
+    path('user/update_profile/', UserProfileUpdateView.as_view()),
 ]

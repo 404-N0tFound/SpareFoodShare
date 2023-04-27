@@ -13,6 +13,7 @@ from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+import json
 
 
 class RegistrationView(APIView):
@@ -33,6 +34,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         token['full_name'] = user.full_name
         token['is_business'] = user.is_business
+        token['phone_number'] = str(user.phone_number)
+        token['date_joined'] = str(user.date_joined)[:19]
         return token
 
 
@@ -360,5 +363,22 @@ class ItemOperationsView(APIView):
                 Item.objects.filter(id=data['id']).update(is_deleted=True)
             return Response(status=status.HTTP_200_OK)
 
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileUpdateView(APIView):
+    @classmethod
+    def post(cls, request):
+        data = request.data
+        try:
+            user = User.objects.get(id__exact=data['user_id'])
+            user.phone_number = data['phone_number']
+            user.full_name = data['full_name']
+            user.save()
+            return Response({
+                'phone_number': data['phone_number'],
+                'full_name': data['full_name']
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
