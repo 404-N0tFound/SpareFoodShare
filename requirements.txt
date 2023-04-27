@@ -7,4 +7,9 @@ django-phonenumber-field~=7.0.2
 phonenumbers~=8.13.7
 Pillow~=9.4.0
 psycopg2~=2.9.5
+<<<<<<< HEAD
 six
+=======
+channels~=4.0.0b1
+daphne~=4.0.0b1
+>>>>>>> adc857832e3f684692d9763eae3f5c10b3ebf5a5

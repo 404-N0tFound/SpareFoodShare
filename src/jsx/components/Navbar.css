@@ -1,6 +1,7 @@
 .navbar {
     color: black;
     min-height: 139px;
+    min-width: 1140px;
     border-bottom: 3px solid black;
 }
 
@@ -37,11 +38,7 @@
     border-left: 3px solid black;
 }
 
-.Login-a {
-    border-right: 3px solid black;
-}
-
-.login-a {
+.browse-a {
     border-right: 3px solid black;
 }
 

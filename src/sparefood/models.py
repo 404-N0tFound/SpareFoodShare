@@ -50,6 +50,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_business = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']
@@ -70,30 +71,63 @@ class Item(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("name", max_length=240)
     description = models.TextField("description", max_length=10000)
-    provider_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    provider = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
     upload_date = models.DateField(default=timezone.now)
     expiration_date = models.DateField()
-    status = models.CharField("status", max_length=30, default="Available")
-    is_private = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+    is_collected = models.BooleanField(default=False)
     location = models.CharField("location", max_length=240)
     picture = models.ImageField(verbose_name="picture", upload_to='items')
     shared_times = models.PositiveIntegerField(default=0)
-    last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateField(auto_now=True)
 
     @property
     def get_absolute_image_url(self):
         return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
+    @property
+    def is_registrable(self) -> bool:
+        return self._is_registrable
+
+    @is_registrable.setter
+    def is_registrable(self, value: bool):
+        if not (type(value) == bool):
+            raise ValueError(f"Value {value} must be a bool.")
+        self._is_registrable = value
+
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
-    order_initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
-    order_item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
 
-    order_created_date = models.DateTimeField(auto_now_add=True)
-    order_donation_amount = models.FloatField()
+    created_date = models.DateField(auto_now_add=True)
+    donation_amount = models.FloatField()
 
-    order_isCollected = models.BooleanField(default=False)
-    order_isDeleted = models.BooleanField(default=False)
+    is_collected = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
 
-    order_collected_date = models.DateTimeField(null=True, blank=True)
-    order_collection_location = models.CharField(verbose_name="order_location", max_length=240)
+    collected_date = models.DateField(null=True, blank=True)
+    collection_location = models.CharField(verbose_name="order_location", max_length=240, default="Sheffield")
+
+
+class ChatRoom(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.RESTRICT, to_field='id')
+    user_1 = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_1')
+    user_2 = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_2')
+
+    @property
+    def order_name(self) -> str:
+        return ''
+
+
+class Message(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    value = models.CharField(max_length=10000)
+    date = models.DateField(verbose_name='date', auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, to_field='id')
+    chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, to_field='id')
