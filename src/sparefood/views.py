@@ -182,7 +182,7 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')))[offset: max_index]
+        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_deleted__lte=False))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -214,19 +214,18 @@ def infinite_myorders_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
-        Q(initiator_id=request.GET.get('user_id')) or
-        Q(provider_id=request.GET.get('user_id'))).values("id",
-                                                          "created_date",
-                                                          "donation_amount",
-                                                          "is_collected",
-                                                          "is_deleted",
-                                                          "collection_location",
-                                                          "initiator",
-                                                          "initiator__email",
-                                                          "initiator__full_name",
-                                                          "item",
-                                                          "item__name"
-                                                          )[offset: max_index]
+        Q(initiator_id=request.GET.get('user_id'))).values("id",
+                                                           "created_date",
+                                                           "donation_amount",
+                                                           "is_collected",
+                                                           "is_deleted",
+                                                           "collection_location",
+                                                           "initiator",
+                                                           "initiator__email",
+                                                           "initiator__full_name",
+                                                           "item",
+                                                           "item__name"
+                                                           )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -302,3 +301,64 @@ class MessagesView(APIView):
             'message': message.value,
         } for message in Message.objects.filter(Q(chat_room=request.GET.get('room'))).order_by('date')]
         return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
+
+
+def infinite_mysales_filter(request):
+    limit = int(request.GET.get('limit'))
+    offset = int(request.GET.get('offset'))
+    max_index = int(offset) + int(limit)
+    return Order.objects.filter(
+        Q(item__provider_id=request.GET.get('user_id'))).values("id",
+                                                                "created_date",
+                                                                "donation_amount",
+                                                                "is_collected",
+                                                                "is_deleted",
+                                                                "collection_location",
+                                                                "initiator",
+                                                                "initiator__email",
+                                                                "initiator__full_name",
+                                                                "item",
+                                                                "item__name"
+                                                                )[offset: max_index]
+
+
+class SalesView(ListAPIView):
+    serializer_class = OrdersSerializer
+
+    def get_queryset(self):
+        qs = infinite_mysales_filter(self.request)
+        return qs
+
+    def list(self, request):
+        data = self.get_queryset()
+        return Response({
+            "sales": data,
+            "has_more": is_more_sales(request)
+        })
+
+
+def is_more_sales(request):
+    offset = request.GET.get('offset')
+    if int(offset) >= Order.objects.filter(
+            Q(id__exact=request.GET.get('user_id'))).count():
+        return False
+    return True
+
+
+class ItemOperationsView(APIView):
+    @classmethod
+    def post(cls, request):
+        data = request.data
+        try:
+            if data['operation'] == 'update':
+                Item.objects.filter(id=data['id']).update(name=data['name'],
+                                                          description=data['des'],
+                                                          location=data['location'],
+                                                          expiration_date=data['expiration_date']
+                                                          )
+            elif data['operation'] == 'delete':
+                Item.objects.filter(id=data['id']).update(is_deleted=True)
+            return Response(status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(e, status=status.HTTP_400_BAD_REQUEST)

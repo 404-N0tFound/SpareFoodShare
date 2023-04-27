@@ -17,6 +17,7 @@ import MyOrders from "./jsx/MyOrders/MyOrders";
 import Chats from "./jsx/Chats/Chats";
 import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
+import MySales from './jsx/MySales/MySales';
 
 export default function App() {
     return (
@@ -67,6 +68,12 @@ export default function App() {
                         <Route path="profile/myitems" element={
                                 <PrivateRouteProfile>
                                         <MyItems />
+                                </PrivateRouteProfile>
+                            }
+                        />
+                        <Route path="profile/sales" element={
+                                <PrivateRouteProfile>
+                                        <MySales />
                                 </PrivateRouteProfile>
                             }
                         />
