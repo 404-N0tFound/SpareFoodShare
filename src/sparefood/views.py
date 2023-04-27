@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.db.models import Q, OuterRef, Subquery
+from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-=======
-from django.db.models import Q, OuterRef, Subquery
-from django.http import JsonResponse
->>>>>>> adc857832e3f684692d9763eae3f5c10b3ebf5a5
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -66,11 +61,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
-<<<<<<< HEAD
-
-=======
         token['is_business'] = user.is_business
->>>>>>> adc857832e3f684692d9763eae3f5c10b3ebf5a5
         return token
 
 
@@ -135,12 +126,8 @@ class CreateOrderView(APIView):
 def is_more_items(request):
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
-<<<<<<< HEAD
-            Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
-=======
             Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
             Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d'))).count():
->>>>>>> adc857832e3f684692d9763eae3f5c10b3ebf5a5
         return False
     return True
 
@@ -149,10 +136,6 @@ def infinite_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-<<<<<<< HEAD
-    return Item.objects.filter(
-        Q(is_private__lte=False) & Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
-=======
     filtered_items = Item.objects.filter(
         Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
         Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
@@ -163,7 +146,6 @@ def infinite_filter(request):
         else:
             item.is_registrable = True
     return filtered_items
->>>>>>> adc857832e3f684692d9763eae3f5c10b3ebf5a5
 
 
 class InfiniteItemsView(ListAPIView):
