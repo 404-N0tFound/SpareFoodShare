@@ -68,6 +68,7 @@ export const AuthProvider = ({children}) => {
             if (response.status === 200 || response.status === 201) {
                 navigator(0)
                 alert('Account created!')
+                alert('Please check your email and click on the link to activate your account');
             } else if (response.status === 401) {
                 alert('Invalid email or password.')
             } else {
