@@ -29,6 +29,8 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             serializer.save()
             activate_email(request, serializer.data, serializer.data['email'])
+            response_data = serializer.data
+            response_data['email_sent'] = True
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
