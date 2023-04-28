@@ -31,7 +31,6 @@ function Upload() {
         } else {
             const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
             let form_data = new FormData();
-
             form_data.append('picture', selectedImage, selectedImage.name);
             form_data.append('name', e.target.name.value);
             form_data.append('description', e.target.description.value);
