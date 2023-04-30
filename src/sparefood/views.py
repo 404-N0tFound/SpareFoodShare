@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 
 from datetime import datetime
+from .jwt_decoder import decode_jwt
 
 from .serializers import *
 from .models import *
@@ -43,17 +44,19 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['GET'])
 def getApiRoutes(request):
     routes = [
-        '/api/register',
         '/api/token',
         '/api/token/refresh',
+        '/api/register',
         '/api/item',
         '/api/items',
+        '/api/myitems',
         '/api/items/upload',
         '/api/orders',
         '/api/orders/create',
-        '/api/orders/check',
         '/api/chats',
-        '/api/chats/messages'
+        '/api/chats/messages',
+        '/api/sales',
+        '/api/item_operations'
     ]
     return Response(routes)
 
@@ -61,7 +64,9 @@ def getApiRoutes(request):
 class CreateItemView(APIView):
     @classmethod
     def post(cls, request):
-        serializer = ItemSerializer(data=request.data)
+        data = request.data
+        data['provider'] = decode_jwt(data['provider'], True)
+        serializer = ItemSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -71,23 +76,27 @@ class CreateItemView(APIView):
 class CreateOrderView(APIView):
     @classmethod
     def post(cls, request):
+        data = request.data
+        data['initiator'] = decode_jwt(data['initiator'], True)
         serializer = OrdersSerializer(data=request.data)
         if serializer.is_valid():
             try:
                 item = Item.objects.get(id__exact=serializer.initial_data.get("item"))
-                if str(item.provider_id) == str(request.data['initiator']):
+                if str(item.provider_id) == str(decode_jwt(request.data['initiator'], True)):
                     return Response("You may not order your own item.", status=status.HTTP_401_UNAUTHORIZED)
                 item.is_collected = True
                 if serializer.save():
                     new_order = Order.objects.get(Q(item_id__exact=serializer.initial_data.get("item")) |
                                                   Q(initiator__exact=serializer.initial_data.get("item")))
                     chat_data = {'order': new_order.id,
-                                 'user_1': serializer.data['initiator'],
+                                 'user_1': data['initiator'],
                                  'user_2': item.provider_id}
                     room_serializer = ChatsSerializer(data=chat_data)
                     if room_serializer.is_valid():
                         item.save()
                         room_serializer.save()
+                    else:
+                        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             except Exception as e:
                 return Response(e, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -111,7 +120,7 @@ def infinite_filter(request):
         Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
         Q(expiration_date__gte=datetime.today().strftime('%Y-%m-%d')))[offset: max_index]
     for item in filtered_items:
-        user_id = request.GET.get('user_id')
+        user_id = decode_jwt(request)
         if str(item.provider_id) == str(user_id):
             item.is_registrable = False
         else:
@@ -155,7 +164,7 @@ class SingleItemView(APIView):
                     "picture": settings.MEDIA_URL + str(item.picture),
                     "shared_times": item.shared_times,
                     "last_updated": item.last_updated,
-                    "is_registrable": is_item_registrable(item, request.GET.get('user'))
+                    "is_registrable": is_item_registrable(item, decode_jwt(request))
                 }, status=status.HTTP_200_OK)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except Exception:
@@ -182,7 +191,7 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Item.objects.filter(
-        Q(provider_id__exact=request.GET.get('user_id')) & Q(is_deleted__lte=False))[offset: max_index]
+        Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -204,7 +213,7 @@ class InfiniteMyItemsView(ListAPIView):
 def is_more_orders(request):
     offset = request.GET.get('offset')
     if int(offset) >= Order.objects.filter(
-            Q(id__exact=request.GET.get('user_id'))).count():
+            Q(id__exact=decode_jwt(request))).count():
         return False
     return True
 
@@ -214,7 +223,7 @@ def infinite_myorders_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
-        Q(initiator_id=request.GET.get('user_id'))).values("id",
+        Q(initiator_id=decode_jwt(request))).values("id",
                                                            "created_date",
                                                            "donation_amount",
                                                            "is_collected",
@@ -263,7 +272,7 @@ def infinite_chats_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     first_rooms = ChatRoom.objects.filter(
-        Q(user_1=request.GET.get('user_id'))).annotate(
+        Q(user_1=decode_jwt(request))).annotate(
         order_name=Subquery(
             Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
         ),
@@ -272,7 +281,7 @@ def infinite_chats_filter(request):
         )
     ).values('id', 'item_name')
     second_rooms = ChatRoom.objects.filter(
-        Q(user_2=request.GET.get('user_id'))).annotate(
+        Q(user_2=decode_jwt(request))).annotate(
         order_name=Subquery(
             Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
         ),
@@ -287,8 +296,8 @@ def infinite_chats_filter(request):
 def is_more_chats(request):
     offset = request.GET.get('offset')
     if int(offset) >= ChatRoom.objects.filter(
-            Q(user_1=request.GET.get('user_id')) or
-            Q(user_2=request.GET.get('user_id'))).count():
+            Q(user_1=decode_jwt(request)) or
+            Q(user_2=decode_jwt(request))).count():
         return False
     return True
 
@@ -308,7 +317,7 @@ def infinite_mysales_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
-        Q(item__provider_id=request.GET.get('user_id'))).values("id",
+        Q(item__provider_id=decode_jwt(request))).values("id",
                                                                 "created_date",
                                                                 "donation_amount",
                                                                 "is_collected",
@@ -340,7 +349,7 @@ class SalesView(ListAPIView):
 def is_more_sales(request):
     offset = request.GET.get('offset')
     if int(offset) >= Order.objects.filter(
-            Q(id__exact=request.GET.get('user_id'))).count():
+            Q(id__exact=decode_jwt(request))).count():
         return False
     return True
 
