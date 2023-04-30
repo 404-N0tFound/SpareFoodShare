@@ -404,9 +404,6 @@ class UserProfileUpdateView(APIView):
             user.phone_number = data['phone_number']
             user.full_name = data['full_name']
             user.save()
-            return Response({
-                'phone_number': data['phone_number'],
-                'full_name': data['full_name']
-            }, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
