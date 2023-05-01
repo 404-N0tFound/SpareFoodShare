@@ -38,7 +38,7 @@ function MyProfile() {
         console.log(e.target.value);
         anyChange = true;
     }
-    console.log(user)
+
     return (
             <div className="page-content">
                 <Navbar/>
