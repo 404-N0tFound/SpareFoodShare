@@ -1,8 +1,80 @@
-.profile-page {
-  display: inline;
+.Personal_Details {
+  height: 550px;
+  margin-top: 60px;
+  border: 1px solid #dfdfdf;
+  height: 70vh;
 }
 
-.myprofile-page {
-  text-align: center;
-  height: 100vh;
+.Personal_Details .reg_form ul li {
+  margin: 20px 0;
+  list-style-type: none;
+}
+
+.Personal_Details .reg_form label {
+  display: inline-block;
+  width: 88px;
+  text-align: right;
+  font-size: 20px;
+  padding-right: 3px;
+  font-weight: bold;
+  color: #4c4c4c;
+}
+
+.Personal_Details .reg_form li .inp {
+  width: 240px;
+  height: 36px;
+  margin-left: 90px;
+  border: 1px solid #999;
+  border-radius:10px;
+  position:relative;
+  left: 40px;
+}
+
+.Personal_Details .reg_form li.inp::placeholder {
+  font: 16px/3 sans-serif;
+}
+
+#Role_distinguish_para {
+  font: 20px sans-serif;
+  color: #838177;
+  font-weight: bold;
+}
+
+.gou {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -4px;
+  width: 20px;
+  height: 20px;
+}
+
+.Personal_Details .reg_form li .success {
+  color: green;
+}
+
+.li1 {
+  padding-top: 20px;
+}
+
+.upload-form {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background: rgba(21, 102, 29, 0.2);
+  border-radius: 25px;
+  left: 25%;
+  border: solid;
+  border-color: white;
+  cursor: pointer
+}
+
+.button_MyProfile {
+  font-weight: bold;
+  border: 0.5px solid green;
+  border-radius: 10px;
+  width: 200px;
+  height: 35px;
+  position: relative;
+  left: 170px;
+  background: #D4F0CA;
 }
