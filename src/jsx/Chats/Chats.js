@@ -71,25 +71,27 @@ class ChatsRender extends PureComponent {
                 <Navbar/>
                 <body className="chats-body">
                 <ProfileFramework />
+                <h3>Active Chats</h3>
                 <div className="chats-list">
-                    <ul>
-                        {this.state.chats && this.state.chats.map((chatObj) => (
-                            <div key={chatObj.id} className="chats-entry">
-                                <li>
-                                    <div className="chat-selection">
-                                        <h2>Item Name: {chatObj.item_name}</h2>
-                                        <button onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>Chat</button>
-                                    </div>
-                                </li>
-                            </div>
-                            )
-                        )}
-                        {this.state.chats.length === 0 &&
-                            <div className="no_chats_msg">
-                                You currently have no active chats.
-                            </div>
-                        }
-                    </ul>
+                    <div className="chats-block">
+                        <ul>
+                            {this.state.chats && this.state.chats.map((chatObj) => (
+                                <div key={chatObj.id} className="chats-entry">
+                                    <li>
+                                        <div className="chat-selection">
+                                            <button className="chat-button" onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>{chatObj.item_name}</button>
+                                        </div>
+                                    </li>
+                                </div>
+                                )
+                            )}
+                            {this.state.chats.length === 0 &&
+                                <div className="no_chats_msg">
+                                    You currently have no active chats.
+                                </div>
+                            }
+                        </ul>
+                    </div>
                 </div>
                 </body>
                 <Footer id="foot_id"/>

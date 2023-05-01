@@ -7,9 +7,10 @@
     width: 80%;
     left: 225px;
     list-style: none;
-    padding-top: 50px;
+    padding-top: 40px;
+    padding-left: 20px;
     position: relative;
-    background: #fefefe;
+    background: rgba(21, 102, 29, 0.2);
     border-radius: 25px;
     text-align: left;
     margin-bottom: 10px;
@@ -20,29 +21,51 @@
 }
 
 .messageInput {
-    width: 90%;
+    width: 88%;
+    height: 30px;
     align-content: center;
+    border-radius: 25px;
+    margin-right: 10px;
 }
 
 .messages {
-    background-color: #3B5998;
-    height: 300px;
-    border-radius: 30px;
+    background: rgba(21, 102, 29, 0.0);
+    height: 325px;
+    border-radius: 25px;
     width: 95%;
     overflow: auto;
 }
 
 .single_message {
-    background-color: #fefefe;
+    background: rgba(204, 246, 210, 1.0);
     max-width: 400px;
     border-radius: 10px;
     margin: 10px;
 }
 
 .single_message p {
-    margin: 0;
+    margin: 1%;
+    padding-left: 2%;
 }
 
 .message_author {
     color: #ff5700;
+}
+
+.submit-message {
+    border-radius: 25px;
+    height: 35px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 200ms linear;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 15px;
+    padding-top: 1%;
+    display: inline-flex;
+    -webkit-align-items: center;
+    text-align: center;
+    border: solid;
+    background: rgba(21, 102, 29, 0.5);
+    color: black;
 }

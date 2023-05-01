@@ -13,7 +13,7 @@ import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
 import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
-import MyOrders from "./jsx/MyOrders/MyOrders";
+import MyOrders from "./jsx/myorders/MyOrders";
 import Chats from "./jsx/Chats/Chats";
 import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
