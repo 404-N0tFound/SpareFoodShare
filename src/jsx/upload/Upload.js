@@ -3,6 +3,7 @@ import ProfileFramework from "../components/ProfileFramework";
 import "./Upload.css";
 import {useState} from "react";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
 import upload_pic from "../pics/upload-icon.jpeg";
@@ -56,7 +57,7 @@ function Upload() {
 
         if (csvData) {
             const csvLines = String(csvData).split("\n");
-            const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             const defaultImageData = selectedDefaultImage
 
             let url = 'http://127.0.0.1:8000/api/items/upload/';
@@ -69,7 +70,7 @@ function Upload() {
 
                 let form_data = new FormData();
 
-                form_data.append("provider", user_id);
+                form_data.append("provider", jwt);
 
                 for (const header of headers) {
                     form_data.append(header, item[header]);
