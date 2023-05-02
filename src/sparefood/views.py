@@ -415,11 +415,11 @@ class UserProfileUpdateView(APIView):
             try:
                 parsed = phonenumbers.parse(data['phone_number'])
                 user.phone_number = parsed.national_number
-            except phonenumbers.NumberParseException as ignored:
+            except phonenumbers.NumberParseException:
                 try:
                     parsed = phonenumbers.parse('+44{}'.format(data['phone_number']))
                     user.phone_number = parsed.national_number
-                except phonenumbers.NumberParseException as ignored:
+                except phonenumbers.NumberParseException:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
             user.full_name = data['full_name']
             user.save()
