@@ -409,7 +409,7 @@ class UserProfileUpdateView(APIView):
     def post(cls, request):
         data = request.data
         try:
-            user = User.objects.get(id__exact=data['user_id'])
+            user = User.objects.get(id__exact=decode_jwt(data['jwt'], True))
             user.phone_number = data['phone_number']
             user.full_name = data['full_name']
             user.save()

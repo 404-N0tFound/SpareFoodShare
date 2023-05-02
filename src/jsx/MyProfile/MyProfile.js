@@ -21,7 +21,7 @@ function MyProfile() {
                     headers:{
                         'Content-Type' : 'application/json'
                         },
-                        body: JSON.stringify({'user_id': user.user_id, 'full_name': full_name, 'phone_number': phone_number})
+                        body: JSON.stringify({'jwt': JSON.parse(localStorage.getItem('authTokens')).access, 'full_name': full_name, 'phone_number': phone_number})
                 })
                 if(response.status == 200){
                     alert("Update Successfully!");
@@ -34,8 +34,7 @@ function MyProfile() {
         }
 
     }
-    let onChange = (e) => {
-        console.log(e.target.value);
+    let onChange = () => {
         anyChange = true;
     }
 
@@ -45,7 +44,7 @@ function MyProfile() {
                 <ProfileFramework/>
                 <div className="Personal_Details">
                     <div className="reg_form">
-                        <form className="upload-form" onSubmit={updateProfile}>
+                        <form className="personal-details-form" onSubmit={updateProfile}>
                             <ul>
                                 <h2>Personal Details</h2>
                                 <li >
