@@ -44,7 +44,6 @@ function Upload() {
             }
         }
         setCsvData(items)
-        console.log(items)
     };
 
     let uploadCsv = async (e) =>{
@@ -56,18 +55,14 @@ function Upload() {
         }
 
         if (csvData) {
-            const csvLines = String(csvData).split("\n");
             const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
             const defaultImageData = selectedDefaultImage
-
             let url = 'http://127.0.0.1:8000/api/items/upload/';
             let itemsDataArray = [];
-            console.log(csvLines)
 
             for (let i = 0; i < csvData.length; i++) {
                 const item = csvData[i];
                 const headers = Object.keys(item);
-
                 let form_data = new FormData();
 
                 form_data.append("provider", user_id);
