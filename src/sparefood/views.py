@@ -13,6 +13,8 @@ from rest_framework.generics import ListAPIView
 from datetime import datetime
 from .jwt_decoder import decode_jwt
 
+import phonenumbers
+
 from .serializers import *
 from .models import *
 
@@ -410,7 +412,15 @@ class UserProfileUpdateView(APIView):
         data = request.data
         try:
             user = User.objects.get(id__exact=decode_jwt(data['jwt'], True))
-            user.phone_number = data['phone_number']
+            try:
+                parsed = phonenumbers.parse(data['phone_number'])
+                user.phone_number = parsed.national_number
+            except phonenumbers.NumberParseException as ignored:
+                try:
+                    parsed = phonenumbers.parse('+44{}'.format(data['phone_number']))
+                    user.phone_number = parsed.national_number
+                except phonenumbers.NumberParseException as ignored:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
             user.full_name = data['full_name']
             user.save()
             return Response(status=status.HTTP_200_OK)
