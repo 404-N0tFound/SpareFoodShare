@@ -11,12 +11,102 @@ import upload_pic from "../pics/upload-icon.jpeg";
 function Upload() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedPreImage, setSelectedPreImage] = useState(null);
+    const [csvData, setCsvData] = useState(null);
+    const [selectedDefaultImage, setSelectedDefaultImage] = useState(null);
+    const isBusiness = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).is_business;
     const navigator = useNavigate();
 
     let handleImageChange = (e) => {
         setSelectedImage(e.target.files[0])
         setSelectedPreImage(URL.createObjectURL(event.target.files[0]));
     };
+
+    let handleDefaultImageChange = (e) => {
+        setSelectedDefaultImage(e.target.files[0]);
+    };
+
+    let handleCSVChange = async (e) => {
+        const file = e.target.files[0];
+        const content = await file.text();
+        const csvLines = content.split("\n");
+        const headers = csvLines[0].split(",");
+        const items = [];
+
+        for (let i = 1; i < csvLines.length; i++) {
+
+            const data = csvLines[i].split(",")
+            if (data.length === headers.length) {
+                const item = {};
+                for (let j = 0; j < headers.length; j++) {
+                    item[headers[j].trim()] = data[j].trim()
+                }
+                items.push(item)
+            }
+        }
+        setCsvData(items)
+        console.log(items)
+    };
+
+    let uploadCsv = async (e) =>{
+        e.preventDefault()
+
+        if (!selectedDefaultImage) {
+            alert("Please select a default image");
+            return;
+        }
+
+        if (csvData) {
+            const csvLines = String(csvData).split("\n");
+            const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            const defaultImageData = selectedDefaultImage
+
+            let url = 'http://127.0.0.1:8000/api/items/upload/';
+            let itemsDataArray = [];
+            console.log(csvLines)
+
+            for (let i = 0; i < csvData.length; i++) {
+                const item = csvData[i];
+                const headers = Object.keys(item);
+
+                let form_data = new FormData();
+
+                form_data.append("provider", user_id);
+
+                for (const header of headers) {
+                    form_data.append(header, item[header]);
+                }
+
+                form_data.append("picture", defaultImageData, defaultImageData.name);
+
+                itemsDataArray.push(form_data);
+            }
+
+            itemsDataArray.map((item, index) => {
+                console.log(`Item ${index}:`);
+                for (let pair of item.entries()) {
+                    console.log(pair[0] + ": " + pair[1]);
+                }
+            });
+
+            Promise.all(
+                itemsDataArray.map(formData =>
+                    axios.post(url, formData, {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    })
+                )
+            )
+                .then(responses => {
+                    responses.forEach(response => {
+                        console.log(`New ${response.data.name} uploaded!`);
+                    });
+                    navigator('../browse');
+                    alert(`${responses.length} items uploaded!`);
+                })
+                .catch(err => console.log(err));
+        }
+    }
 
     let createItem = async (e) => {
         e.preventDefault()
@@ -59,6 +149,23 @@ function Upload() {
                 <div className="upload-page">
                     <ProfileFramework/>
                     <div className="upload-box">
+                        {isBusiness ? (
+                            <form className="csv-upload-form" onSubmit={uploadCsv}>
+                                <h2>Upload Item by CSV File</h2>
+                                <label>
+                                    <input type="file" id="csv_file" accept=".csv" onChange={handleCSVChange} required/>
+                                    <span className="file-input-text">Please select a CSV file</span>
+                                </label>
+                                <br/>
+                                <label>
+                                    <input type="file" id="defaultImageInput" accept="image/*" onChange={handleDefaultImageChange} required/>
+                                    <span className="file-input-text">Please select an image for the uploaded items</span>
+                                </label>
+                                <div className="button-div">
+                                    <button className="submit-button">submit</button>
+                                </div>
+                            </form>
+                        ) : null}
                         <form className="upload-form" onSubmit={createItem}>
                             <h2 className="form-title">
                                 Upload Item
