@@ -50,7 +50,6 @@ def activate_email(request, user, toEmail):
 
 
 def activate_account(request, uidb64, token):
-
     uid = force_str(urlsafe_base64_decode(uidb64))
     User.objects.filter(email=uid).update(is_active=True)
 
@@ -257,17 +256,17 @@ def infinite_myorders_filter(request):
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
         Q(initiator_id=decode_jwt(request))).values("id",
-                                                           "created_date",
-                                                           "donation_amount",
-                                                           "is_collected",
-                                                           "is_deleted",
-                                                           "collection_location",
-                                                           "initiator",
-                                                           "initiator__email",
-                                                           "initiator__full_name",
-                                                           "item",
-                                                           "item__name"
-                                                           )[offset: max_index]
+                                                    "created_date",
+                                                    "donation_amount",
+                                                    "is_collected",
+                                                    "is_deleted",
+                                                    "collection_location",
+                                                    "initiator",
+                                                    "initiator__email",
+                                                    "initiator__full_name",
+                                                    "item",
+                                                    "item__name"
+                                                    )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -351,17 +350,17 @@ def infinite_mysales_filter(request):
     max_index = int(offset) + int(limit)
     return Order.objects.filter(
         Q(item__provider_id=decode_jwt(request))).values("id",
-                                                                "created_date",
-                                                                "donation_amount",
-                                                                "is_collected",
-                                                                "is_deleted",
-                                                                "collection_location",
-                                                                "initiator",
-                                                                "initiator__email",
-                                                                "initiator__full_name",
-                                                                "item",
-                                                                "item__name"
-                                                                )[offset: max_index]
+                                                         "created_date",
+                                                         "donation_amount",
+                                                         "is_collected",
+                                                         "is_deleted",
+                                                         "collection_location",
+                                                         "initiator",
+                                                         "initiator__email",
+                                                         "initiator__full_name",
+                                                         "item",
+                                                         "item__name"
+                                                         )[offset: max_index]
 
 
 class SalesView(ListAPIView):
