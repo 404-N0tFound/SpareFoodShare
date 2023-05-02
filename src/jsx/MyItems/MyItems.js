@@ -20,7 +20,6 @@ class MyItems extends PureComponent{
             has_more: true,
             offset: 0,
             limit: 20,
-            user: {},
             context: false,
             xYPosition: { x: 0, y: 0 },
             chosen: null,
@@ -50,9 +49,10 @@ class MyItems extends PureComponent{
     }
 
     loadItems = () => {
-        this.setState({loading: true, user: this.context.user}, async () => {
-            const { offset, limit, user } = this.state;
-            let response = await fetch(`http://127.0.0.1:8000/api/myitems/?limit=${limit}&offset=${offset}&user_id=${user.user_id}`, {
+        this.setState({loading: true}, async () => {
+            const { offset, limit } = this.state;
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
+            let response = await fetch(`http://127.0.0.1:8000/api/myitems/?limit=${limit}&offset=${offset}&jwt=${jwt}`, {
                 method:'GET'
             })
             let data = await response.json()

@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
-import jwtDecode from "jwt-decode";
 import {useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -45,11 +44,11 @@ class LiveChatRender extends PureComponent {
 
     sendMessage = (e) => {
         e.preventDefault();
-        const user_id = (jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id).toString();
+        const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
         const { chatId } = this.props.location.state;
         this.ws.send(JSON.stringify({
             'message': e.target.messageInput.value,
-            'user_id': user_id,
+            'jwt': jwt,
             'ChatRoom': chatId
         }))
         e.target.messageInput.value = "";

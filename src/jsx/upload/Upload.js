@@ -4,7 +4,6 @@ import "./Upload.css";
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import jwtDecode from "jwt-decode";
 import Footer from "../components/Footer";
 import upload_pic from "../pics/upload-icon.jpeg";
 
@@ -119,14 +118,14 @@ function Upload() {
         } else if (!e.target.location.value) {
             alert("Don't forget to enter a distribution location")
         } else {
-            const user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             let form_data = new FormData();
             form_data.append('picture', selectedImage, selectedImage.name);
             form_data.append('name', e.target.name.value);
             form_data.append('description', e.target.description.value);
             form_data.append('expiration_date', e.target.expiration.value);
             form_data.append('location', e.target.location.value);
-            form_data.append('provider', user_id.toString());
+            form_data.append('provider', jwt);
             console.log(form_data);
             let url = 'http://127.0.0.1:8000/api/items/upload/';
             axios.post(url, form_data, {

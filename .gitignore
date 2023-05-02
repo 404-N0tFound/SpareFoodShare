@@ -164,5 +164,8 @@ src/sparefood/templates/app/build/
 # To stop changing the README
 README.md
 
+# For the generated UML diagrams
+*.dot
+
 # Migrations are irrelavent for now
 /src/sparefood/migrations
