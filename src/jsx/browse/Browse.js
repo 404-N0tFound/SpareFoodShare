@@ -3,7 +3,6 @@ import "./Browse.css";
 import "../components/Theme.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import jwtDecode from "jwt-decode";
 import {useLocation, useNavigate} from 'react-router-dom';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import PropTypes from 'prop-types';
@@ -57,13 +56,13 @@ class BrowseScreen extends PureComponent {
     }
 
     populateModalSingle = async (uuid) => {
-        let user_id = 0;
+        let jwt = 0;
         try {
-            user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             /* eslint-disable no-empty */
         } catch (ignored) {}
         /* eslint-enable */
-        let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}&user=${user_id}`, {
+        let response = await fetch(`http://127.0.0.1:8000/api/item/?uuid=${uuid}&jwt=${jwt}`, {
             method:'GET'
         })
         let data = await response.json();
@@ -83,13 +82,13 @@ class BrowseScreen extends PureComponent {
     loadItems = () => {
         this.setState({loading: true}, async () => {
             const { offset, limit } = this.state;
-            let user_id = 0;
+            let jwt = 0;
             try {
-                user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+                jwt = JSON.parse(localStorage.getItem('authTokens')).access;
                 /* eslint-disable no-empty */
             } catch (ignored) {}
             /* eslint-enable */
-            let response = await fetch(`http://127.0.0.1:8000/api/items/?limit=${limit}&offset=${offset}&user_id=${user_id}`, {
+            let response = await fetch(`http://127.0.0.1:8000/api/items/?limit=${limit}&offset=${offset}&jwt=${jwt}`, {
                 method:'GET'
             })
             let data = await response.json()
@@ -127,24 +126,28 @@ class BrowseScreen extends PureComponent {
 
     registerInterest = async () => {
         try {
-            jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+            JSON.parse(localStorage.getItem('authTokens')).access;
         } catch (Exception) {
             alert("You must sign in before you can register interest in an item!");
             return;
         }
         if(this.state.donation_amount == 0)
-            this.createOrder();
+            await this.createOrder();
         else
             this.setState({show: true});
     }
 
     createOrder = async() => {
-        let user_id = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id;
+        let jwt = JSON.parse(localStorage.getItem('authTokens')).access;
         const orderDetails = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ item: this.state.active_item.id, initiator: user_id,
-                donation_amount: this.state.donation_amount})}
+            body: JSON.stringify({
+                item: this.state.active_item.id,
+                initiator: jwt,
+                donation_amount: this.state.donation_amount
+            })}
+        console.log(jwt);
         let response = await fetch('http://127.0.0.1:8000/api/orders/create/', orderDetails);
         await response.json()
         if (response.status === 200 || response.status === 201) {
