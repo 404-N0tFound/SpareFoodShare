@@ -6,6 +6,11 @@ from django.conf import settings
 
 
 def decode_jwt(request, is_direct=False) -> str:
+    """
+    :param request:
+    :param is_direct: Whether to use the request or true if the jwt as a string itself is being passed
+    :return: The user UUID as a string
+    """
     if is_direct:
         token = request
     else:
@@ -17,7 +22,7 @@ def decode_jwt(request, is_direct=False) -> str:
         return '0'
 
 
-def is_valid_uuid(request, is_direct) -> bool:
+def is_valid_uuid(request, is_direct=False) -> bool:
     if is_direct:
         token = request
     else:
