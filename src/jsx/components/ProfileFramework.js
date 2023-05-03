@@ -8,19 +8,19 @@ function ProfileFramework() {
     return (
         <div className="sidebar">
             <div className="sidebar-text">
-                <a href='../profile'>My Profile</a>
+                <a href='../profile'>Profile</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/myitems'>My Items</a>
+                <a href='../profile/myitems'>Items</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/orders'>My Orders</a>
+                <a href='../profile/orders'>Orders</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/sales'>My Sales</a>
+                <a href='../profile/sales'>Sales</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/chats'>My Chats</a>
+                <a href='../profile/chats'>Chats</a>
             </div>
             {user.is_admin ?
             <div className="sidebar-text">

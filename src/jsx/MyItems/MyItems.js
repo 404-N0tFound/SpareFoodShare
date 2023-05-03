@@ -28,6 +28,7 @@ class MyItems extends PureComponent{
             delete_item: null,
             anyChanges: false,
             reload: false,
+            show: false,
         };
 
         window.onscroll = () => {
@@ -102,8 +103,12 @@ class MyItems extends PureComponent{
             this.setState({delete_item: this.state.active_item}, () => {
                 this.deleteItem();
             });
-
         }
+    }
+
+    modalOperations = (chosen) => {
+        this.closeModal();
+        this.initMenu(chosen);
     }
 
 
@@ -176,6 +181,20 @@ class MyItems extends PureComponent{
         )
     }
 
+    openModal = (selectedItem) => {
+        this.setState({
+            active_item: selectedItem,
+            show: true,
+        });
+        const modal = document.getElementById("myModal");
+        modal.style.display = "block";
+    }
+
+    closeModal = () => {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
     render() {
         return (
             <div className="page-content" onClick={this.handleClick}>
@@ -192,7 +211,7 @@ class MyItems extends PureComponent{
                 <div className="my_items-content">
                     <ul>
                         {this.state.items && this.state.items.map((itemsObj) => (
-                            <div key={itemsObj.id} className="my_items-card"  onContextMenu = {this.showNav.bind(this, itemsObj)}>
+                            <a key={itemsObj.id} className="my_items-card" onClick = {() => this.openModal(itemsObj)} onContextMenu = {this.showNav.bind(this, itemsObj)}>
                                 <li>
                                     <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="my_items_info">
@@ -203,7 +222,7 @@ class MyItems extends PureComponent{
                                         <p>Location: { itemsObj.location }</p>
                                     </div>
                                 </li>
-                            </div>
+                            </a>
                             )
                         )}
                         {this.state.items.length === 0 &&
@@ -252,6 +271,25 @@ class MyItems extends PureComponent{
                                     </form>
                                 </div>
                             :<p></p>}
+                    </div>
+                </div>
+
+                <div className="modal" id="myModal">
+                    <div className="modal-content">
+                        <span onClick={this.closeModal} className="close">&times;</span>
+                        {this.state.active_item != null && this.state.show == true?
+                            <div>
+                                <div className="my_items_info">
+                                    <h3>Name: {this.state.active_item.name}</h3>
+                                    <p>Des: {this.state.active_item.description}</p><br />
+                                    <p>Upload Date: { this.state.active_item.upload_date }</p>
+                                    <p>Expiration Date: { this.state.active_item.expiration_date }</p>
+                                    <p>Location: { this.state.active_item.location }</p>
+                                    <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Edit")}>Edit</button>
+                                    <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Delete")}>Delete</button>
+                                </div>
+                            </div>
+                        : <p>No item selected</p> }
                     </div>
                 </div>
 
