@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 
 from datetime import datetime
-from .jwt_decoder import decode_jwt, is_valid_uuid
+from .jwt_decoder import *
 
 import phonenumbers
 
@@ -246,8 +246,11 @@ def infinite_myitems_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
+    if is_admin(request):
+        return Item.objects.all()[offset: max_index]
+    else:
+        return Item.objects.filter(
+            Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -278,19 +281,33 @@ def infinite_myorders_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Order.objects.filter(
-        Q(initiator_id=decode_jwt(request))).values("id",
-                                                    "created_date",
-                                                    "donation_amount",
-                                                    "is_collected",
-                                                    "is_deleted",
-                                                    "collection_location",
-                                                    "initiator",
-                                                    "initiator__email",
-                                                    "initiator__full_name",
-                                                    "item",
-                                                    "item__name"
-                                                    )[offset: max_index]
+    if decode_jwt(request):
+        return Order.objects.all().values("id",
+                                          "created_date",
+                                          "donation_amount",
+                                          "is_collected",
+                                          "is_deleted",
+                                          "collection_location",
+                                          "initiator",
+                                          "initiator__email",
+                                          "initiator__full_name",
+                                          "item",
+                                          "item__name"
+                                          )[offset: max_index]
+    else:
+        return Order.objects.filter(
+            Q(initiator_id=decode_jwt(request))).values("id",
+                                                        "created_date",
+                                                        "donation_amount",
+                                                        "is_collected",
+                                                        "is_deleted",
+                                                        "collection_location",
+                                                        "initiator",
+                                                        "initiator__email",
+                                                        "initiator__full_name",
+                                                        "item",
+                                                        "item__name"
+                                                        )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -449,3 +466,10 @@ class UserProfileUpdateView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StatsView(APIView):
+    @classmethod
+    def get(cls, request):
+        data = {}
+        return Response(data, status=status.HTTP_200_OK)

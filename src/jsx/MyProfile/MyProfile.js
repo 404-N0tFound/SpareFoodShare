@@ -51,6 +51,7 @@ function MyProfile() {
                                 <h2>Personal Details</h2>
                                 <li >
                                     {user.is_business ? <p id= "Role_distinguish_para" >Role: Business</p> :<p id= "Role_distinguish_para">Role: individual</p>}
+                                    {user.is_admin ? <p id= "Admin_distinguish_para" >Admin</p> : null}
                                 </li>
                                 <li className="li1">
                                     <label htmlFor="username">User&nbsp;&nbsp;name：</label>
