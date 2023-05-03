@@ -93,23 +93,7 @@ export const AuthProvider = ({children}) => {
                 },
                 body: JSON.stringify({'refresh': authTokens?.refresh})
             })
-            let data = await response.json()
-            if (response.status === 200) {
-                setAuthTokens(data)
-                setUser(jwtDecode(data.access))
-                localStorage.setItem('authTokens', JSON.stringify(data))
-            } else {
-                setAuthTokens(null)
-                setUser(null)
-                localStorage.removeItem('authTokens')
-                if (!response.status === 400) {
-                    navigator('../')
-                }
-            }
-
-            if (loading) {
-                setLoading(false);
-            }
+            await handleResponse(response);
         } catch (e) {
             setAuthTokens(null);
             localStorage.removeItem('authTokens');
@@ -118,12 +102,46 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    let updateNewToken = async (oldToken) => {
+        try {
+            let response = await fetch(`http://127.0.0.1:8000/api/token/new/?jwt=${oldToken}`, {
+                method:'GET'
+            })
+            await handleResponse(response);
+        } catch (e) {
+            setAuthTokens(null);
+            localStorage.removeItem('authTokens');
+            setLoading(false);
+            console.log("Auth service failed, is it maybe down?");
+        }
+    }
+
+    let handleResponse = async (response) => {
+        let data = await response.json()
+        if (response.status === 200) {
+            setAuthTokens(data)
+            setUser(jwtDecode(data.access))
+            localStorage.setItem('authTokens', JSON.stringify(data))
+        } else {
+            setAuthTokens(null)
+            setUser(null)
+            localStorage.removeItem('authTokens')
+            if (!response.status === 400) {
+                navigator('../')
+            }
+        }
+        if (loading) {
+            setLoading(false);
+        }
+    }
+
     let contextData = {
         user:user,
         authTokens:authTokens,
         loginUser:loginUser,
         logoutUser:logoutUser,
-        createUser:createUser
+        createUser:createUser,
+        updateNewToken:updateNewToken
     }
 
     useEffect(()=> {

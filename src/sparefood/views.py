@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 
 from datetime import datetime
-from .jwt_decoder import decode_jwt
+from .jwt_decoder import decode_jwt, is_valid_uuid
 
 import phonenumbers
 
@@ -20,6 +20,7 @@ from .models import *
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.core.mail import send_mail
 from .tokens import account_activation_token
@@ -56,6 +57,28 @@ def activate_account(request, uidb64, token):
     return HttpResponseRedirect('http://localhost:3000/')
 
 
+class NewRefreshToken(APIView):
+    @classmethod
+    def get(cls, request):
+        if is_valid_uuid(request):
+            user = User.objects.get(id__exact=decode_jwt(request))
+            refresh = RefreshToken.for_user(user)
+            refresh['user_id'] = str(user.id)
+            refresh['email'] = user.email
+            refresh['full_name'] = user.full_name
+            refresh['is_admin'] = user.is_admin
+            refresh['is_business'] = user.is_business
+            refresh['phone_number'] = str(user.phone_number)
+            refresh['date_joined'] = str(user.date_joined)[:19]
+            data = {
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -63,6 +86,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['user_id'] = str(user.id)
         token['email'] = user.email
         token['full_name'] = user.full_name
+        token['is_admin'] = user.is_admin
         token['is_business'] = user.is_business
         token['phone_number'] = str(user.phone_number)
         token['date_joined'] = str(user.date_joined)[:19]
@@ -413,11 +437,11 @@ class UserProfileUpdateView(APIView):
             user = User.objects.get(id__exact=decode_jwt(data['jwt'], True))
             try:
                 parsed = phonenumbers.parse(data['phone_number'])
-                user.phone_number = parsed.national_number
+                user.phone_number = str(parsed.national_number)
             except phonenumbers.NumberParseException:
                 try:
                     parsed = phonenumbers.parse('+44{}'.format(data['phone_number']))
-                    user.phone_number = parsed.national_number
+                    user.phone_number = str(parsed.national_number)
                 except phonenumbers.NumberParseException:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
             user.full_name = data['full_name']
