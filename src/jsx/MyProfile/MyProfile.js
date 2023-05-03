@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function MyProfile() {
-    let {user} = useContext(AuthContext)
+    let {user, updateNewToken} = useContext(AuthContext)
     let anyChange = false;
 
     let updateProfile = async(e) => {
@@ -15,7 +15,7 @@ function MyProfile() {
         if(anyChange){
             let full_name = e.target.username.value;
             let phone_number = e.target.phone_number.value;
-            try{
+            try {
                 let response = await fetch("http://127.0.0.1:8000/api/user/update_profile/", {
                     method: "POST",
                     headers:{
@@ -23,10 +23,12 @@ function MyProfile() {
                         },
                         body: JSON.stringify({'jwt': JSON.parse(localStorage.getItem('authTokens')).access, 'full_name': full_name, 'phone_number': phone_number})
                 })
-                if(response.status == 200){
+                if(response.status === 200) {
+                    await updateNewToken(JSON.parse(localStorage.getItem('authTokens')).access);
                     alert("Update Successfully!");
+                    window.location.reload();
                 }
-            }catch(e){
+            } catch(e) {
                 alert('Update failed! Is it maybe down?')
             }
         }else{
