@@ -16,7 +16,10 @@ import {
     XAxis,
     Legend, Bar, LineChart, Line
 } from 'recharts';
+
 import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 class AdminStats extends PureComponent{
     constructor(props) {
@@ -67,10 +70,104 @@ class AdminStats extends PureComponent{
     }
 
     generatePDF = () => {
-        const report = new jsPDF('portrait','pt','a4');
-        report.html(document.querySelector('.admin_stats-page')).then(() => {
-            report.save('report.pdf');
-        })
+        const charts = document.querySelectorAll('.admin_stats-page');
+        const pdfDoc = new jsPDF('portrait', 'pt', 'a4');
+        const promises = [];
+        charts.forEach((chart) => {
+            promises.push(
+                html2canvas(chart, {
+                    scale: 0.85,
+                    useCORS: true,
+                    allowTaint: true,
+                }).then((canvas) => {
+                    return canvas;
+                })
+            );
+        });
+        Promise.all(promises).then((canvases) => {
+            canvases.forEach((canvas, index) => {
+                if (index !== 0) {
+                    pdfDoc.addPage();
+                }
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                pdfDoc.addImage(imgData, 'JPEG', -75, 0, canvas.width / 2, canvas.height / 2);
+
+                const data1 = [['Day', 'New Users'],
+                    [`${this.state.new_users_week[0].name}`, `${this.state.new_users_week[0]['New Users']}`],
+                    [`${this.state.new_users_week[1].name}`, `${this.state.new_users_week[1]['New Users']}`],
+                    [`${this.state.new_users_week[2].name}`, `${this.state.new_users_week[2]['New Users']}`],
+                    [`${this.state.new_users_week[3].name}`, `${this.state.new_users_week[3]['New Users']}`],
+                    [`${this.state.new_users_week[4].name}`, `${this.state.new_users_week[4]['New Users']}`],
+                    [`${this.state.new_users_week[5].name}`, `${this.state.new_users_week[5]['New Users']}`],
+                    [`${this.state.new_users_week[6].name}`, `${this.state.new_users_week[6]['New Users']}`]
+                ];
+                const options1 = { startY: 440 };
+                pdfDoc.autoTable({ head: [data1[0]], body: data1.slice(1), ...options1 });
+
+                const data2 = [['Month', 'New Users'],
+                    [`${this.state.new_users_month[0].name}`, `${this.state.new_users_month[0]['New Users']}`],
+                    [`${this.state.new_users_month[1].name}`, `${this.state.new_users_month[1]['New Users']}`],
+                    [`${this.state.new_users_month[2].name}`, `${this.state.new_users_month[2]['New Users']}`],
+                    [`${this.state.new_users_month[3].name}`, `${this.state.new_users_month[3]['New Users']}`],
+                    [`${this.state.new_users_month[4].name}`, `${this.state.new_users_month[4]['New Users']}`],
+                    [`${this.state.new_users_month[5].name}`, `${this.state.new_users_month[5]['New Users']}`]
+                ];
+                const options2 = { startY: 620 };
+                pdfDoc.autoTable({ head: [data2[0]], body: data2.slice(1), ...options2 });
+
+                pdfDoc.addPage()
+                const data3 = [['Individual Users', 'Business Users'], [`${this.state.user_ratio[0].value}`, `${this.state.user_ratio[1].value}`]];
+                const options3 = { startY: 50 };
+                pdfDoc.autoTable({ head: [data3[0]], body: data3.slice(1), ...options3 });
+
+                const data4 = [['Day', 'Shares'],
+                    [`${this.state.shared_week[0].name}`, `${this.state.shared_week[0]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[1].name}`, `${this.state.shared_week[1]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[2].name}`, `${this.state.shared_week[2]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[3].name}`, `${this.state.shared_week[3]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[4].name}`, `${this.state.shared_week[4]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[5].name}`, `${this.state.shared_week[5]['Site-wide Shares']}`],
+                    [`${this.state.shared_week[6].name}`, `${this.state.shared_week[6]['Site-wide Shares']}`]
+                ];
+                const options4 = { startY: 100 };
+                pdfDoc.autoTable({ head: [data4[0]], body: data4.slice(1), ...options4 });
+
+                const data5 = [['Month', 'Shares'],
+                    [`${this.state.shared_month[0].name}`, `${this.state.shared_month[0]['Site-wide Shares']}`],
+                    [`${this.state.shared_month[1].name}`, `${this.state.shared_month[1]['Site-wide Shares']}`],
+                    [`${this.state.shared_month[2].name}`, `${this.state.shared_month[2]['Site-wide Shares']}`],
+                    [`${this.state.shared_month[3].name}`, `${this.state.shared_month[3]['Site-wide Shares']}`],
+                    [`${this.state.shared_month[4].name}`, `${this.state.shared_month[4]['Site-wide Shares']}`],
+                    [`${this.state.shared_month[5].name}`, `${this.state.shared_month[5]['Site-wide Shares']}`]
+                ];
+                const options5 = { startY: 280 };
+                pdfDoc.autoTable({ head: [data5[0]], body: data5.slice(1), ...options5 });
+
+                const data6 = [['Day', 'Perished Items'],
+                    [`${this.state.perished_week[0].name}`, `${this.state.perished_week[0]['Perished Items']}`],
+                    [`${this.state.perished_week[1].name}`, `${this.state.perished_week[1]['Perished Items']}`],
+                    [`${this.state.perished_week[2].name}`, `${this.state.perished_week[2]['Perished Items']}`],
+                    [`${this.state.perished_week[3].name}`, `${this.state.perished_week[3]['Perished Items']}`],
+                    [`${this.state.perished_week[4].name}`, `${this.state.perished_week[4]['Perished Items']}`],
+                    [`${this.state.perished_week[5].name}`, `${this.state.perished_week[5]['Perished Items']}`],
+                    [`${this.state.perished_week[6].name}`, `${this.state.perished_week[6]['Perished Items']}`]
+                ];
+                const options6 = { startY: 440 };
+                pdfDoc.autoTable({ head: [data6[0]], body: data6.slice(1), ...options6 });
+
+                const data7 = [['Month', 'Perished Items'],
+                    [`${this.state.perished_month[0].name}`, `${this.state.perished_month[0]['Perished Items']}`],
+                    [`${this.state.perished_month[1].name}`, `${this.state.perished_month[1]['Perished Items']}`],
+                    [`${this.state.perished_month[2].name}`, `${this.state.perished_month[2]['Perished Items']}`],
+                    [`${this.state.perished_month[3].name}`, `${this.state.perished_month[3]['Perished Items']}`],
+                    [`${this.state.perished_month[4].name}`, `${this.state.perished_month[4]['Perished Items']}`],
+                    [`${this.state.perished_month[5].name}`, `${this.state.perished_month[5]['Perished Items']}`]
+                ];
+                const options7 = { startY: 620 };
+                pdfDoc.autoTable({ head: [data7[0]], body: data7.slice(1), ...options7 });
+            });
+            pdfDoc.save('SiteStatistics.pdf');
+        });
     };
 
     COLORS = ['#0088FE', '#de1754'];
