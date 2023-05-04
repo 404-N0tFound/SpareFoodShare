@@ -74,6 +74,7 @@ class MyOrders extends PureComponent{
     )}
 
     render() {
+        console.log(this.state.orders)
         return (
             <div className="page-content">
                 <Navbar/>
@@ -93,7 +94,7 @@ class MyOrders extends PureComponent{
                                 <li>
                                     <div className="my_orders_info">
                                         <h3>Item Name: {ordersObj.item__name} </h3>
-                                        <p>Initiator Email: {ordersObj.initiator__email}</p>
+                                        <p>Provider Email: {ordersObj.item__provider__email}</p>
                                         <p>Pickup Location: {ordersObj.collection_location} </p>
                                         <p>Created Date: {ordersObj.created_date } </p>
                                         <p>Donation: ￡{ordersObj.donation_amount} </p>
