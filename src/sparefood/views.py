@@ -619,64 +619,55 @@ class StatsView(APIView):
 
     @classmethod
     def calculate_new_users_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            print(change_date.strftime('%Y-%m-%d'))
+            each_calculated_day.append(len(User.objects.filter(Q(date_joined__date=change_date))))
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
         data = [
             {
                 'name': 'Sunday',
-                'New Users': 12
+                'New Users': each_calculated_day[6]
             },
             {
                 'name': 'Monday',
-                'New Users': 4
+                'New Users': each_calculated_day[0]
             },
             {
                 'name': 'Tuesday',
-                'New Users': 8
+                'New Users': each_calculated_day[1]
             },
             {
                 'name': 'Wednesday',
-                'New Users': 1
+                'New Users': each_calculated_day[2]
             },
             {
                 'name': 'Thursday',
-                'New Users': 0
+                'New Users': each_calculated_day[3]
             },
             {
                 'name': 'Friday',
-                'New Users': 6
+                'New Users': each_calculated_day[4]
             },
             {
                 'name': 'Saturday',
-                'New Users': 7
+                'New Users': each_calculated_day[5]
             }
         ]
         return data
 
     @classmethod
     def calculate_new_users_monthly(cls):
-        data = [
-            {
-                'name': 'December',
-                'New Users': 1
-            },
-            {
-                'name': 'January',
-                'New Users': 3
-            },
-            {
-                'name': 'February',
-                'New Users': 4
-            },
-            {
-                'name': 'March',
-                'New Users': 0
-            },
-            {
-                'name': 'April',
-                'New Users': 19
-            },
-            {
-                'name': 'May',
-                'New Users': 38
-            }
-        ]
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            new_users = len(User.objects.filter(Q(date_joined__month=change_month.month)))
+            data.append({'name': calendar.month_name[change_month.month], 'New Users': new_users})
+        data = data[::-1]
         return data
