@@ -74,7 +74,6 @@ class MyOrders extends PureComponent{
     )}
 
     render() {
-        console.log(this.state.orders)
         return (
             <div className="page-content">
                 <Navbar/>
