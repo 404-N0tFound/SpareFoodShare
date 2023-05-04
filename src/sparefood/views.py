@@ -10,6 +10,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
+from django.core.exceptions import ObjectDoesNotExist
+
 import calendar
 from datetime import datetime, timedelta
 from .jwt_decoder import *
@@ -690,3 +692,25 @@ class StatsView(APIView):
             data.append({'name': calendar.month_name[change_month.month], 'New Users': new_users})
         data = data[::-1]
         return data
+
+
+class ShareView(APIView):
+    @classmethod
+    def post(cls, request, item_uuid):
+        try:
+            item = Item.objects.get(id__exact=item_uuid)
+            try:
+                share = Share.objects.get(Q(item__exact=item.id), Q(date=datetime.today().strftime('%Y-%m-%d')))
+                share.times_shared += 1
+                share.save()
+                return Response(share.times_shared, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                data = {'item': item.id, 'times_shared': 1}
+                serializer = ShareSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(1, status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
