@@ -423,7 +423,7 @@ def infinite_mysales_filter(request):
                                                          "initiator__email",
                                                          "initiator__full_name",
                                                          "item",
-                                                         "item__name"
+                                                         "item__name",
                                                          )[offset: max_index]
 
 

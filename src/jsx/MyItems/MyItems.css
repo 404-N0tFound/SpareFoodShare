@@ -1,5 +1,11 @@
 .my_items-body {
-	min-height: 100vh;
+	min-height: 75vh;
+}
+
+.my_items-body:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .my_items_content {

@@ -292,7 +292,6 @@ class MyItems extends PureComponent{
                         : <p>No item selected</p> }
                     </div>
                 </div>
-
                 </body>
                 <Footer id="foot_id"/>
             </div>
