@@ -16,6 +16,7 @@ import {
     XAxis,
     Legend, Bar, LineChart, Line
 } from 'recharts';
+import jsPDF from 'jspdf';
 
 class AdminStats extends PureComponent{
     constructor(props) {
@@ -64,6 +65,13 @@ class AdminStats extends PureComponent{
             }
         })
     }
+
+    generatePDF = () => {
+        const report = new jsPDF('portrait','pt','a4');
+        report.html(document.querySelector('.admin_stats-page')).then(() => {
+            report.save('report.pdf');
+        })
+    };
 
     COLORS = ['#0088FE', '#de1754'];
     renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
@@ -199,6 +207,7 @@ class AdminStats extends PureComponent{
                         </div>
                     </div>
                 </div>
+                <button onClick={this.generatePDF} type="button" className="export-pdf">Export PDF</button>
                 </body>
                 <Footer id="foot_id"/>
             </div>

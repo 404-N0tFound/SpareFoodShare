@@ -643,7 +643,6 @@ class StatsView(APIView):
         for i in range(datetime.today().weekday() + 1):
             change_date = datetime.today()
             change_date += timedelta(days=-(datetime.today().weekday() - i))
-            print(change_date.strftime('%Y-%m-%d'))
             each_calculated_day.append(len(User.objects.filter(Q(date_joined__date=change_date))))
         for i in range(7 - len(each_calculated_day)):
             each_calculated_day.append(0)

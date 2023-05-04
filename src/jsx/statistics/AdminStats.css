@@ -47,3 +47,26 @@
 .new-users-weekly-chart {
     margin: 5px 30px 5px 20px;
 }
+
+.export-pdf {
+    border-radius: 25px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 200ms linear;
+    padding: 10px 30px;
+    margin: 5%;
+    letter-spacing: 1px;
+    display: inline-flex;
+    -webkit-align-items: center;
+    text-align: center;
+    border: none;
+    background-color: #ffea75;
+    color: #5e2d1d;
+}
+
+.export-pdf:hover {
+    background-color: #5e2d1d;
+    color: #ffea75;
+}
