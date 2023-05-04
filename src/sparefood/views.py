@@ -521,34 +521,45 @@ class StatsView(APIView):
 
     @classmethod
     def calculate_items_shared_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            shares = Share.objects.filter(Q(date=change_date.strftime('%Y-%m-%d')))
+            total_shares = 0
+            for share in shares:
+                total_shares += share.times_shared
+            each_calculated_day.append(total_shares)
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
         data = [
             {
                 'name': 'Sunday',
-                'Site-wide Shares': 12
+                'Site-wide Shares': each_calculated_day[6]
             },
             {
                 'name': 'Monday',
-                'Site-wide Shares': 4
+                'Site-wide Shares': each_calculated_day[0]
             },
             {
                 'name': 'Tuesday',
-                'Site-wide Shares': 8
+                'Site-wide Shares': each_calculated_day[1]
             },
             {
                 'name': 'Wednesday',
-                'Site-wide Shares': 1
+                'Site-wide Shares': each_calculated_day[2]
             },
             {
                 'name': 'Thursday',
-                'Site-wide Shares': 0
+                'Site-wide Shares': each_calculated_day[3]
             },
             {
                 'name': 'Friday',
-                'Site-wide Shares': 6
+                'Site-wide Shares': each_calculated_day[4]
             },
             {
                 'name': 'Saturday',
-                'Site-wide Shares': 7
+                'Site-wide Shares': each_calculated_day[5]
             }
         ]
         return data
