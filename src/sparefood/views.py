@@ -566,32 +566,18 @@ class StatsView(APIView):
 
     @classmethod
     def calculate_items_shared_monthly(cls):
-        data = [
-            {
-                'name': 'December',
-                'Site-wide Shares': 1
-            },
-            {
-                'name': 'January',
-                'Site-wide Shares': 3
-            },
-            {
-                'name': 'February',
-                'Site-wide Shares': 4
-            },
-            {
-                'name': 'March',
-                'Site-wide Shares': 0
-            },
-            {
-                'name': 'April',
-                'Site-wide Shares': 19
-            },
-            {
-                'name': 'May',
-                'Site-wide Shares': 38
-            }
-        ]
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            shares = Share.objects.filter(Q(date__month=change_month.month))
+            total_shares = 0
+            for share in shares:
+                total_shares += share.times_shared
+            data.append({'name': calendar.month_name[change_month.month], 'Site-wide Shares': total_shares})
+        data = data[::-1]
         return data
 
     @classmethod
