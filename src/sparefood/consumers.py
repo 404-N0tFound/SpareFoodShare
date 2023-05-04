@@ -3,7 +3,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
-from .jwt_decoder import decode_jwt
+from .jwt_decoder import decode_jwt, is_admin
 
 from .models import User, ChatRoom, Message
 
@@ -33,6 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return
         user_id = decode_jwt(data['jwt'], True)
         if user_id == '0':
+            return
+        if is_admin(data['jwt'], True):
             return
         room = data['ChatRoom']
 

@@ -7,6 +7,7 @@ import Layout from "./jsx/Layout";
 import PrivateRouteLogin from "./jsx/components/PrivateRouteLogin";
 import PrivateRouteProfile from "./jsx/components/PrivateRouteProfile";
 import PrivateRouteAdmin from "./jsx/components/PrivateRouteAdmin";
+import PrivateRouteBoth from "./jsx/components/PrivateRouteBoth";
 import {AuthProvider} from "./jsx/AuthContext";
 
 import Welcome from "./jsx/welcome/Welcome";
@@ -45,9 +46,9 @@ export default function App() {
                             }
                         />
                         <Route path="profile" element={
-                                <PrivateRouteProfile>
+                                <PrivateRouteBoth>
                                         <MyProfile />
-                                </PrivateRouteProfile>
+                                </PrivateRouteBoth>
                             }
                         />
                         <Route path="profile/orders" element={
@@ -63,20 +64,20 @@ export default function App() {
                         }
                         />
                         <Route path ="profile/chats" element={
-                            <PrivateRouteProfile>
+                            <PrivateRouteBoth>
                                 <Chats />
-                            </PrivateRouteProfile>
+                            </PrivateRouteBoth>
                         } />
                         <Route path="profile/chat" element={
-                            <PrivateRouteProfile>
+                            <PrivateRouteBoth>
                                 <LiveChat />
-                            </PrivateRouteProfile>
+                            </PrivateRouteBoth>
                         }
                         />
                         <Route path="profile/myitems" element={
-                                <PrivateRouteProfile>
+                                <PrivateRouteBoth>
                                         <MyItems />
-                                </PrivateRouteProfile>
+                                </PrivateRouteBoth>
                             }
                         />
                         <Route path="profile/sales" element={

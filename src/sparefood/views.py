@@ -345,26 +345,46 @@ def infinite_chats_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    first_rooms = ChatRoom.objects.filter(
-        Q(user_1=decode_jwt(request))).annotate(
-        order_name=Subquery(
-            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
-        ),
-        item_name=Subquery(
-            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-        )
-    ).values('id', 'item_name')
-    second_rooms = ChatRoom.objects.filter(
-        Q(user_2=decode_jwt(request))).annotate(
-        order_name=Subquery(
-            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
-        ),
-        item_name=Subquery(
-            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-        )
-    ).values('id', 'item_name')
-    total_rooms = (first_rooms | second_rooms)[offset: max_index]
-    return total_rooms
+    if is_admin(request):
+        first_rooms = ChatRoom.objects.all().annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        second_rooms = ChatRoom.objects.all().annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        total_rooms = (first_rooms | second_rooms)[offset: max_index]
+        return total_rooms
+    else:
+        first_rooms = ChatRoom.objects.filter(
+            Q(user_1=decode_jwt(request))).annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        second_rooms = ChatRoom.objects.filter(
+            Q(user_2=decode_jwt(request))).annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        total_rooms = (first_rooms | second_rooms)[offset: max_index]
+        return total_rooms
 
 
 def is_more_chats(request):
