@@ -289,7 +289,8 @@ def infinite_myorders_filter(request):
                                                     "initiator__email",
                                                     "initiator__full_name",
                                                     "item",
-                                                    "item__name"
+                                                    "item__name",
+                                                    "item__provider__email"
                                                     )[offset: max_index]
 
 
@@ -383,7 +384,7 @@ def infinite_mysales_filter(request):
                                                          "initiator__email",
                                                          "initiator__full_name",
                                                          "item",
-                                                         "item__name"
+                                                         "item__name",
                                                          )[offset: max_index]
 
 
