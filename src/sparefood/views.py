@@ -10,7 +10,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
-from datetime import datetime
+import calendar
+from datetime import datetime, timedelta
 from .jwt_decoder import *
 
 import phonenumbers
@@ -247,7 +248,7 @@ def infinite_myitems_filter(request):
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
     if is_admin(request):
-        return Item.objects.all()[offset: max_index]
+        return Item.objects.filter(Q(is_deleted__lte=False))[offset: max_index]
     else:
         return Item.objects.filter(
             Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
@@ -471,5 +472,211 @@ class UserProfileUpdateView(APIView):
 class StatsView(APIView):
     @classmethod
     def get(cls, request):
-        data = {}
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            if is_admin(request):
+                data = {
+                    "user_ratio": cls.calculate_user_ratio(),
+                    "shared_week": cls.calculate_items_shared_weekly(),
+                    "shared_month": cls.calculate_items_shared_monthly(),
+                    "perished_week": cls.calculate_items_perished_weekly(),
+                    "perished_month": cls.calculate_items_perished_monthly(),
+                    "new_users_week": cls.calculate_new_users_weekly(),
+                    "new_users_month": cls.calculate_new_users_monthly()
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+
+    @classmethod
+    def calculate_user_ratio(cls):
+        data = [
+            {'name': 'Individual Users', 'value': len(User.objects.filter(Q(is_business=False)))},
+            {'name': 'Businesses Users', 'value': len(User.objects.filter(Q(is_business=True)))}
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_shared_weekly(cls):
+        data = [
+            {
+                'name': 'Sunday',
+                'Site-wide Shares': 12
+            },
+            {
+                'name': 'Monday',
+                'Site-wide Shares': 4
+            },
+            {
+                'name': 'Tuesday',
+                'Site-wide Shares': 8
+            },
+            {
+                'name': 'Wednesday',
+                'Site-wide Shares': 1
+            },
+            {
+                'name': 'Thursday',
+                'Site-wide Shares': 0
+            },
+            {
+                'name': 'Friday',
+                'Site-wide Shares': 6
+            },
+            {
+                'name': 'Saturday',
+                'Site-wide Shares': 7
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_shared_monthly(cls):
+        data = [
+            {
+                'name': 'December',
+                'Site-wide Shares': 1
+            },
+            {
+                'name': 'January',
+                'Site-wide Shares': 3
+            },
+            {
+                'name': 'February',
+                'Site-wide Shares': 4
+            },
+            {
+                'name': 'March',
+                'Site-wide Shares': 0
+            },
+            {
+                'name': 'April',
+                'Site-wide Shares': 19
+            },
+            {
+                'name': 'May',
+                'Site-wide Shares': 38
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_perished_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            each_calculated_day.append(len(Item.objects.filter(Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+                                                               Q(expiration_date=change_date.strftime('%Y-%m-%d')))))
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
+        data = [
+            {
+                'name': 'Sunday',
+                'Perished Items': each_calculated_day[6]
+            },
+            {
+                'name': 'Monday',
+                'Perished Items': each_calculated_day[0]
+            },
+            {
+                'name': 'Tuesday',
+                'Perished Items': each_calculated_day[1]
+            },
+            {
+                'name': 'Wednesday',
+                'Perished Items': each_calculated_day[2]
+            },
+            {
+                'name': 'Thursday',
+                'Perished Items': each_calculated_day[3]
+            },
+            {
+                'name': 'Friday',
+                'Perished Items': each_calculated_day[4]
+            },
+            {
+                'name': 'Saturday',
+                'Perished Items': each_calculated_day[5]
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_perished_monthly(cls):
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            perished_count = len(Item.objects.filter(Q(is_deleted=False) & Q(is_collected=False) &
+                                                     Q(expiration_date__month=change_month.month)))
+            data.append({'name': calendar.month_name[change_month.month], 'Perished Items': perished_count})
+        data = data[::-1]
+        return data
+
+    @classmethod
+    def calculate_new_users_weekly(cls):
+        data = [
+            {
+                'name': 'Sunday',
+                'New Users': 12
+            },
+            {
+                'name': 'Monday',
+                'New Users': 4
+            },
+            {
+                'name': 'Tuesday',
+                'New Users': 8
+            },
+            {
+                'name': 'Wednesday',
+                'New Users': 1
+            },
+            {
+                'name': 'Thursday',
+                'New Users': 0
+            },
+            {
+                'name': 'Friday',
+                'New Users': 6
+            },
+            {
+                'name': 'Saturday',
+                'New Users': 7
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_new_users_monthly(cls):
+        data = [
+            {
+                'name': 'December',
+                'New Users': 1
+            },
+            {
+                'name': 'January',
+                'New Users': 3
+            },
+            {
+                'name': 'February',
+                'New Users': 4
+            },
+            {
+                'name': 'March',
+                'New Users': 0
+            },
+            {
+                'name': 'April',
+                'New Users': 19
+            },
+            {
+                'name': 'May',
+                'New Users': 38
+            }
+        ]
+        return data

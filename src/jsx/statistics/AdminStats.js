@@ -20,98 +20,51 @@ import {
 class AdminStats extends PureComponent{
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false,
+            user_ratio: [],
+            shared_week: [],
+            shared_month: [],
+            perished_week: [],
+            perished_month: [],
+            new_users_week: [],
+            new_users_month: []
+        };
     }
 
-    data = [
-        { name: 'Individual Users', value: 89234752847 },
-        { name: 'Businesses Users', value: 84273509824 }
-    ];
-    data2 = [
-        {
-            name: 'Sunday',
-            'Site-wide Shares': 8
-        },
-        {
-            name: 'Monday',
-            'Site-wide Shares': 1
-        },
-        {
-            name: 'Tuesday',
-            'Site-wide Shares': 4
-        },
-        {
-            name: 'Wednesday',
-            'Site-wide Shares': 0
-        },
-        {
-            name: 'Thursday',
-            'Site-wide Shares': 3
-        },
-        {
-            name: 'Friday',
-            'Site-wide Shares': 1
-        },
-        {
-            name: 'Saturday',
-            'Site-wide Shares': 5
-        },
-    ];
-    data3 = [
-        {
-            name: 'Sunday',
-            'New Users': 2
-        },
-        {
-            name: 'Monday',
-            'New Users': 0
-        },
-        {
-            name: 'Tuesday',
-            'New Users': 4
-        },
-        {
-            name: 'Wednesday',
-            'New Users': 1
-        },
-        {
-            name: 'Thursday',
-            'New Users': 1
-        },
-        {
-            name: 'Friday',
-            'New Users': 2
-        },
-        {
-            name: 'Saturday',
-            'New Users': 3
-        },
-    ];
-    data4 = [
-        {
-            name: 'December',
-            'New Users': 1
-        },
-        {
-            name: 'January',
-            'New Users': 9
-        },
-        {
-            name: 'February',
-            'New Users': 4
-        },
-        {
-            name: 'March',
-            'New Users': 5
-        },
-        {
-            name: 'April',
-            'New Users': 2
-        },
-        {
-            name: 'May',
-            'New Users': 11
-        }
-    ];
+    componentDidMount() {
+        this.loadStatistics().then({});
+    }
+
+    loadStatistics = async () => {
+        this.setState({loading: true}, async () => {
+            let jwt = 0;
+            try {
+                jwt = JSON.parse(localStorage.getItem('authTokens')).access;
+                /* eslint-disable no-empty */
+            } catch (ignored) {}
+            /* eslint-enable */
+            let response = await fetch(`http://127.0.0.1:8000/api/stats/?jwt=${jwt}`, {
+                method:'GET'
+            })
+            let data = await response.json()
+            if (response.status === 200) {
+                this.setState({
+                    loading: false,
+                    user_ratio: [...data.user_ratio],
+                    shared_week: [...data.shared_week],
+                    shared_month: [...data.shared_month],
+                    perished_week: [...data.perished_week],
+                    perished_month: [...data.perished_month],
+                    new_users_week: [...data.new_users_week],
+                    new_users_month: [...data.new_users_month],
+                });
+            } else {
+                alert('Statistics service failed! Is it maybe down?');
+            }
+        })
+    }
+
     COLORS = ['#0088FE', '#de1754'];
     renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
         const RADIAN = Math.PI / 180;
@@ -139,7 +92,7 @@ class AdminStats extends PureComponent{
                             <ResponsiveContainer minWidth="200px" minHeight="200px">
                                 <PieChart className="user-ratio-chart">
                                     <Pie
-                                        data={this.data}
+                                        data={this.state.user_ratio}
                                         cx="50%"
                                         cy="50%"
                                         labelLine={false}
@@ -148,7 +101,7 @@ class AdminStats extends PureComponent{
                                         fill="#8884d8"
                                         dataKey="value"
                                     >
-                                        {this.data.map((entry, index) => (
+                                        {this.state.user_ratio.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={this.COLORS[index % this.COLORS.length]} />
                                         ))}
                                     </Pie>
@@ -164,7 +117,7 @@ class AdminStats extends PureComponent{
                             <p>Items Shared This Week</p>
                             <div className="chart-container">
                                 <ResponsiveContainer width={400} height={325}>
-                                    <BarChart className="shared-weekly-chart" data={this.data2}>
+                                    <BarChart className="shared-weekly-chart" data={this.state.shared_week}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
                                         <Tooltip />
@@ -178,7 +131,7 @@ class AdminStats extends PureComponent{
                             <p>Items Shared Last 6 Months</p>
                             <div className="chart-container">
                                 <ResponsiveContainer width={400} height={325}>
-                                    <BarChart className="shared-weekly-chart" data={this.data2}>
+                                    <BarChart className="shared-weekly-chart" data={this.state.shared_month}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
                                         <Tooltip />
@@ -192,12 +145,12 @@ class AdminStats extends PureComponent{
                             <p>Perished Items Per Day</p>
                             <div className="chart-container">
                                 <ResponsiveContainer width={400} height={325}>
-                                    <BarChart className="shared-weekly-chart" data={this.data2}>
+                                    <BarChart className="shared-weekly-chart" data={this.state.perished_week}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
                                         <Tooltip />
                                         <Legend />
-                                        <Bar dataKey="Site-wide Shares" fill="#d82ad5"/>
+                                        <Bar dataKey="Perished Items" fill="#d82ad5"/>
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -206,12 +159,12 @@ class AdminStats extends PureComponent{
                             <p>Perished Items Last 6 Months</p>
                             <div className="chart-container">
                                 <ResponsiveContainer width={400} height={325}>
-                                    <BarChart className="shared-weekly-chart" data={this.data2}>
+                                    <BarChart className="shared-weekly-chart" data={this.state.perished_month}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
                                         <Tooltip />
                                         <Legend />
-                                        <Bar dataKey="Site-wide Shares" fill="#d87825"/>
+                                        <Bar dataKey="Perished Items" fill="#d87825"/>
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -222,7 +175,7 @@ class AdminStats extends PureComponent{
                                 <ResponsiveContainer width={400} height={150}>
                                     <LineChart
                                         className="new-users-weekly-chart"
-                                        data={this.data3}
+                                        data={this.state.new_users_week}
                                     >
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
@@ -233,7 +186,7 @@ class AdminStats extends PureComponent{
                                 <ResponsiveContainer width={400} height={175}>
                                     <LineChart
                                         className="new-users-weekly-chart"
-                                        data={this.data4}
+                                        data={this.state.new_users_month}
                                     >
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" />
