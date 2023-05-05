@@ -33,6 +33,7 @@ export const AuthProvider = ({children}) => {
                 })
                 let data = await response.json()
                 if (response.status === 200) {
+                    await createNotification()
                     setAuthTokens(data)
                     setUser(jwtDecode(data.access))
                     localStorage.setItem('authTokens', JSON.stringify(data))
@@ -46,6 +47,26 @@ export const AuthProvider = ({children}) => {
                 alert('Auth service failed! Is it maybe down?')
             }
         }
+    }
+
+    let createNotification = async () => {
+        if (Notification.permission === "default") {
+            Notification.requestPermission().then((permission) => {
+                if (permission !== "granted") {
+                    return null;
+                }
+            });
+        }
+        setTimeout(() => {
+            showNotification("Item Expiration Reminder", "Your item will expire in 5 seconds.", "/path/to/icon.png");
+        }, 5 * 1000);
+    }
+
+    let showNotification = (title, body, icon) => {
+        new Notification(title, {
+            body: body,
+            icon: icon,
+        });
     }
 
     let createUser = async (e) => {
