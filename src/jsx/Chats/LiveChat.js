@@ -59,7 +59,6 @@ class LiveChatRender extends PureComponent {
 
     onMessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log(event.data)
         this.setState({ messages: [...this.state.messages, message] });
     };
 
