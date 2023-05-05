@@ -20,8 +20,6 @@ class LiveChatRender extends PureComponent {
         };
     }
 
-
-
     async componentDidMount() {
         const {chatId} = this.props.location.state;
         let response = await fetch(`http://127.0.0.1:8000/api/chats/messages/?room=${chatId}`, {
