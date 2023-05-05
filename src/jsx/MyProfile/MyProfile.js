@@ -50,7 +50,7 @@ function MyProfile() {
                             <ul>
                                 <h2>Personal Details</h2>
                                 <li >
-                                    {user.is_business ? <p id= "Role_distinguish_para" >Role: Business</p> :<p id= "Role_distinguish_para">Role: individual</p>}
+                                    {user.is_business && !user.is_admin ? <p id= "Role_distinguish_para" >Role: Business</p> : !user.is_admin ? <p id= "Role_distinguish_para">Role: individual</p> : null}
                                     {user.is_admin ? <p id= "Admin_distinguish_para" >Admin</p> : null}
                                 </li>
                                 <li className="li1">
