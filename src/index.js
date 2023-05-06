@@ -21,10 +21,12 @@ import Chats from "./jsx/Chats/Chats";
 import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
 import MySales from './jsx/MySales/MySales';
+import InitialNotificationGenerator from "./jsx/components/InitialNotificationGenerator";
 
 export default function App() {
     return (
             <BrowserRouter>
+                <InitialNotificationGenerator />
                 <Routes>
                     <Route path="/" element={
                         <AuthProvider>
