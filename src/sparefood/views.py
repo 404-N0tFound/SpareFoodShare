@@ -4,6 +4,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from jwt import DecodeError
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
@@ -270,6 +271,32 @@ class InfiniteMyItemsView(ListAPIView):
             "items": serializer.data,
             "has_more": is_more_items(request)
         })
+
+
+class MyExpiringItemsView(APIView):
+    @classmethod
+    def get(cls, request):
+        try:
+            if is_valid_uuid(request):
+                expiration_date = datetime.today()
+                expiration_date += timedelta(days=1)
+                my_items = Item.objects.filter(Q(provider_id=decode_jwt(request)) & Q(is_deleted__lte=False) &
+                                               Q(is_collected=False) &
+                                               Q(expiration_date=expiration_date.strftime('%Y-%m-%d'))).values(
+                                                                                                 "id",
+                                                                                                 "name",
+                                                                                                 "description",
+                                                                                                 "upload_date",
+                                                                                                 "expiration_date",
+                                                                                                 "location",
+                                                                                                 "picture",
+                                                                                                 "last_updated"
+                                                                                                 )
+                return Response(list(my_items), status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except DecodeError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 def is_more_orders(request):
