@@ -12,6 +12,8 @@ test_py:
       DB_USER: 'foo'
       DB_PASSWORD: 'foo'
       DB_PORT: '5432'
+      EMAIL_PASSWORD: 'barfoo'
+      ALLOWED_HOSTS: '.localhost,127.0.0.1,[::1]'
 
     # Pip's cache doesn't store the python packages
     # https://pip.pypa.io/en/stable/topics/caching/
