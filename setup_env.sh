@@ -7,4 +7,6 @@
   DB_USER=$DB_USER
   DB_PASSWORD=$DB_PASSWORD
   DB_PORT=$DB_PORT
+  EMAIL_PASSWORD='foo'
+  ALLOWED_HOSTS='.localhost,127.0.0.1,[::1]'
 } >> .env
