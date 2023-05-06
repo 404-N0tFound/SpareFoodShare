@@ -1,4 +1,5 @@
 from django.views.static import serve
+from django.conf.urls.static import static
 
 from .views import *
 from django.urls import path, re_path
@@ -37,4 +38,5 @@ url_patterns = [
 
 if settings.DEBUG:
     url_patterns.insert(0, path('', getApiRoutes))
+    url_patterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns = url_patterns

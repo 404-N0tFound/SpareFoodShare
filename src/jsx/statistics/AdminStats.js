@@ -302,9 +302,13 @@ class AdminStats extends PureComponent{
                                 </ResponsiveContainer>
                             </div>
                         </div>
+                        <div className="chart-empty"></div>
+                        <div className="chart-empty">
+                            <button onClick={this.generatePDF} type="button" className="export-pdf">Export PDF</button>
+                        </div>
+                        <div className="chart-empty"></div>
                     </div>
                 </div>
-                <button onClick={this.generatePDF} type="button" className="export-pdf">Export PDF</button>
                 </body>
                 <Footer id="foot_id"/>
             </div>
