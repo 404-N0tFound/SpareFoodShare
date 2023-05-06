@@ -32,7 +32,9 @@ from .tokens import account_activation_token
 
 @api_view(['GET'])
 def getApiRoutes(request) -> Response:
-    """Returns a response with a list of all available routes for debugging."""
+    """Returns a response with a list of all available routes for debugging.
+    :return: A response JSON with the list of all valid endpoints.
+    """
     routes = [
         '/api/',
         '/api/token',
@@ -60,8 +62,13 @@ def getApiRoutes(request) -> Response:
 
 
 class RegistrationView(APIView):
+    """The registration endpoint for creating a new user"""
     @classmethod
     def post(cls, request) -> Response:
+        """Creates a new user object and returns a status if successful as well as calls to activate email.
+        :param request: The Http request header for the post
+        :return: A response JSON type
+        """
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -70,7 +77,12 @@ class RegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def activate_email(request, user, toEmail):
+def activate_email(request, user, toEmail) -> None:
+    """Sends a mail message to the user with an encoded link for account activation
+    :param request: The Http header for the request endpoint
+    :param user: The user object to be used in the validation
+    :param toEmail: String of the email to send to
+    """
     mail_subject = "Activate your user account."
     message = render_to_string("app/activate_account.html", {
         'user': user['full_name'],
@@ -83,7 +95,13 @@ def activate_email(request, user, toEmail):
     send_mail(mail_subject, message, None, [toEmail])
 
 
-def activate_account(request, uidb64, token):
+def activate_account(request, uidb64, token) -> HttpResponseRedirect:
+    """Updates a user's validation status to true.
+    :param request: The request HTTP header
+    :param uidb64: Hashed user uuid provided from the URL
+    :param token: A direct JWT token from the endpoint
+    :return: Http redirect back to landing page
+    """
     uid = force_str(urlsafe_base64_decode(uidb64))
     User.objects.filter(email=uid).update(is_active=True)
 
@@ -91,8 +109,13 @@ def activate_account(request, uidb64, token):
 
 
 class NewRefreshToken(APIView):
+    """Returns a new JWT token if necessary for client actions when given a valid JWT."""
     @classmethod
     def get(cls, request) -> Response:
+        """Provides new JWT token.
+        :param request: The request header with JWT token.
+        :return: A response JSON with the included new valid JWT token.
+        """
         if is_valid_uuid(request):
             user = User.objects.get(id__exact=decode_jwt(request))
             refresh = RefreshToken.for_user(user)
@@ -113,6 +136,7 @@ class NewRefreshToken(APIView):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Generates a refresh and access token pair for a user and returns the encrypted values before salting."""
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -127,6 +151,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
+    """Override for the default token pair types."""
     serializer_class = MyTokenObtainPairSerializer
 
 
@@ -317,6 +342,10 @@ def is_more_orders(request) -> bool:
 
 
 def infinite_myorders_filter(request) -> QuerySet:
+    """Returns a queryset for the orders objects when given a limit, offset, and valid jwt token.
+    :param request: An HTTP request with valid parameters.
+    :return: A queryset of all the objects that meet the given parameters.
+    """
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -380,6 +409,10 @@ class ChatsView(ListAPIView):
 
 
 def infinite_chats_filter(request) -> QuerySet:
+    """Returns a queryset for the chatroom objects when given a limit, offset, and valid jwt token.
+    :param request: An HTTP request with valid parameters.
+    :return: A queryset of all the objects that meet the given parameters.
+    """
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -445,6 +478,10 @@ class MessagesView(APIView):
 
 
 def infinite_mysales_filter(request) -> QuerySet:
+    """Returns a queryset of orders if given the limit, offset, and jwt token for a user.
+    :param request: Http request with limit, offset, and jwt token values.
+    :return: A queryset of valid sales.
+    """
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
