@@ -30,6 +30,34 @@ from django.core.mail import send_mail
 from .tokens import account_activation_token
 
 
+@api_view(['GET'])
+def getApiRoutes(request):
+    routes = [
+        '/api/',
+        '/api/token',
+        '/api/token/refresh',
+        '/api/token/new',
+        'activate/<uidb64>/<token>',
+        '/api/register',
+        '/api/item',
+        '/api/item/share/<uuid:item_uuid>'
+        '/api/items',
+        '/api/myitems',
+        '/api/myitems/expiring/',
+        '/api/items/upload',
+        '/api/orders',
+        '/api/orders/create',
+        '/api/chats',
+        '/api/chats/messages',
+        '/api/sales',
+        '/api/item_operations',
+        '/api/user/update_profile',
+        '/api/stats',
+        '/api/media/(<path>.*)'
+    ]
+    return Response(routes)
+
+
 class RegistrationView(APIView):
     @classmethod
     def post(cls, request):
@@ -99,26 +127,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
-
-@api_view(['GET'])
-def getApiRoutes(request):
-    routes = [
-        '/api/token',
-        '/api/token/refresh',
-        '/api/register',
-        '/api/item',
-        '/api/items',
-        '/api/myitems',
-        '/api/items/upload',
-        '/api/orders',
-        '/api/orders/create',
-        '/api/chats',
-        '/api/chats/messages',
-        '/api/sales',
-        '/api/item_operations'
-    ]
-    return Response(routes)
 
 
 class CreateItemView(APIView):
@@ -283,15 +291,15 @@ class MyExpiringItemsView(APIView):
                 my_items = Item.objects.filter(Q(provider_id=decode_jwt(request)) & Q(is_deleted__lte=False) &
                                                Q(is_collected=False) &
                                                Q(expiration_date=expiration_date.strftime('%Y-%m-%d'))).values(
-                                                                                                 "id",
-                                                                                                 "name",
-                                                                                                 "description",
-                                                                                                 "upload_date",
-                                                                                                 "expiration_date",
-                                                                                                 "location",
-                                                                                                 "picture",
-                                                                                                 "last_updated"
-                                                                                                 )
+                    "id",
+                    "name",
+                    "description",
+                    "upload_date",
+                    "expiration_date",
+                    "location",
+                    "picture",
+                    "last_updated"
+                )
                 return Response(list(my_items), status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_403_FORBIDDEN)
