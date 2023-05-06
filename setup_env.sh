@@ -10,3 +10,5 @@
   EMAIL_PASSWORD=$EMAIL_PASSWORD
   ALLOWED_HOSTS=$ALLOWED_HOSTS
 } >> .env
+
+mkdir ./src/static/
