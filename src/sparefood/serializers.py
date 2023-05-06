@@ -67,3 +67,9 @@ class ChatsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatRoom
         fields = ['id', 'user_1', 'user_2', 'order', 'order_name']
+
+
+class ShareSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Share
+        fields = ['id', 'item', 'times_shared']

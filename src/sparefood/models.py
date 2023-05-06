@@ -78,7 +78,6 @@ class Item(models.Model):
     is_collected = models.BooleanField(default=False)
     location = models.CharField("location", max_length=240)
     picture = models.ImageField(verbose_name="picture", upload_to='items')
-    shared_times = models.PositiveIntegerField(default=0)
     last_updated = models.DateField(auto_now=True)
 
     @property
@@ -131,3 +130,10 @@ class Message(models.Model):
     date = models.DateField(verbose_name='date', auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.RESTRICT, to_field='id')
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, to_field='id')
+
+
+class Share(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, to_field='id')
+    date = models.DateField(verbose_name='date', auto_now_add=True)
+    times_shared = models.IntegerField(verbose_name='times_shared', default=0)

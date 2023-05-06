@@ -38,7 +38,7 @@ export const AuthProvider = ({children}) => {
                     localStorage.setItem('authTokens', JSON.stringify(data))
                     navigator('../profile')
                 } else if (response.status === 401) {
-                    alert('Invalid email or password.')
+                    alert('Invalid email or password. Also ensure that you have verified your email.')
                 } else {
                     alert('Auth service failed! Is it maybe down?')
                 }

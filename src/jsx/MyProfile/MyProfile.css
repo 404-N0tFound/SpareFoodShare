@@ -39,6 +39,12 @@
   font-weight: bold;
 }
 
+#Admin_distinguish_para {
+  font: 20px sans-serif;
+  color: red;
+  font-weight: bold;
+}
+
 .gou {
   display: inline-block;
   vertical-align: middle;

@@ -16,6 +16,7 @@ urlpatterns = [
     path('token/new/', NewRefreshToken.as_view()),
     path('register/', RegistrationView.as_view()),
     path('item/', SingleItemView.as_view()),
+    path('item/share/<uuid:item_uuid>/', ShareView.as_view()),
     path('items/', InfiniteItemsView.as_view()),
     path('myitems/', InfiniteMyItemsView.as_view()),
     path('items/upload/', CreateItemView.as_view()),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('item_operations/', ItemOperationsView.as_view()),
     path('activate/<uidb64>/<token>', views.activate_account, name='activate'),
     path('user/update_profile/', UserProfileUpdateView.as_view()),
+    path('stats/', StatsView.as_view())
 ]

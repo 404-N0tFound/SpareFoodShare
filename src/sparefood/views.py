@@ -10,8 +10,11 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 
-from datetime import datetime
-from .jwt_decoder import decode_jwt, is_valid_uuid
+from django.core.exceptions import ObjectDoesNotExist
+
+import calendar
+from datetime import datetime, timedelta
+from .jwt_decoder import *
 
 import phonenumbers
 
@@ -246,8 +249,11 @@ def infinite_myitems_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Item.objects.filter(
-        Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
+    if is_admin(request):
+        return Item.objects.filter(Q(is_deleted__lte=False))[offset: max_index]
+    else:
+        return Item.objects.filter(
+            Q(provider_id__exact=decode_jwt(request)) & Q(is_deleted__lte=False))[offset: max_index]
 
 
 class InfiniteMyItemsView(ListAPIView):
@@ -278,20 +284,33 @@ def infinite_myorders_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    return Order.objects.filter(
-        Q(initiator_id=decode_jwt(request))).values("id",
-                                                    "created_date",
-                                                    "donation_amount",
-                                                    "is_collected",
-                                                    "is_deleted",
-                                                    "collection_location",
-                                                    "initiator",
-                                                    "initiator__email",
-                                                    "initiator__full_name",
-                                                    "item",
-                                                    "item__name",
-                                                    "item__provider__email"
-                                                    )[offset: max_index]
+    if decode_jwt(request):
+        return Order.objects.all().values("id",
+                                          "created_date",
+                                          "donation_amount",
+                                          "is_collected",
+                                          "is_deleted",
+                                          "collection_location",
+                                          "initiator",
+                                          "initiator__email",
+                                          "initiator__full_name",
+                                          "item",
+                                          "item__name"
+                                          )[offset: max_index]
+    else:
+        return Order.objects.filter(
+            Q(initiator_id=decode_jwt(request))).values("id",
+                                                        "created_date",
+                                                        "donation_amount",
+                                                        "is_collected",
+                                                        "is_deleted",
+                                                        "collection_location",
+                                                        "initiator",
+                                                        "initiator__email",
+                                                        "initiator__full_name",
+                                                        "item",
+                                                        "item__name"
+                                                        )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -328,26 +347,46 @@ def infinite_chats_filter(request):
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    first_rooms = ChatRoom.objects.filter(
-        Q(user_1=decode_jwt(request))).annotate(
-        order_name=Subquery(
-            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
-        ),
-        item_name=Subquery(
-            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-        )
-    ).values('id', 'item_name')
-    second_rooms = ChatRoom.objects.filter(
-        Q(user_2=decode_jwt(request))).annotate(
-        order_name=Subquery(
-            Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
-        ),
-        item_name=Subquery(
-            Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-        )
-    ).values('id', 'item_name')
-    total_rooms = (first_rooms | second_rooms)[offset: max_index]
-    return total_rooms
+    if is_admin(request):
+        first_rooms = ChatRoom.objects.all().annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        second_rooms = ChatRoom.objects.all().annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        total_rooms = (first_rooms | second_rooms)[offset: max_index]
+        return total_rooms
+    else:
+        first_rooms = ChatRoom.objects.filter(
+            Q(user_1=decode_jwt(request))).annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        second_rooms = ChatRoom.objects.filter(
+            Q(user_2=decode_jwt(request))).annotate(
+            order_name=Subquery(
+                Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
+            ),
+            item_name=Subquery(
+                Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
+            )
+        ).values('id', 'item_name')
+        total_rooms = (first_rooms | second_rooms)[offset: max_index]
+        return total_rooms
 
 
 def is_more_chats(request):
@@ -450,3 +489,225 @@ class UserProfileUpdateView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StatsView(APIView):
+    @classmethod
+    def get(cls, request):
+        try:
+            if is_admin(request):
+                data = {
+                    "user_ratio": cls.calculate_user_ratio(),
+                    "shared_week": cls.calculate_items_shared_weekly(),
+                    "shared_month": cls.calculate_items_shared_monthly(),
+                    "perished_week": cls.calculate_items_perished_weekly(),
+                    "perished_month": cls.calculate_items_perished_monthly(),
+                    "new_users_week": cls.calculate_new_users_weekly(),
+                    "new_users_month": cls.calculate_new_users_monthly()
+                }
+                return Response(data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+
+    @classmethod
+    def calculate_user_ratio(cls):
+        data = [
+            {'name': 'Individual Users', 'value': len(User.objects.filter(Q(is_business=False)))},
+            {'name': 'Businesses Users', 'value': len(User.objects.filter(Q(is_business=True)))}
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_shared_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            shares = Share.objects.filter(Q(date=change_date.strftime('%Y-%m-%d')))
+            total_shares = 0
+            for share in shares:
+                total_shares += share.times_shared
+            each_calculated_day.append(total_shares)
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
+        data = [
+            {
+                'name': 'Sunday',
+                'Site-wide Shares': each_calculated_day[6]
+            },
+            {
+                'name': 'Monday',
+                'Site-wide Shares': each_calculated_day[0]
+            },
+            {
+                'name': 'Tuesday',
+                'Site-wide Shares': each_calculated_day[1]
+            },
+            {
+                'name': 'Wednesday',
+                'Site-wide Shares': each_calculated_day[2]
+            },
+            {
+                'name': 'Thursday',
+                'Site-wide Shares': each_calculated_day[3]
+            },
+            {
+                'name': 'Friday',
+                'Site-wide Shares': each_calculated_day[4]
+            },
+            {
+                'name': 'Saturday',
+                'Site-wide Shares': each_calculated_day[5]
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_shared_monthly(cls):
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            shares = Share.objects.filter(Q(date__month=change_month.month))
+            total_shares = 0
+            for share in shares:
+                total_shares += share.times_shared
+            data.append({'name': calendar.month_name[change_month.month], 'Site-wide Shares': total_shares})
+        data = data[::-1]
+        return data
+
+    @classmethod
+    def calculate_items_perished_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            each_calculated_day.append(len(Item.objects.filter(Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
+                                                               Q(expiration_date=change_date.strftime('%Y-%m-%d')))))
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
+        data = [
+            {
+                'name': 'Sunday',
+                'Perished Items': each_calculated_day[6]
+            },
+            {
+                'name': 'Monday',
+                'Perished Items': each_calculated_day[0]
+            },
+            {
+                'name': 'Tuesday',
+                'Perished Items': each_calculated_day[1]
+            },
+            {
+                'name': 'Wednesday',
+                'Perished Items': each_calculated_day[2]
+            },
+            {
+                'name': 'Thursday',
+                'Perished Items': each_calculated_day[3]
+            },
+            {
+                'name': 'Friday',
+                'Perished Items': each_calculated_day[4]
+            },
+            {
+                'name': 'Saturday',
+                'Perished Items': each_calculated_day[5]
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_items_perished_monthly(cls):
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            perished_count = len(Item.objects.filter(Q(is_deleted=False) & Q(is_collected=False) &
+                                                     Q(expiration_date__month=change_month.month)))
+            data.append({'name': calendar.month_name[change_month.month], 'Perished Items': perished_count})
+        data = data[::-1]
+        return data
+
+    @classmethod
+    def calculate_new_users_weekly(cls):
+        each_calculated_day = []
+        for i in range(datetime.today().weekday() + 1):
+            change_date = datetime.today()
+            change_date += timedelta(days=-(datetime.today().weekday() - i))
+            each_calculated_day.append(len(User.objects.filter(Q(date_joined__date=change_date))))
+        for i in range(7 - len(each_calculated_day)):
+            each_calculated_day.append(0)
+        data = [
+            {
+                'name': 'Sunday',
+                'New Users': each_calculated_day[6]
+            },
+            {
+                'name': 'Monday',
+                'New Users': each_calculated_day[0]
+            },
+            {
+                'name': 'Tuesday',
+                'New Users': each_calculated_day[1]
+            },
+            {
+                'name': 'Wednesday',
+                'New Users': each_calculated_day[2]
+            },
+            {
+                'name': 'Thursday',
+                'New Users': each_calculated_day[3]
+            },
+            {
+                'name': 'Friday',
+                'New Users': each_calculated_day[4]
+            },
+            {
+                'name': 'Saturday',
+                'New Users': each_calculated_day[5]
+            }
+        ]
+        return data
+
+    @classmethod
+    def calculate_new_users_monthly(cls):
+        data = []
+        current_date = datetime.today()
+        for i in range(6):
+            change_month = current_date
+            for j in range(i):
+                change_month = change_month.replace(day=1) - timedelta(days=1)
+            new_users = len(User.objects.filter(Q(date_joined__month=change_month.month)))
+            data.append({'name': calendar.month_name[change_month.month], 'New Users': new_users})
+        data = data[::-1]
+        return data
+
+
+class ShareView(APIView):
+    @classmethod
+    def post(cls, request, item_uuid):
+        try:
+            item = Item.objects.get(id__exact=item_uuid)
+            try:
+                share = Share.objects.get(Q(item__exact=item.id), Q(date=datetime.today().strftime('%Y-%m-%d')))
+                share.times_shared += 1
+                share.save()
+                return Response(share.times_shared, status=status.HTTP_200_OK)
+            except ObjectDoesNotExist:
+                data = {'item': item.id, 'times_shared': 1}
+                serializer = ShareSerializer(data=data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(1, status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

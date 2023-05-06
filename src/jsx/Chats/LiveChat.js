@@ -7,8 +7,11 @@ import Footer from "../components/Footer";
 import {PureComponent} from "react";
 import {useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
+import AuthContext from "../AuthContext";
 
 class LiveChatRender extends PureComponent {
+    static contextType = AuthContext;
+
     ws = null;
     constructor(props) {
         super(props);
@@ -56,7 +59,6 @@ class LiveChatRender extends PureComponent {
 
     onMessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log(event.data)
         this.setState({ messages: [...this.state.messages, message] });
     };
 
@@ -65,6 +67,7 @@ class LiveChatRender extends PureComponent {
     }
 
     render() {
+        const {user} = this.context;
         return (
             <div className="page-content">
                 <Navbar/>
@@ -87,10 +90,12 @@ class LiveChatRender extends PureComponent {
                              ref={(el) => { this.messagesEnd = el; }}>
                         </div>
                     </div>
+                    {!user.is_admin ?
                     <form onSubmit={this.sendMessage}>
                         <input type="text" className="messageInput" id="messageInput" name="messageInput" />
                         <button id="submit" className="submit-message" name="Send">Send</button>
                     </form>
+                    : null}
                 </div>
                 </body>
                 <Footer id="foot_id"/>
