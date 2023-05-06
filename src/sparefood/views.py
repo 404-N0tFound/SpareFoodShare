@@ -1,5 +1,5 @@
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Q, OuterRef, Subquery
+from django.db.models import Q, OuterRef, Subquery, QuerySet
 from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
@@ -31,7 +31,8 @@ from .tokens import account_activation_token
 
 
 @api_view(['GET'])
-def getApiRoutes(request):
+def getApiRoutes(request) -> Response:
+    """Returns a response with a list of all available routes for debugging."""
     routes = [
         '/api/',
         '/api/token',
@@ -60,7 +61,7 @@ def getApiRoutes(request):
 
 class RegistrationView(APIView):
     @classmethod
-    def post(cls, request):
+    def post(cls, request) -> Response:
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -91,7 +92,7 @@ def activate_account(request, uidb64, token):
 
 class NewRefreshToken(APIView):
     @classmethod
-    def get(cls, request):
+    def get(cls, request) -> Response:
         if is_valid_uuid(request):
             user = User.objects.get(id__exact=decode_jwt(request))
             refresh = RefreshToken.for_user(user)
@@ -131,7 +132,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class CreateItemView(APIView):
     @classmethod
-    def post(cls, request):
+    def post(cls, request) -> Response:
         data = request.data
         data['provider'] = decode_jwt(data['provider'], True)
         serializer = ItemSerializer(data=data)
@@ -143,7 +144,7 @@ class CreateItemView(APIView):
 
 class CreateOrderView(APIView):
     @classmethod
-    def post(cls, request):
+    def post(cls, request) -> Response:
         data = request.data
         data['initiator'] = decode_jwt(data['initiator'], True)
         serializer = OrdersSerializer(data=request.data)
@@ -171,7 +172,7 @@ class CreateOrderView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def is_more_items(request):
+def is_more_items(request) -> bool:
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
             Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
@@ -180,7 +181,7 @@ def is_more_items(request):
     return True
 
 
-def infinite_filter(request):
+def infinite_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -245,7 +246,7 @@ def is_item_registrable(item, request_user) -> bool:
     return False if str(item.provider_id) == str(request_user) else True
 
 
-def is_more_myitems(request):
+def is_more_myitems(request) -> bool:
     offset = request.GET.get('offset')
     if int(offset) >= Item.objects.filter(
             Q(is_deleted__lte=False) & Q(is_collected__lte=False) &
@@ -254,7 +255,7 @@ def is_more_myitems(request):
     return True
 
 
-def infinite_myitems_filter(request):
+def infinite_myitems_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -268,11 +269,11 @@ def infinite_myitems_filter(request):
 class InfiniteMyItemsView(ListAPIView):
     serializer_class = ItemSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         qs = infinite_myitems_filter(self.request)
         return qs
 
-    def list(self, request):
+    def list(self, request) -> Response:
         query_set = self.get_queryset()
         serializer = self.serializer_class(query_set, many=True)
         return Response({
@@ -283,7 +284,7 @@ class InfiniteMyItemsView(ListAPIView):
 
 class MyExpiringItemsView(APIView):
     @classmethod
-    def get(cls, request):
+    def get(cls, request) -> Response:
         try:
             if is_valid_uuid(request):
                 expiration_date = datetime.today()
@@ -307,7 +308,7 @@ class MyExpiringItemsView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-def is_more_orders(request):
+def is_more_orders(request) -> bool:
     offset = request.GET.get('offset')
     if int(offset) >= Order.objects.filter(
             Q(id__exact=decode_jwt(request))).count():
@@ -315,7 +316,7 @@ def is_more_orders(request):
     return True
 
 
-def infinite_myorders_filter(request):
+def infinite_myorders_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -351,11 +352,11 @@ def infinite_myorders_filter(request):
 class OrdersView(ListAPIView):
     serializer_class = OrdersSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         qs = infinite_myorders_filter(self.request)
         return qs
 
-    def list(self, request):
+    def list(self, request) -> Response:
         data = self.get_queryset()
         return Response({
             "orders": data,
@@ -366,11 +367,11 @@ class OrdersView(ListAPIView):
 class ChatsView(ListAPIView):
     serializer_class = ChatsSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         qs = infinite_chats_filter(self.request)
         return qs
 
-    def list(self, request):
+    def list(self, request) -> Response:
         data = self.get_queryset()
         return Response({
             "chats": data,
@@ -378,7 +379,7 @@ class ChatsView(ListAPIView):
         })
 
 
-def infinite_chats_filter(request):
+def infinite_chats_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -424,7 +425,7 @@ def infinite_chats_filter(request):
         return total_rooms
 
 
-def is_more_chats(request):
+def is_more_chats(request) -> bool:
     offset = request.GET.get('offset')
     if int(offset) >= ChatRoom.objects.filter(
             Q(user_1=decode_jwt(request)) or
@@ -435,7 +436,7 @@ def is_more_chats(request):
 
 class MessagesView(APIView):
     @classmethod
-    def get(cls, request):
+    def get(cls, request) -> JsonResponse:
         data = [{
             'username': message.user.full_name,
             'message': message.value,
@@ -443,7 +444,7 @@ class MessagesView(APIView):
         return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
 
-def infinite_mysales_filter(request):
+def infinite_mysales_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
@@ -465,11 +466,11 @@ def infinite_mysales_filter(request):
 class SalesView(ListAPIView):
     serializer_class = OrdersSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         qs = infinite_mysales_filter(self.request)
         return qs
 
-    def list(self, request):
+    def list(self, request) -> Response:
         data = self.get_queryset()
         return Response({
             "sales": data,
@@ -477,7 +478,7 @@ class SalesView(ListAPIView):
         })
 
 
-def is_more_sales(request):
+def is_more_sales(request) -> bool:
     offset = request.GET.get('offset')
     if int(offset) >= Order.objects.filter(
             Q(id__exact=decode_jwt(request))).count():
@@ -487,7 +488,7 @@ def is_more_sales(request):
 
 class ItemOperationsView(APIView):
     @classmethod
-    def post(cls, request):
+    def post(cls, request) -> Response:
         data = request.data
         try:
             if data['operation'] == 'update':
@@ -506,7 +507,7 @@ class ItemOperationsView(APIView):
 
 class UserProfileUpdateView(APIView):
     @classmethod
-    def post(cls, request):
+    def post(cls, request) -> Response:
         data = request.data
         try:
             user = User.objects.get(id__exact=decode_jwt(data['jwt'], True))
@@ -528,7 +529,7 @@ class UserProfileUpdateView(APIView):
 
 class StatsView(APIView):
     @classmethod
-    def get(cls, request):
+    def get(cls, request) -> Response:
         try:
             if is_admin(request):
                 data = {
@@ -547,7 +548,7 @@ class StatsView(APIView):
             return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
 
     @classmethod
-    def calculate_user_ratio(cls):
+    def calculate_user_ratio(cls) -> list:
         data = [
             {'name': 'Individual Users', 'value': len(User.objects.filter(Q(is_business=False)))},
             {'name': 'Businesses Users', 'value': len(User.objects.filter(Q(is_business=True)))}
@@ -555,7 +556,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_items_shared_weekly(cls):
+    def calculate_items_shared_weekly(cls) -> list:
         each_calculated_day = []
         for i in range(datetime.today().weekday() + 1):
             change_date = datetime.today()
@@ -600,7 +601,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_items_shared_monthly(cls):
+    def calculate_items_shared_monthly(cls) -> list:
         data = []
         current_date = datetime.today()
         for i in range(6):
@@ -616,7 +617,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_items_perished_weekly(cls):
+    def calculate_items_perished_weekly(cls) -> list:
         each_calculated_day = []
         for i in range(datetime.today().weekday() + 1):
             change_date = datetime.today()
@@ -658,7 +659,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_items_perished_monthly(cls):
+    def calculate_items_perished_monthly(cls) -> list:
         data = []
         current_date = datetime.today()
         for i in range(6):
@@ -672,7 +673,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_new_users_weekly(cls):
+    def calculate_new_users_weekly(cls) -> list:
         each_calculated_day = []
         for i in range(datetime.today().weekday() + 1):
             change_date = datetime.today()
@@ -713,7 +714,7 @@ class StatsView(APIView):
         return data
 
     @classmethod
-    def calculate_new_users_monthly(cls):
+    def calculate_new_users_monthly(cls) -> list:
         data = []
         current_date = datetime.today()
         for i in range(6):
@@ -728,7 +729,7 @@ class StatsView(APIView):
 
 class ShareView(APIView):
     @classmethod
-    def post(cls, request, item_uuid):
+    def post(cls, request, item_uuid) -> Response:
         try:
             item = Item.objects.get(id__exact=item_uuid)
             try:

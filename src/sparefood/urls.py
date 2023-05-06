@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import (
 
 from . import views
 
-url_patterns = [
+url_patterns: list = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/new/', NewRefreshToken.as_view()),
@@ -39,4 +39,4 @@ url_patterns = [
 if settings.DEBUG:
     url_patterns.insert(0, path('', getApiRoutes))
     url_patterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns = url_patterns
+urlpatterns: list = url_patterns

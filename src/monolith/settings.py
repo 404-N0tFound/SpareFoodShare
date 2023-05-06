@@ -31,7 +31,6 @@ DEBUG = False
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
@@ -53,6 +52,7 @@ REST_FRAMEWORK = {
     )
 }
 
+# JWT configuration and salting settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
@@ -92,6 +92,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+# Auth middleware configuration for JWT generation and serving
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -105,6 +106,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+# URLs parsing link for API calls
 ROOT_URLCONF = 'monolith.urls'
 
 TEMPLATES = [
@@ -123,9 +125,11 @@ TEMPLATES = [
     },
 ]
 
+# Websocket and Daphne configuration links
 WSGI_APPLICATION = 'monolith.wsgi.application'
 ASGI_APPLICATION = 'sparefood.asgi.application'
 
+# Daphne channel type support
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': "channels.layers.InMemoryChannelLayer"
@@ -171,8 +175,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Email settings
-
+# Email settings and user validation configurables
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
