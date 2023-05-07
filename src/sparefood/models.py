@@ -35,6 +35,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """Our provided user class with all necessary info and inheritance from django abstract user"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(verbose_name="email", max_length=120, unique=True)
     full_name = models.CharField(verbose_name="full_name", max_length=240)
@@ -68,6 +69,8 @@ class User(AbstractUser):
 
 
 class Item(models.Model):
+    """Our items that have been uploaded to be viewed and/or purchased. This includes a uuid which is referenced from
+    a share value as well as expiration data about how to serve item data."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField("name", max_length=240)
     description = models.TextField("description", max_length=10000)
@@ -82,14 +85,17 @@ class Item(models.Model):
 
     @property
     def get_absolute_image_url(self):
+        """Calculates the attached image MEDIA url for serving on the front-end"""
         return '%s%s' % (settings.MEDIA_URL, self.image.url)
 
     @property
     def is_registrable(self) -> bool:
+        """Returns whether a given jwt request can register interest in this item or not."""
         return self._is_registrable
 
     @is_registrable.setter
     def is_registrable(self, value: bool):
+        """Setter to calculate if it is possible to register interest in an item or not."""
         if not (type(value) == bool):
             raise ValueError(f"Value {value} must be a bool.")
         self._is_registrable = value
@@ -99,6 +105,9 @@ class Item(models.Model):
 
 
 class Order(models.Model):
+    """Once a user has selected they want an item, an order is created to attach the user and the provider together
+    as well as a chat lobby between them for an item. This object stores also the donated amount but no credit
+    information."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id')
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -114,6 +123,7 @@ class Order(models.Model):
 
 
 class ChatRoom(models.Model):
+    """A chat lobby for holding where a websocket server will go and who can view it given an order."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(Order, on_delete=models.RESTRICT, to_field='id')
     user_1 = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_1')
@@ -125,6 +135,7 @@ class ChatRoom(models.Model):
 
 
 class Message(models.Model):
+    """A chat message that is tied to a given chat room."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     value = models.CharField(max_length=10000)
     date = models.DateField(verbose_name='date', auto_now_add=True)
@@ -133,6 +144,7 @@ class Message(models.Model):
 
 
 class Share(models.Model):
+    """An instance of how many times an item has been shared on a given day, or defaults to 0 if no shares were made."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, to_field='id')
     date = models.DateField(verbose_name='date', auto_now_add=True)
