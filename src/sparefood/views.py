@@ -634,15 +634,22 @@ class ItemOperationsView(APIView):
         """
         data = request.data
         try:
-            if data['operation'] == 'update':
-                Item.objects.filter(id=data['id']).update(name=data['name'],
-                                                          description=data['des'],
-                                                          location=data['location'],
-                                                          expiration_date=data['expiration_date']
-                                                          )
-            elif data['operation'] == 'delete':
-                Item.objects.filter(id=data['id']).update(is_deleted=True)
-            return Response(status=status.HTTP_200_OK)
+            if is_valid_uuid(data['jwt'], True):
+                if not is_admin(data['jwt'], True) and \
+                        (decode_jwt(data['jwt'], True) != Item.objects.get(id=data['id']).provider_id):
+                    if data['operation'] == 'update':
+                        Item.objects.filter(id=data['id']).update(name=data['name'],
+                                                                  description=data['des'],
+                                                                  location=data['location'],
+                                                                  expiration_date=data['expiration_date']
+                                                                  )
+                    elif data['operation'] == 'delete':
+                        Item.objects.filter(id=data['id']).update(is_deleted=True)
+                    return Response(status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
