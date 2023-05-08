@@ -9,12 +9,15 @@
 }
 
 .my_sales-content ul li {
-    width: 35%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background: linear-gradient(#E3FBE9FF 0%, #d3ffdd 50%, #c3ffcc 100%);
+    margin: 0 auto;
+    text-align: center;
+    font-family: arial;
     float: left;
+    width: 35%;
+    border-radius: 20px;
     list-style: none;
-    background-color: #FFFFFF;
-    margin-top: 3%;
-    margin-left: 13%;
     height: 350px;
     -webkit-box-shadow: 0 0 5px 3px #ccc;
 }
@@ -41,9 +44,9 @@
 }
 
 .my_sales-pic {
-    width: 40%;
-    height: 100%;
-    float: left;
+    width: 275px;
+    height: 275px;
+    border-radius: 10px;
 }
 
 .no_sales_msg {
@@ -51,11 +54,11 @@
 }
 
 .my_sales_btn {
-    background-color: black;
-    color: white;
+    background-color: #b3ffbe;
+    color: #333333;
     font-size: 15px;
     padding: 10px 50px;
-    border-radius: 5px;
+    border-radius: 10px;
     float: right;
     margin-right: 3%;
     margin-top: 10%;
@@ -63,5 +66,5 @@
 
 .my_sales-filter {
     width: 5%;
-    margin-left: 12%;
+    margin-left: 15%;
 }

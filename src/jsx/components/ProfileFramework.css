@@ -3,12 +3,12 @@
     width: 200px;
     left: 10px;
     top: 22%;
-    padding-top: 50px;
+    margin-top: 3%;
+    padding-top: 25px;
     position: absolute;
-    background: rgba(21, 102, 29, 0.6);
-    border-radius: 25px;
-    border: solid;
-    border-color: white;
+    background: linear-gradient(#E3FBE9FF 0%, #d3ffdd 50%, #c3ffcc 100%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
 }
 
 .sidebar-text {

@@ -188,7 +188,7 @@ class BrowseScreen extends PureComponent {
                 <body className="listings-body">
                 <div className="items-filter">
                     <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
-                        <option value="default" disabled>None</option>
+                        <option value="default" disabled>Sort By</option>
                         <option value="upload_date">Upload Date</option>
                         <option value="expiration_date">Expiration Date</option>
                     </select>
@@ -203,7 +203,6 @@ class BrowseScreen extends PureComponent {
                                         <img className="items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                         <h1>{itemsObj.name}</h1>
                                         <p>Expiry Date: {itemsObj.expiration_date}</p>
-                                        <p><button>Register Interest</button></p>
                                     </a>
                                 </li>
                             </div>
@@ -224,12 +223,13 @@ class BrowseScreen extends PureComponent {
                             <div>
                                 <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
                                 <h1>{this.state.active_item.name}</h1>
-                                <p>Description: {this.state.active_item.description}</p>
-                                <p>Location: {this.state.active_item.location}</p>
-                                <p>Expiry Date: {this.state.active_item.expiration_date}</p>
-                                <p>Donations:<input type="number" onChange={ (e) => this.setState({donation_amount: e.target.value}) } placeholder="0~10" min="0" max="10"/></p>
-                                <p><button onClick={this.shareItem}>Share</button></p>
-                                { this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
+                                <p><b>Description:</b> {this.state.active_item.description}</p>
+                                <p><b>Upload Date:</b> { this.state.active_item.upload_date }</p>
+                                <p><b>Expiry Date:</b> {this.state.active_item.expiration_date}</p>
+                                <p><b>Location</b>: {this.state.active_item.location}</p>
+                                <p><b>Donations:</b><input type="number" onChange={ (e) => this.setState({donation_amount: e.target.value}) } placeholder="0~10" min="0" max="10"/></p>
+                                <p className="button"><button onClick={this.shareItem}>Share</button></p>
+                                { this.state.active_item.is_registrable ? <p className="button"><button onClick={this.registerInterest}>Register Interest</button></p> : null }
                                 {this.state.show ? (
                                 <p>
                                     <PayPalButtons

@@ -43,6 +43,13 @@ class MyItems extends PureComponent{
                 this.loadItems();
             }
         }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     }
 
     componentDidMount() {
@@ -203,7 +210,7 @@ class MyItems extends PureComponent{
                 <ProfileFramework />
                 <div className="my_items-filter">
                     <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
-                        <option value="default" disabled>None</option>
+                        <option value="default" disabled>Sort By</option>
                         <option value="upload_date">Upload Date</option>
                         <option value="expiration_date">Expiration Date</option>
                     </select>
@@ -215,11 +222,8 @@ class MyItems extends PureComponent{
                                 <li>
                                     <img className="my_items-pic" src={`http://127.0.0.1:8000${itemsObj.picture}`} />
                                     <div className="my_items_info">
-                                        <h3>Name: {itemsObj.name}</h3>
-                                        <p>Des: {itemsObj.description}</p><br />
-                                        <p>Upload Date: { itemsObj.upload_date }</p>
-                                        <p>Expiration Date: { itemsObj.expiration_date }</p>
-                                        <p>Location: { itemsObj.location }</p>
+                                        <h2>{itemsObj.name}</h2>
+                                        <p>Expiry Date: { itemsObj.expiration_date }</p>
                                     </div>
                                 </li>
                             </a>
@@ -256,16 +260,16 @@ class MyItems extends PureComponent{
                                             <input name="item-name" className="form-style" defaultValue={this.state.edit_item.name} onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group">
-                                            <label className="item-form-label">Des: </label>
+                                            <label className="item-form-label">Description: </label>
                                             <input name="item-description" className="form-style" defaultValue={this.state.edit_item.description} onChange={this.handleChange} />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="item-form-label">Expiry Date: </label>
+                                            <input name="item-expiration_date" type="date" className="form-style" defaultValue={this.state.edit_item.expiration_date} onChange={this.handleChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="item-form-label">Location: </label>
                                             <input name="item-location" className="form-style" defaultValue={this.state.edit_item.location} onChange={this.handleChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="item-form-label">Expiration Date: </label>
-                                            <input name="item-expiration_date" type="date" className="form-style" defaultValue={this.state.edit_item.expiration_date} onChange={this.handleChange} />
                                         </div><br />
                                         <button className="myitems-edit-submit">Save</button>
                                     </form>
@@ -278,16 +282,15 @@ class MyItems extends PureComponent{
                     <div className="modal-content">
                         <span onClick={this.closeModal} className="close">&times;</span>
                         {this.state.active_item != null && this.state.show == true?
-                            <div>
-                                <div className="my_items_info">
-                                    <h3>Name: {this.state.active_item.name}</h3>
-                                    <p>Des: {this.state.active_item.description}</p><br />
-                                    <p>Upload Date: { this.state.active_item.upload_date }</p>
-                                    <p>Expiration Date: { this.state.active_item.expiration_date }</p>
-                                    <p>Location: { this.state.active_item.location }</p>
-                                    <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Edit")}>Edit</button>
-                                    <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Delete")}>Delete</button>
-                                </div>
+                            <div className="my_items_info">
+                                <img className="my_items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
+                                <h3><b>Name:</b> {this.state.active_item.name}</h3>
+                                <p><b>Description:</b> {this.state.active_item.description}</p>
+                                <p><b>Upload Date:</b> { this.state.active_item.upload_date }</p>
+                                <p><b>Expiry Date:</b> { this.state.active_item.expiration_date }</p>
+                                <p><b>Location:</b> { this.state.active_item.location }</p>
+                                <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Edit")}>Edit</button>
+                                <button className="myitems-modal-btns" onClick = {() => this.modalOperations("Delete")}>Delete</button>
                             </div>
                         : <p>No item selected</p> }
                     </div>

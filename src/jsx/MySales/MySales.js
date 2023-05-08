@@ -81,7 +81,7 @@ class MySales extends PureComponent{
                 <ProfileFramework />
                 <div className="my_sales-filter">
                     <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
-                        <option value="default" disabled>None</option>
+                        <option value="default" disabled>Sort By</option>
                         <option value="created_date">Created Date</option>
                         <option value="donation_amount">Donation</option>
                     </select>
