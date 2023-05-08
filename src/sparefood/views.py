@@ -561,7 +561,6 @@ def is_more_chats(request) -> bool:
 
 class MessagesView(APIView):
     """Gets all messages for a given valid chatroom uuid."""
-
     @classmethod
     def get(cls, request) -> JsonResponse:
         """Gets all messages for a chatroom uuid.
@@ -635,7 +634,6 @@ def is_more_sales(request) -> bool:
 
 class ItemOperationsView(APIView):
     """Endpoint for changing item information if a valid user requests so."""
-
     @classmethod
     def post(cls, request) -> Response:
         """Functional view for either editing or deleting an item from the database.
@@ -669,7 +667,6 @@ class UserProfileUpdateView(APIView):
     - User phone number\n
     - User full name\n
     """
-
     @classmethod
     def post(cls, request) -> Response:
         """Post point for updating the user information with new provided data if it is valid.
@@ -706,7 +703,6 @@ class StatsView(APIView):
     - number of new users that joined the website this week for each given weekday\n
     - number of new users that joined the website this month over the past 6 months
     """
-
     @classmethod
     def get(cls, request) -> Response:
         """Endpoint for obtaining admin statistics.
@@ -933,7 +929,6 @@ class StatsView(APIView):
 
 class ShareView(APIView):
     """Increments an item's share count on any given valid item uuid."""
-
     @classmethod
     def post(cls, request, item_uuid) -> Response:
         """Creates or increments an item share count for today's system date.
