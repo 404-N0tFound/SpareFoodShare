@@ -27,7 +27,6 @@ function Upload() {
         setSelectedDefaultImage(e.target.files[0]);
     };
 
-
     let dataURLtoBlob = async (dataUrl) => {
         const response = await fetch(dataUrl);
         return response.blob();
