@@ -66,7 +66,6 @@ def getApiRoutes(request) -> Response:
 
 class RegistrationView(APIView):
     """The registration endpoint for creating a new user"""
-
     @classmethod
     def post(cls, request) -> Response:
         """Creates a new user object and returns a status if successful as well as calls to activate email.
@@ -114,7 +113,6 @@ def activate_account(request, uidb64, token) -> HttpResponseRedirect:
 
 class NewRefreshToken(APIView):
     """Returns a new JWT token if necessary for client actions when given a valid JWT."""
-
     @classmethod
     def get(cls, request) -> Response:
         """Provides new JWT token.
@@ -142,7 +140,6 @@ class NewRefreshToken(APIView):
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Generates a refresh and access token pair for a user and returns the encrypted values before salting."""
-
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -163,7 +160,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class CreateItemView(APIView):
     """View for posting a new item to the database."""
-
     @classmethod
     def post(cls, request) -> Response:
         """Endpoint for creating a new item when valid data is provided.
@@ -181,7 +177,6 @@ class CreateItemView(APIView):
 
 class CreateOrderView(APIView):
     """View for posting a new order to the database."""
-
     @classmethod
     def post(cls, request) -> Response:
         """Endpoint for creating a new order when valid data is provided.
