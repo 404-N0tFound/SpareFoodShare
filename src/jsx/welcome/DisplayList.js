@@ -4,9 +4,12 @@ import pic_1 from "../pics/pic-1.jpg";
 import pic_2 from "../pics/pic-2.jpg";
 import pic_3 from "../pics/pic-3.jpg";
 import { Component } from "react";
+import AuthContext from "../AuthContext";
 
 class DisplayList extends Component {
+    static contextType = AuthContext;
     render() {
+        const {user} = this.context;
         return (
             <div className="display-list">
                 <ul>
@@ -47,12 +50,12 @@ class DisplayList extends Component {
                                         <p>Join the community and help fight back against food wastage. Browse through the existing listings - or post an item of your own!</p>
                                     </div>
                                     <div>
-                                        <a className="loginButton" type="button" href="../login">
-                                            Sign up
-                                        </a>
-                                        <a className="browseButton" type="button" href="../login">
-                                            Login
-                                        </a>
+                                        {user ? (
+                                            null
+                                        ) : (
+                                            <a className="loginButton" type="button" href="../login">
+                                                Sign up or Login
+                                            </a>                                            ) }
                                     </div>
                                 </div>
                             </div>
@@ -74,10 +77,7 @@ class DisplayList extends Component {
                                     <div>
                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
                                         <a href="#" className="fa fa-facebook"></a>
-                                        <a href="#" className="fa fa-snapchat-ghost"></a>
-                                        <a href="#" className="fa fa-linkedin"></a>
-                                        <a href="#" className="fa fa-reddit"></a>
-                                        <a href="#" className="fa fa-twitter"></a>
+                                        <a href="#" className="fa fa-whatsapp"></a>
                                     </div>
                                 </div>
                             </div>

@@ -17,7 +17,7 @@ function Navbar () {
                             {user ? (
                                 <a href="../profile" className="login-a">My Profile</a>
                             ) : (
-                                <a href="../login" className="login-a">Login</a>
+                                <a href="../login" className="login-a">Register/Login</a>
                             ) }
                             <a href="../browse" className="browse-a">Browse</a>
                         </ul>

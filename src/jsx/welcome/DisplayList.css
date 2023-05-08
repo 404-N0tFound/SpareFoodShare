@@ -50,6 +50,8 @@
 }
 
 .loginButton {
+    font-family: 'Poppins', sans-serif;
+    width: 225px;
     border: 1px outset #0b0d0c;
     background-color: #092B0C;
     color: #F0FFF2;
@@ -100,27 +102,9 @@
     border-radius: 100px;
 }
 
-.fa-twitter {
-    background: #55ACEE;
-    color: white;
-    border-radius: 100px;
-}
 
-.fa-linkedin {
-    background: #007bb5;
-    color: white;
-    border-radius: 100px;
-}
-
-.fa-snapchat-ghost {
-    background: #fffc00;
-    color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    border-radius: 100px;
-}
-
-.fa-reddit {
-    background: #ff5700;
+.fa-whatsapp {
+    background: #25D366;
     color: white;
     border-radius: 100px;
 }

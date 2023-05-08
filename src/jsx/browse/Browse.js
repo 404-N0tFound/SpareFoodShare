@@ -182,7 +182,7 @@ class BrowseScreen extends PureComponent {
                                 <p>Description: {this.state.active_item.description}</p>
                                 <p>Location: {this.state.active_item.location}</p>
                                 <p>Expiry Date: {this.state.active_item.expiration_date}</p>
-                                <p><button onClick={this.shareItem}>Share</button></p>
+                                <button className = "shareButton" onClick={this.shareItem}>Share</button>
                                 { this.state.active_item.is_registrable ? <p><button onClick={this.registerInterest}>Register Interest</button></p> : null }
                             </div>
                         : <p>No item selected</p> }
