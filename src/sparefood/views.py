@@ -365,7 +365,6 @@ class InfiniteMyItemsView(ListAPIView):
 
 class MyExpiringItemsView(APIView):
     """Returns all items that will expire tomorrow for a given user."""
-
     @classmethod
     def get(cls, request) -> Response:
         """Gets all items for a user that will expire tomorrow based on server-side system time.
