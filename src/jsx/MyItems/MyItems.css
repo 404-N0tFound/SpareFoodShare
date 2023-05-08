@@ -142,3 +142,8 @@
   touch-action: manipulation;
   margin-left: 5px;
 }
+
+.myitems-modal-btns:hover, .myitems-edit-submit:hover {
+    background-color: #a3ffae;
+    color: #0b0d0c;
+}

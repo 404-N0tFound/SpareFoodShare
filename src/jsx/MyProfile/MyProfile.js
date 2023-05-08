@@ -32,7 +32,7 @@ function MyProfile() {
                 alert('Update failed! Is it maybe down?')
             }
         }else{
-            alert("You haven't done any changes!");
+            alert("You haven't made any changes!");
         }
 
     }

@@ -9,7 +9,7 @@ body{
 h4 {
   font-weight: 600;
   font-size: 30px;
-  color: #F0FFF2;
+  color: #0b0d0c;
 }
 
 h6 span{
@@ -97,7 +97,7 @@ h6 span{
 .card-front, .card-back {
   width: 500px;
   height: 550px;
-  background-color: #092B0C;
+  background: linear-gradient(#E3FBE9FF 0%, #d3ffdd 50%, #c3ffcc 100%);
   position: absolute;
   border-radius: 25px;
   left: 0;
@@ -151,32 +151,32 @@ h6 span{
 }
 
 .button{  
-  border-radius: 25px;
+  border-radius: 10px;
   height: 40px;
   font-size: 15px;
   font-weight: 600;
   text-transform: uppercase;
   transition: all 200ms linear;
-  padding: 10px 30px;
-  margin: 5%;
+  padding: 10px 85px;
+  margin: auto;
   letter-spacing: 1px;
   display: inline-flex;
   -webkit-align-items: center;
   text-align: center;
   border: none;
-  background-color: #ffea75;
-  color: #5e2d1d;
+  background-color: #b3ffbe;
+  color: #0b0d0c;
 }
 
 .button:hover{  
-  background-color: #5e2d1d;
-  color: #ffea75;
+  background-color: #a3ffae;
+  color: #0b0d0c;
 }
 
 .business-check-text{
   font-size: 15px;
   font-weight: 600;
-  color: #F0FFF2;
+  color: #0b0d0c;
   display: inline-block;
 }
 

@@ -92,3 +92,24 @@
     width: 5%;
     margin-left: 12%;
 }
+
+
+.modal-button {
+    border-radius: 10px;
+    height: 10%;
+    width: 50%;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: auto;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #b3ffbe;
+    color: #0b0d0c;
+    position: relative;
+}
+
+.modal-button:hover {
+    background-color: #a3ffae;
+    color: #0b0d0c;
+}

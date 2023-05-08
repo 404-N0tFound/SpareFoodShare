@@ -228,8 +228,8 @@ class BrowseScreen extends PureComponent {
                                 <p><b>Expiry Date:</b> {this.state.active_item.expiration_date}</p>
                                 <p><b>Location</b>: {this.state.active_item.location}</p>
                                 <p><b>Donations:</b><input type="number" onChange={ (e) => this.setState({donation_amount: e.target.value}) } placeholder="0~10" min="0" max="10"/></p>
-                                <p className="button"><button onClick={this.shareItem}>Share</button></p>
-                                { this.state.active_item.is_registrable ? <p className="button"><button onClick={this.registerInterest}>Register Interest</button></p> : null }
+                                <button className="modal-button" onClick={this.shareItem}>Share</button>
+                                { this.state.active_item.is_registrable ? <button className="modal-button" onClick={this.registerInterest}>Register Interest</button> : null }
                                 {this.state.show ? (
                                 <p>
                                     <PayPalButtons
