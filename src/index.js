@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./jsx/Layout";
 import PrivateRouteLogin from "./jsx/components/PrivateRouteLogin";
 import PrivateRouteProfile from "./jsx/components/PrivateRouteProfile";
+import PrivateRouteAdmin from "./jsx/components/PrivateRouteAdmin";
+import PrivateRouteBoth from "./jsx/components/PrivateRouteBoth";
 import {AuthProvider} from "./jsx/AuthContext";
 
 import Welcome from "./jsx/welcome/Welcome";
@@ -13,14 +15,18 @@ import Browse from "./jsx/browse/Browse";
 import Login from "./jsx/login/Login";
 import Upload from "./jsx/upload/Upload";
 import MyProfile from "./jsx/MyProfile/MyProfile";
-import MyOrders from "./jsx/myorders/MyOrders";
+import MyOrders from "./jsx/MyOrders/MyOrders";
+import AdminStats from "./jsx/statistics/AdminStats";
 import Chats from "./jsx/Chats/Chats";
 import LiveChat from "./jsx/Chats/LiveChat";
 import MyItems from './jsx/MyItems/MyItems';
+import MySales from './jsx/MySales/MySales';
+import InitialNotificationGenerator from "./jsx/components/InitialNotificationGenerator";
 
 export default function App() {
     return (
             <BrowserRouter>
+                <InitialNotificationGenerator />
                 <Routes>
                     <Route path="/" element={
                         <AuthProvider>
@@ -42,9 +48,9 @@ export default function App() {
                             }
                         />
                         <Route path="profile" element={
-                                <PrivateRouteProfile>
+                                <PrivateRouteBoth>
                                         <MyProfile />
-                                </PrivateRouteProfile>
+                                </PrivateRouteBoth>
                             }
                         />
                         <Route path="profile/orders" element={
@@ -53,20 +59,32 @@ export default function App() {
                                 </PrivateRouteProfile>
                             }
                         />
+                        <Route path="profile/admin" element={
+                            <PrivateRouteAdmin>
+                                <AdminStats />
+                            </PrivateRouteAdmin>
+                        }
+                        />
                         <Route path ="profile/chats" element={
-                            <PrivateRouteProfile>
+                            <PrivateRouteBoth>
                                 <Chats />
-                            </PrivateRouteProfile>
+                            </PrivateRouteBoth>
                         } />
                         <Route path="profile/chat" element={
-                            <PrivateRouteProfile>
+                            <PrivateRouteBoth>
                                 <LiveChat />
-                            </PrivateRouteProfile>
+                            </PrivateRouteBoth>
                         }
                         />
                         <Route path="profile/myitems" element={
-                                <PrivateRouteProfile>
+                                <PrivateRouteBoth>
                                         <MyItems />
+                                </PrivateRouteBoth>
+                            }
+                        />
+                        <Route path="profile/sales" element={
+                                <PrivateRouteProfile>
+                                        <MySales />
                                 </PrivateRouteProfile>
                             }
                         />

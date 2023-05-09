@@ -89,13 +89,8 @@
     cursor: pointer;
 }
 
-.shareButton {
-  font-weight: bold;
-  border-radius: 10px;
-  width: 250px;
-  height: 35px;
-  position: relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  background-color: #b3ffbe;
-  color: #0b0d0c;
+.items-filter {
+    width: 5%;
+    margin-left: 12%;
 }
+

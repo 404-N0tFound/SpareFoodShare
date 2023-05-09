@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import {PureComponent} from "react";
-import jwtDecode from "jwt-decode";
 
 import {useNavigate} from 'react-router-dom';
 import PropTypes from "prop-types";
@@ -44,8 +43,8 @@ class ChatsRender extends PureComponent {
     loadChats = () => {
         this.setState({loading: true, user: this.context.user}, async () => {
             const { offset, limit } = this.state;
-            const user_id = (jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).user_id).toString();
-            let response = await fetch(`http://127.0.0.1:8000/api/chats/?limit=${limit}&offset=${offset}&user_id=${user_id}`, {
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
+            let response = await fetch(`http://127.0.0.1:8000/api/chats/?limit=${limit}&offset=${offset}&jwt=${jwt}`, {
                 method:'GET'
             })
             let data = await response.json()
