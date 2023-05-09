@@ -1,41 +1,4 @@
-/* Style the select element */
-/*select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: #b3ffbe;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #333;
-    border-radius: 4px;
-    position: relative;
-}
 
-/* Add the arrow */
-/*select:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background-image: url(require("../pics/sort.jpg")); /* or use background-image: url('path/to/arrow.png'); */
-    background-size: 10px;
-    background-repeat: no-repeat;
-    width: 10px;
-    height: 10px;
-/*
-
-/* Style the arrow when the select is open */
-/*select:focus:after {
-    border-top: 6px solid #b3ffbe;
-}/*
-
-/* Style the options */
-/*select option {
-    background-color: #b3ffbe;
-    color: #333;
-}*/
 
 .listings-body {
     min-height: 75vh;

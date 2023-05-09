@@ -1,5 +1,16 @@
 .my_orders-body {
     min-height: 75vh;
+    align-items: center;
+    font-size: calc(10px + 2vmin);
+    color: black;
+    width: 100%;
+    margin-left: 5%;
+}
+
+my_orders-body:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .my_orders_content {
@@ -18,8 +29,22 @@
     width: 35%;
     border-radius: 20px;
     list-style: none;
-    height: 350px;
-    -webkit-box-shadow: 0 0 5px 3px #ccc;
+    margin-left: 12%;
+}
+
+.my_orders-pic {
+    width: 275px;
+    height: 275px;
+    border-radius: 10px;
+}
+
+.no_orders_msg {
+    margin-left: 13%;
+}
+
+.my_orders-filter {
+    width: 5%;
+    margin-left: 12%;
 }
 
 .my_orders-content .my_orders_info h3 {
@@ -43,28 +68,22 @@
     height: 50%;
 }
 
-.my_orders-pic {
-    width: 275px;
-    height: 275px;
-    border-radius: 10px;
-}
-
-.no_orders_msg {
-    margin-left: 13%;
-}
-
 .my_orders_btn {
-    background-color: #b3ffbe;
-    color: #333333;
-    font-size: 15px;
-    padding: 10px 50px;
     border-radius: 10px;
-    float: right;
-    margin-right: 3%;
-    margin-top: 10%;
+    border: 0000;
+    height: 10%;
+    width: 50%;
+    font-size: 15px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #b3ffbe;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    color: #0b0d0c;
+    position: relative;
 }
 
-.my_orders-filter {
-    width: 5%;
-    margin-left: 15%;
+.my_orders_btn:hover {
+    background-color: #a3ffae;
+    color: #0b0d0c;
 }
