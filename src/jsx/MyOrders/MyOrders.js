@@ -81,7 +81,7 @@ class MyOrders extends PureComponent{
                 <ProfileFramework />
                 <div className="my_orders-filter">
                     <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
-                        <option value="default" disabled>None</option>
+                        <option value="default" disabled>Sort By</option>
                         <option value="created_date">Created Date</option>
                         <option value="donation_amount">Donation</option>
                     </select>
@@ -92,7 +92,7 @@ class MyOrders extends PureComponent{
                             <div key={ordersObj.id} className="my_orders-card">
                                 <li>
                                     <div className="my_orders_info">
-                                        <h3>Item Name: {ordersObj.item__name} </h3>
+                                        <h2>Item Name: {ordersObj.item__name} </h2>
                                         <p>Provider Email: {ordersObj.item__provider__email}</p>
                                         <p>Pickup Location: {ordersObj.collection_location} </p>
                                         <p>Created Date: {ordersObj.created_date } </p>

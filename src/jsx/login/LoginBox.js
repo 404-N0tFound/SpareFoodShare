@@ -26,7 +26,7 @@ function LoginBox () {
                                     <div className="form-group">
                                         <input name="password" type="password" className="form-style" placeholder="Password" autoComplete="off" />
                                     </div>
-                                    <button className="button">sign in</button>
+                                    <button className="login-button">sign in</button>
                                 </form>
                             </div>
                             <div className="card-back">
@@ -53,7 +53,7 @@ function LoginBox () {
                                         <span className="checkmark"></span>
                                       </label>
                                     </div>
-                                    <button className="button">register</button>
+                                    <button className="login-button">register</button>
                                 </form>
                             </div>
                         </div>
