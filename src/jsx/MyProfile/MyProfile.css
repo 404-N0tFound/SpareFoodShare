@@ -67,14 +67,19 @@
 }
 
 .button {
-  font-weight: bold;
   border-radius: 10px;
-  width: 250px;
-  height: 35px;
-  position: relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border: 0000;
+  height: 10%;
+  width: 50%;
+
+  font-size: 15px;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   background-color: #b3ffbe;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   color: #0b0d0c;
+  position: relative;
 }
 
 .button:hover {

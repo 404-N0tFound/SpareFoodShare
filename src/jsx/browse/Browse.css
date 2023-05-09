@@ -1,3 +1,42 @@
+/* Style the select element */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #b3ffbe;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+    position: relative;
+}
+
+/* Add the arrow */
+select:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-image: url(require("../pics/sort.jpg")); /* or use background-image: url('path/to/arrow.png'); */
+    background-size: 10px;
+    background-repeat: no-repeat;
+    width: 10px;
+    height: 10px;
+}
+
+/* Style the arrow when the select is open */
+select:focus:after {
+    border-top: 6px solid #b3ffbe;
+}
+
+/* Style the options */
+select option {
+    background-color: #b3ffbe;
+    color: #333;
+}
+
 .listings-body {
     min-height: 75vh;
     align-items: center;
@@ -66,7 +105,7 @@
     background: linear-gradient(#E3FBE9FF 0%, #d3ffdd 50%, #c3ffcc 100%);
     margin: 3% auto; /* 15% from the top and centered */
     padding: 10px;
-    border: 1px solid #888;
+    #border: 1px solid #888;
     border-radius: 20px;
     width: 80%; /* Could be more or less, depending on screen size */
 }
@@ -96,15 +135,15 @@
 
 .modal-button {
     border-radius: 10px;
+    border: 0000;
     height: 10%;
     width: 50%;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 1000;
     text-transform: uppercase;
-    margin: auto;
     letter-spacing: 1px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     background-color: #b3ffbe;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     color: #0b0d0c;
     position: relative;
 }
@@ -113,3 +152,7 @@
     background-color: #a3ffae;
     color: #0b0d0c;
 }
+
+
+
+

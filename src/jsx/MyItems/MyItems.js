@@ -284,7 +284,7 @@ class MyItems extends PureComponent{
                         {this.state.active_item != null && this.state.show == true?
                             <div className="my_items_info">
                                 <img className="my_items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
-                                <h3><b>Name:</b> {this.state.active_item.name}</h3>
+                                <h3> {this.state.active_item.name}</h3>
                                 <p><b>Description:</b> {this.state.active_item.description}</p>
                                 <p><b>Upload Date:</b> { this.state.active_item.upload_date }</p>
                                 <p><b>Expiry Date:</b> { this.state.active_item.expiration_date }</p>

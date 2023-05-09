@@ -92,7 +92,7 @@ class MySales extends PureComponent{
                             <div key={salesObj.id} className="my_sales-card">
                                 <li>
                                     <div className="my_sales_info">
-                                        <h3>Item Name: {salesObj.item__name} </h3>
+                                        <h2>Item Name: {salesObj.item__name} </h2>
                                         <p>Create Date: {salesObj.created_date}</p>
                                         <p>Initiator Email: {salesObj.initiator__email}</p>
                                         <p>Pickup Location: {salesObj.collection_location} </p>

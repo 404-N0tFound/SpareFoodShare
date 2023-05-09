@@ -187,8 +187,8 @@ class BrowseScreen extends PureComponent {
                 <Navbar/>
                 <body className="listings-body">
                 <div className="items-filter">
-                    <select onChange={this.handleFilterChange}  id="filter" defaultValue="default">
-                        <option value="default" disabled>Sort By</option>
+                    <select id="select-option" name="select-option" onChange={this.handleFilterChange} defaultValue="default">
+                        <option style ={{backgroundImage: 'url(' + require('../pics/sort.jpg') +')'} } value="default" disabled>Sort By</option>
                         <option value="upload_date">Upload Date</option>
                         <option value="expiration_date">Expiration Date</option>
                     </select>
@@ -222,7 +222,7 @@ class BrowseScreen extends PureComponent {
                         <PayPalScriptProvider options={{ "client-id": this.state.CLIENT_ID }}>
                             <div>
                                 <img className="items-pic" src={`http://127.0.0.1:8000${this.state.active_item.picture}`} />
-                                <h1>{this.state.active_item.name}</h1>
+                                <h2>{this.state.active_item.name}</h2>
                                 <p><b>Description:</b> {this.state.active_item.description}</p>
                                 <p><b>Upload Date:</b> { this.state.active_item.upload_date }</p>
                                 <p><b>Expiry Date:</b> {this.state.active_item.expiration_date}</p>

@@ -99,7 +99,7 @@ h6 span{
   height: 550px;
   background: linear-gradient(#E3FBE9FF 0%, #d3ffdd 50%, #c3ffcc 100%);
   position: absolute;
-  border-radius: 25px;
+  border-radius: 20px;
   left: 0;
   top: 0;
   transform-style: preserve-3d;
@@ -111,8 +111,8 @@ h6 span{
 }
 
 .card-back {
-  left: -75px;
   transform: rotateY(180deg);
+  margin: auto;
 }
 
 .checkbox:checked ~ .card-3d-wrap .card-3d-wrapper {
@@ -150,25 +150,23 @@ h6 span{
   outline: none;
 }
 
-.button{  
+.login-button{
   border-radius: 10px;
-  height: 40px;
+  border: 0000;
+  height: 10%;
+  width: 50%;
+margin-top: 5%;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 1000;
   text-transform: uppercase;
-  transition: all 200ms linear;
-  padding: 10px 85px;
-  margin: auto;
   letter-spacing: 1px;
-  display: inline-flex;
-  -webkit-align-items: center;
-  text-align: center;
-  border: none;
   background-color: #b3ffbe;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   color: #0b0d0c;
+  position: relative;
 }
 
-.button:hover{  
+.login-button:hover{
   background-color: #a3ffae;
   color: #0b0d0c;
 }

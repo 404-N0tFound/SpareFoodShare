@@ -156,10 +156,11 @@
 }
 
 .submit-button {
-  border-radius: 20px;
+  border-radius: 10px;
+  border: 0000;
   height: 40px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 1000;
   text-transform: uppercase;
   transition: all 200ms linear;
   padding: 10px 30px;
@@ -170,6 +171,11 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   background-color: #b3ffbe;
   color: #0b0d0c;
+}
+
+.submit-button:hover {
+    background-color: #a3ffac;
+    color: #0b0d0c;
 }
 
 .upload_pic_preview {

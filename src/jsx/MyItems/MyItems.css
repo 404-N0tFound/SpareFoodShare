@@ -119,28 +119,18 @@
 }
 
 .myitems-modal-btns, .myitems-edit-submit {
-  background-color: #b3ffbe;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  border-width: 0;
-  color: #333333;
-  cursor: pointer;
-  display: inline-block;
-  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 10px 12px;
-  text-align: center;
-  transition: all 200ms;
-  vertical-align: baseline;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  margin-left: 5px;
+    border-radius: 10px;
+    border: 0000;
+    height: 10%;
+    width: 50%;
+    font-size: 15px;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #b3ffbe;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    color: #0b0d0c;
+    position: relative;
 }
 
 .myitems-modal-btns:hover, .myitems-edit-submit:hover {
