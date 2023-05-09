@@ -4,7 +4,8 @@ import calendar
 import phonenumbers
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Q, OuterRef, Subquery, QuerySet
+from django.db.models import Q, F, Value, OuterRef, Subquery, QuerySet
+from django.db.models.functions import Concat
 from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
@@ -488,7 +489,7 @@ class ChatsView(ListAPIView):
         })
 
 
-def infinite_chats_filter(request) -> QuerySet:
+def infinite_chats_filter(request) -> QuerySet | list:
     """Returns a queryset for the chatroom objects when given a limit, offset, and valid jwt token.
     :param request: An HTTP request with valid parameters.
     :return: A queryset of all the objects that meet the given parameters.
@@ -503,16 +504,18 @@ def infinite_chats_filter(request) -> QuerySet:
             ),
             item_name=Subquery(
                 Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-            )
-        ).values('id', 'item_name')
+            ),
+            party_name=Concat(F('user_1__full_name'), Value(' and '), F('user_2__full_name'))
+        ).values('id', 'item_name', 'party_name')
         second_rooms = ChatRoom.objects.all().annotate(
             order_name=Subquery(
                 Order.objects.filter(id=OuterRef('order_id')).values('item_id')[:1]
             ),
             item_name=Subquery(
                 Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-            )
-        ).values('id', 'item_name')
+            ),
+            party_name=Concat(F('user_1__full_name'), Value(' and '), F('user_2__full_name'))
+        ).values('id', 'item_name', 'party_name')
         total_rooms = (first_rooms | second_rooms)[offset: max_index]
         return total_rooms
     else:
@@ -523,8 +526,9 @@ def infinite_chats_filter(request) -> QuerySet:
             ),
             item_name=Subquery(
                 Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-            )
-        ).values('id', 'item_name')
+            ),
+            party_name=F('user_2__full_name')
+        ).values('id', 'item_name', 'party_name')
         second_rooms = ChatRoom.objects.filter(
             Q(user_2=decode_jwt(request))).annotate(
             order_name=Subquery(
@@ -532,10 +536,13 @@ def infinite_chats_filter(request) -> QuerySet:
             ),
             item_name=Subquery(
                 Item.objects.filter(id=OuterRef('order_id__item_id')).values('name')[:1]
-            )
-        ).values('id', 'item_name')
-        total_rooms = (first_rooms | second_rooms)[offset: max_index]
-        return total_rooms
+            ),
+            party_name=F('user_1__full_name')
+        ).values('id', 'item_name', 'party_name')
+        first_rooms = list(first_rooms)
+        second_rooms = list(second_rooms)
+        total_rooms = first_rooms + second_rooms
+        return total_rooms[offset: max_index]
 
 
 def is_more_chats(request) -> bool:
