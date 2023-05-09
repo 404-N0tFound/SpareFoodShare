@@ -76,9 +76,22 @@ class LiveChatRender extends PureComponent {
                 <div className="live-chat-list">
                     <div className="messages">
                         {this.state.messages.map((item, index) => (
-                            <div key={index} className="single_message">
-                                <p className="message_author">{item.username}</p>
-                                <p className="message_content">{item.message}</p>
+                            <div key={index}>
+                                { item.username == user.full_name ? (
+                                    <div className="single_message-other">
+                                        <div>
+                                            <p className="message_author-other">{item.username}</p>
+                                            <p className="message_content-other">{item.message}</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div key={index} className="single_message">
+                                        <div>
+                                            <p className="message_author">{item.username}</p>
+                                            <p className="message_content">{item.message}</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                         {this.state.messages.length === 0 &&

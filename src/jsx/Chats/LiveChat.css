@@ -48,7 +48,24 @@
     padding-left: 2%;
 }
 
+.single_message-other {
+    background: rgba(204, 246, 210, 1.0);
+    max-width: 400px;
+    border-radius: 10px;
+    margin: 10px;
+    margin-left: 650px;
+}
+
+.single_message-other p {
+    margin: 1%;
+    padding-left: 2%;
+}
+
 .message_author {
+    color: green;
+}
+
+.message_author-other {
     color: #ff5700;
 }
 
