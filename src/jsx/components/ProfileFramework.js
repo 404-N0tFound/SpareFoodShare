@@ -15,12 +15,12 @@ function ProfileFramework() {
             </div>
             {!user.is_admin ?
             <div className="sidebar-text">
-                <a href='../profile/orders'>Orders</a>
+                <a href='../profile/orders'>Collected Items</a>
             </div>
             : null}
             {!user.is_admin ?
             <div className="sidebar-text">
-                <a href='../profile/sales'>Sales</a>
+                <a href='../profile/sales'>Uploaded Items</a>
             </div>
             : null}
             <div className="sidebar-text">
