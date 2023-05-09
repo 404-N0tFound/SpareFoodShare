@@ -206,8 +206,8 @@ margin-top: 5%;
   background-color: #ccc;
 }
 
-.business-check input: checked ~ .checkmark {
-  background-color: black;
+.business-check input:checked ~ .checkmark {
+  background-color: white;
 }
 
 .checkmark:after {

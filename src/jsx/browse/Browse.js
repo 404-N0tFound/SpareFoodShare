@@ -120,8 +120,20 @@ class BrowseScreen extends PureComponent {
         modal.style.display = "none";
     }
 
-    shareItem = () => {
-        navigator.clipboard.writeText(`${window.location.origin}${location.pathname}/?uuid=${this.state.active_item.id}`).then(() => alert("Copied link to clipboard!"));
+    shareItem = async () => {
+        let response = await fetch(`http://127.0.0.1:8000/api/item/share/${this.state.active_item.id}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        await response.json();
+        if (response.status === 200) {
+            navigator.clipboard.writeText(`${window.location.origin}${location.pathname}/?uuid=${this.state.active_item.id}`).then(() => alert("Copied link to clipboard!"));
+        } else {
+            alert("Could not generate a share link! Is the service maybe down?");
+        }
     }
 
     registerInterest = async () => {

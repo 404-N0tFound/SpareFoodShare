@@ -1,5 +1,3 @@
-
-
 .listings-body {
     min-height: 75vh;
     align-items: center;
@@ -95,7 +93,6 @@
     margin-left: 12%;
 }
 
-
 .modal-button {
     border-radius: 10px;
     border: 0000;
@@ -115,7 +112,3 @@
     background-color: #a3ffae;
     color: #0b0d0c;
 }
-
-
-
-

@@ -36,9 +36,10 @@ export const AuthProvider = ({children}) => {
                     setAuthTokens(data)
                     setUser(jwtDecode(data.access))
                     localStorage.setItem('authTokens', JSON.stringify(data))
+                    await createNotification(data.access)
                     navigator('../profile')
                 } else if (response.status === 401) {
-                    alert('Invalid email or password.')
+                    alert('Invalid email or password. Also ensure that you have verified your email.')
                 } else {
                     alert('Auth service failed! Is it maybe down?')
                 }
@@ -46,6 +47,36 @@ export const AuthProvider = ({children}) => {
                 alert('Auth service failed! Is it maybe down?')
             }
         }
+    }
+
+    let createNotification = async (jwt) => {
+        if (Notification.permission === "default") {
+            Notification.requestPermission().then((permission) => {
+                if (permission !== "granted") {
+                    return null;
+                }
+            });
+        }
+        let response = await fetch(`http://127.0.0.1:8000/api/myitems/expiring/?jwt=${jwt}`, {
+            method:'GET'
+        })
+        let data = await response.json()
+        if (response.status === 200) {
+            console.log(data);
+            if (data.length >= 1) {
+                setTimeout(() => {
+                    showNotification(
+                        "Item Expiration Reminder",
+                        `${data.length} of your items will expire tomorrow.`)
+                }, 3 * 1000);
+            }
+        }
+    }
+
+    let showNotification = (title, body) => {
+        new Notification(title, {
+            body: body,
+        });
     }
 
     let createUser = async (e) => {
