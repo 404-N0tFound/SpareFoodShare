@@ -1,26 +1,55 @@
+h3{
+    padding-top: 10px;
+    padding-left: 17%;
+    text-align: left;
+    font-size: 24px;
+}
+
 .chats-body {
     min-height: 75vh;
 }
 
 .chats-list h4 {
-    all: unset;
+    padding-top: 0px;
+    padding-left: 10%;
+    text-align: left;
+    font-size: 24px;
+    color: black;
+}
+
+.chats-list h5 {
+    padding-top: 0px;
+    padding-left: 10%;
+    text-align: left;
+    font-size: 24px;
+    color: black;
+}
+
+.chats-list h6 {
+    margin-top: 35px;
+    margin-right: 20px;
+    text-align: left;
+    font-size: 18px;
+    color: black;
+    width: 250px;
 }
 
 .chats-list ul li {
-    height: 75px;
+    height: 50px;
     width: 80%;
-    left: 225px;
+    left: 200px;
     list-style: none;
-    padding-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 10px;
     position: relative;
-    background: #fefefe;
+    background: rgba(21, 102, 29, 0.3);
     border-radius: 25px;
     text-align: left;
     margin-bottom: 10px;
 }
 
 .chats-list ul:first-child {
-    margin-top: 33px;
+    margin-top: 0px;
 }
 
 .chats-list ul li + li {
@@ -30,11 +59,33 @@
 }
 
 .chat-selection {
-    margin-top: -40px;
+    margin-top: -30px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 98%;
     margin-left: 1%;
-    max-height: 40px;
+    max-height: 30px;
+}
+
+.chat-button {
+    border-radius: 25px;
+    height: 75px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    transition: all 200ms linear;
+    margin-top: 1%;
+    padding-left: 50px;
+    display: inline-flex;
+    -webkit-align-items: center;
+    text-align: center;
+    border: none;
+    background: rgba(21, 102, 29, 0.0);
+    color: black;
+}
+
+.chat-button:hover{
+  background: rgba(21, 102, 29, 0.2);
+  color: white;
 }

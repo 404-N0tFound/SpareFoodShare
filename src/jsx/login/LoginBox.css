@@ -209,7 +209,7 @@ h6 span{
 }
 
 .business-check input:checked ~ .checkmark {
-  background-color: black;
+  background-color: white;
 }
 
 .checkmark:after {
