@@ -6,6 +6,7 @@ import pic_3 from "../pics/pic-3.jpg";
 import { Component } from "react";
 import AuthContext from "../AuthContext";
 
+
 class DisplayList extends Component {
     static contextType = AuthContext;
     render() {

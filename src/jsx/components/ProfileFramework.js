@@ -8,10 +8,10 @@ function ProfileFramework() {
     return (
         <div className="sidebar">
             <div className="sidebar-text">
-                <a href='../profile'>Profile</a>
+                <a href='../profile'>Profile Details</a>
             </div>
             <div className="sidebar-text">
-                <a href='../profile/myitems'>Items</a>
+                <a href='../profile/myitems'>Inventory</a>
             </div>
             {!user.is_admin ?
             <div className="sidebar-text">
