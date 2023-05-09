@@ -25,6 +25,15 @@ h3{
     color: black;
 }
 
+.chats-list h6 {
+    margin-top: 35px;
+    margin-right: 20px;
+    text-align: left;
+    font-size: 18px;
+    color: black;
+    width: 250px;
+}
+
 .chats-list ul li {
     height: 50px;
     width: 80%;
@@ -74,4 +83,9 @@ h3{
     border: none;
     background: rgba(21, 102, 29, 0.0);
     color: black;
+}
+
+.chat-button:hover{
+  background: rgba(21, 102, 29, 0.2);
+  color: white;
 }

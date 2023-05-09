@@ -78,7 +78,8 @@ class ChatsRender extends PureComponent {
                                 <div key={chatObj.id} className="chats-entry">
                                     <li>
                                         <div className="chat-selection">
-                                            <button className="chat-button" onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>{chatObj.item_name}</button>
+                                            <button className="chat-button" onClick={() => navigate(`../profile/chat`, { state: { chatId: chatObj.id } })}>{chatObj.item_name} </button>
+                                            <h6>by {chatObj.party_name} </h6>
                                         </div>
                                     </li>
                                 </div>
