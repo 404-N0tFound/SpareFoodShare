@@ -7,8 +7,11 @@ import Footer from "../components/Footer";
 import {PureComponent} from "react";
 import {useLocation} from "react-router-dom";
 import PropTypes from "prop-types";
+import AuthContext from "../AuthContext";
 
 class LiveChatRender extends PureComponent {
+    static contextType = AuthContext;
+
     ws = null;
     constructor(props) {
         super(props);
@@ -56,7 +59,6 @@ class LiveChatRender extends PureComponent {
 
     onMessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log(event.data)
         this.setState({ messages: [...this.state.messages, message] });
     };
 
@@ -65,6 +67,7 @@ class LiveChatRender extends PureComponent {
     }
 
     render() {
+        const {user} = this.context;
         return (
             <div className="page-content">
                 <Navbar/>
@@ -73,9 +76,22 @@ class LiveChatRender extends PureComponent {
                 <div className="live-chat-list">
                     <div className="messages">
                         {this.state.messages.map((item, index) => (
-                            <div key={index} className="single_message">
-                                <p className="message_author">{item.username}</p>
-                                <p className="message_content">{item.message}</p>
+                            <div key={index}>
+                                { item.username == user.full_name ? (
+                                    <div className="single_message-other">
+                                        <div>
+                                            <p className="message_author-other">{item.username}</p>
+                                            <p className="message_content-other">{item.message}</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div key={index} className="single_message">
+                                        <div>
+                                            <p className="message_author">{item.username}</p>
+                                            <p className="message_content">{item.message}</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                         {this.state.messages.length === 0 &&
@@ -87,10 +103,12 @@ class LiveChatRender extends PureComponent {
                              ref={(el) => { this.messagesEnd = el; }}>
                         </div>
                     </div>
+                    {!user.is_admin ?
                     <form onSubmit={this.sendMessage}>
                         <input type="text" className="messageInput" id="messageInput" name="messageInput" />
                         <button id="submit" className="submit-message" name="Send">Send</button>
                     </form>
+                    : null}
                 </div>
                 </body>
                 <Footer id="foot_id"/>

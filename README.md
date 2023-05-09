@@ -4,7 +4,7 @@
 ![Python Version](https://img.shields.io/badge/Python_Version-3.9_|_3.10_|_3.11-informational?style=flat&logo=python&logoColor=white&color=11BB11)
 ![Lint](https://git.shefcompsci.org.uk/com6103-2022-23/team09/project/badges/master/pipeline.svg)
 
-This is the code for spare food share. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
+This is the code for SpareFoodShare :carrot:. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
 
 # Installation
 For installing all the required libraries for this project, you will need to download and install:
@@ -18,7 +18,7 @@ Alternatively, you can choose to install each module by hand and all versioning 
 
 # Running
 ## Local Machine Instructions
-In order to run the project on your local machine, you will need to compile and run the project.
+In order to run the project on your local machine, you will need to compile and run the project. If you are running it on a local machine and not a server or docker container, you will need to switch to debug mode in settings or else static files cannot be served.
 ### Front End
 ##### Execution
 To run a live copy of the front end, it can be started with `npm run start`.
@@ -32,4 +32,5 @@ Once you have a database, if necessary you can use django to migrate by running 
 ##### Environment Variables
 From there, to run the webservice you will need a file named `.env`.
 In the environment file, you will need to specify your database configuration as well as the django secret key to start the app.
-Once that is done, simply run `python manage.py runserver` and the web app will be hosted at a given port by django!
+The email app token will be needed for email sending as well as there needs to be specified allowed hosts for django to boot.
+Once that is done, simply run `python manage.py runserver` and the web app will be hosted at a given port by django! :tada:

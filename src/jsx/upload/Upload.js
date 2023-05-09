@@ -6,7 +6,8 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
-import upload_pic from "../pics/upload-icon.jpeg";
+import upload_pic from "../pics/upload-icon.png";
+import default_local_image from "../pics/default_local_image.png";
 
 function Upload() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -15,6 +16,7 @@ function Upload() {
     const [selectedDefaultImage, setSelectedDefaultImage] = useState(null);
     const isBusiness = jwtDecode(JSON.parse(localStorage.getItem('authTokens')).access).is_business;
     const navigator = useNavigate();
+    let isFormatValid = true;
 
     let handleImageChange = (e) => {
         setSelectedImage(e.target.files[0])
@@ -25,12 +27,26 @@ function Upload() {
         setSelectedDefaultImage(e.target.files[0]);
     };
 
+    let dataURLtoBlob = async (dataUrl) => {
+        const response = await fetch(dataUrl);
+        return response.blob();
+    }
+
     let handleCSVChange = async (e) => {
         const file = e.target.files[0];
         const content = await file.text();
         const csvLines = content.split("\n");
         const headers = csvLines[0].split(",");
         const items = [];
+        const expectedHeaders = ["name", "description", "expiration_date", "location"];
+
+        isFormatValid = true;
+
+        if (headers.length !== expectedHeaders.length || !headers.every((header, index) => header.trim() === expectedHeaders[index])) {
+            isFormatValid = false;
+            alert("CSV file headers are incorrect. Please use: name, description, expiration_date, location");
+            return;
+        }
 
         for (let i = 1; i < csvLines.length; i++) {
 
@@ -41,33 +57,31 @@ function Upload() {
                     item[headers[j].trim()] = data[j].trim()
                 }
                 items.push(item)
+            } else {
+                isFormatValid = false;
+                alert("CSV file format are incorrect. Please ensure the number of columns matches the header and try again");
+                break;
             }
         }
-        setCsvData(items)
-        console.log(items)
+        if (isFormatValid) {
+            setCsvData(items);
+        } else {
+            setCsvData(null);
+        }
     };
 
     let uploadCsv = async (e) =>{
         e.preventDefault()
 
-        if (!selectedDefaultImage) {
-            alert("Please select a default image");
-            return;
-        }
-
         if (csvData) {
-            const csvLines = String(csvData).split("\n");
             const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             const defaultImageData = selectedDefaultImage
-
             let url = 'http://127.0.0.1:8000/api/items/upload/';
             let itemsDataArray = [];
-            console.log(csvLines)
 
             for (let i = 0; i < csvData.length; i++) {
                 const item = csvData[i];
                 const headers = Object.keys(item);
-
                 let form_data = new FormData();
 
                 form_data.append("provider", jwt);
@@ -76,8 +90,15 @@ function Upload() {
                     form_data.append(header, item[header]);
                 }
 
-                form_data.append("picture", defaultImageData, defaultImageData.name);
-
+                if (defaultImageData) {
+                    form_data.append("picture", defaultImageData, defaultImageData.name);
+                } else {
+                    const defaultLocalImageBlob = await dataURLtoBlob(default_local_image);
+                    const file = new File([defaultLocalImageBlob], "default_local_image.png", {
+                        type: "image/*",
+                    });
+                    form_data.append("picture", file);
+                }
                 itemsDataArray.push(form_data);
             }
 
@@ -104,7 +125,9 @@ function Upload() {
                     navigator('../browse');
                     alert(`${responses.length} items uploaded!`);
                 })
-                .catch(err => console.log(err));
+                .catch(
+                    err => console.log(err)
+                );
         }
     }
 
@@ -152,14 +175,16 @@ function Upload() {
                         {isBusiness ? (
                             <form className="csv-upload-form" onSubmit={uploadCsv}>
                                 <h2>Upload Item by CSV File</h2>
+                                <p>Please use the following as the first row of the CSV file and fill in the data by column:</p>
+                                <p><b>name, description, expiration_date, location</b></p>
                                 <label>
                                     <input type="file" id="csv_file" accept=".csv" onChange={handleCSVChange} required/>
                                     <span className="file-input-text">Please select a CSV file</span>
                                 </label>
                                 <br/>
                                 <label>
-                                    <input type="file" id="defaultImageInput" accept="image/*" onChange={handleDefaultImageChange} required/>
-                                    <span className="file-input-text">Please select an image for the uploaded items</span>
+                                    <input type="file" id="defaultImageInput" accept="image/*" onChange={handleDefaultImageChange} />
+                                    <span className="file-input-text">Please select an image for the uploaded items (OPTIONAL)</span>
                                 </label>
                                 <div className="button-div">
                                     <button className="submit-button">submit</button>
@@ -191,12 +216,12 @@ function Upload() {
                                 </div>
                                 <div className="column">
                                     <div className="pic-field">
-                                            <div className="display-item-image">
+                                            <div className="upload-display-item-image">
                                                 <input type="file" className="img-input"
                                                        id="picture"
                                                        accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
-                                                {selectedImage != null && <img src={selectedPreImage} className="upload_pic_preview"/>}
-                                                {selectedImage == null && <img src={upload_pic} className="upload_pic"/>}
+                                                        {selectedImage != null && <img src={selectedPreImage} className="upload_pic_preview"/>}
+                                                        {selectedImage == null && <img src={upload_pic} className="upload_pic"/>}
                                             </div>
                                     </div>
                                 </div>

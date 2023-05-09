@@ -138,12 +138,13 @@ class MyItems extends PureComponent{
 
     deleteItem = async() => {
         if(confirm("Are you sure that you want to delete Item : " + this.state.delete_item.name)){
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({'id': this.state.delete_item.id, 'operation': 'delete'})
+                body: JSON.stringify({'id': this.state.delete_item.id, 'operation': 'delete', 'jwt': jwt})
             })
             if(response.status === 200)
                     window.location.reload(false);
@@ -156,6 +157,7 @@ class MyItems extends PureComponent{
         let item_location = e.target[2].value;
         let item_expiration_date = e.target[3].value;
         if(this.state.anyChanges){
+            const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
                 method: 'POST',
                 headers: {
@@ -167,6 +169,7 @@ class MyItems extends PureComponent{
                                         "location": item_location,
                                         "expiration_date": item_expiration_date,
                                         "operation": "update",
+                                        "jwt": jwt
                                         })
             })
             if(response.status === 200)
