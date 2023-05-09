@@ -20,7 +20,7 @@ function ProfileFramework() {
             : null}
             {!user.is_admin ?
             <div className="sidebar-text">
-                <a href='../profile/sales'>Uploaded Items</a>
+                <a href='../profile/sales'>Shared Items</a>
             </div>
             : null}
             <div className="sidebar-text">
