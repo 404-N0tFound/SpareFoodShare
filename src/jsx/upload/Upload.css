@@ -151,28 +151,6 @@
     display: flex;
 }
 
-.upload-display-item-image{
-    margin-top: 50px;
-    margin-left: 100px;
-    width: 250px;
-    height: 100px;
-    background-image: url(../pics/upload-solid.svg);
-}
-
-.img-input {
-    display: none;
-}
-
-.upload-display-item-image label{
-    opacity: 0;
-}
-
-.upload-display-item-image p{
-    margin-top: 40px;
-    font-size: 15px;
-    text-align: center;
-}
-
 .button-div {
     text-align: right;
     padding-top: 0px;

@@ -6,7 +6,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {useNavigate} from "react-router-dom";
 import Footer from "../components/Footer";
-import upload_pic from "../pics/upload-icon.jpeg";
+import upload_pic from "../pics/upload-icon.png";
 import default_local_image from "../pics/default_local_image.png";
 
 function Upload() {
@@ -184,7 +184,7 @@ function Upload() {
                                 <br/>
                                 <label>
                                     <input type="file" id="defaultImageInput" accept="image/*" onChange={handleDefaultImageChange} />
-                                    <span className="file-input-text">Please select an image for the uploaded items(OPTION)</span>
+                                    <span className="file-input-text">Please select an image for the uploaded items (OPTIONAL)</span>
                                 </label>
                                 <div className="button-div">
                                     <button className="submit-button">submit</button>
@@ -220,8 +220,8 @@ function Upload() {
                                                 <input type="file" className="img-input"
                                                        id="picture"
                                                        accept="image/png, image/jpeg"  onChange={handleImageChange} required/>
-                                                {selectedImage != null && <img src={selectedPreImage} className="upload_pic_preview"/>}
-                                                {selectedImage == null && <img src={upload_pic} className="upload_pic"/>}
+                                                        {selectedImage != null && <img src={selectedPreImage} className="upload_pic_preview"/>}
+                                                        {selectedImage == null && <img src={upload_pic} className="upload_pic"/>}
                                             </div>
                                     </div>
                                 </div>
