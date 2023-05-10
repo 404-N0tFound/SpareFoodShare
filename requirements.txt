@@ -10,3 +10,4 @@ six
 channels~=4.0.0b1
 daphne~=4.0.0b1
 django-extensions~=3.2.1
+psycopg2~=2.9.5
