@@ -425,7 +425,8 @@ def infinite_myorders_filter(request) -> QuerySet:
                                           "initiator__email",
                                           "initiator__full_name",
                                           "item",
-                                          "item__name"
+                                          "item__name",
+                                          "item__provider__email"
                                           )[offset: max_index]
     else:
         return Order.objects.filter(
@@ -439,7 +440,8 @@ def infinite_myorders_filter(request) -> QuerySet:
                                                         "initiator__email",
                                                         "initiator__full_name",
                                                         "item",
-                                                        "item__name"
+                                                        "item__name",
+                                                        "item__provider__email"
                                                         )[offset: max_index]
 
 
