@@ -11,7 +11,6 @@
     list-style: none;
 }
 
-
 .listings-body:after {
     content: "";
     display: table;
