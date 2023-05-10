@@ -93,13 +93,10 @@ class MySales extends PureComponent{
                                 <li>
                                     <div className="my_sales_info">
                                         <h2>Item Name: {salesObj.item__name} </h2>
-                                        <p>Create Date: {salesObj.created_date}</p>
+                                        <p>Created Date: {salesObj.created_date}</p>
                                         <p>Initiator Email: {salesObj.initiator__email}</p>
                                         <p>Pickup Location: {salesObj.collection_location} </p>
-                                        <p>Created Date: {salesObj.created_date } </p>
                                         <p>Donation: ￡{salesObj.donation_amount} </p>
-                                        {salesObj.is_collected && <p>Collect Date: {salesObj.collect_date} </p>}
-                                        {!salesObj.is_collected && <p>Collect Date: Not Collected </p>}
                                     </div>
                                 </li>
                             </div>
