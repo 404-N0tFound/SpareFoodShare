@@ -9,6 +9,37 @@ import AuthContext from "../AuthContext";
 
 class DisplayList extends Component {
     static contextType = AuthContext;
+
+    handleShareOnFacebook = () => {
+        const message = 'Come join us over at SpareFoodShare and stop food waste!';
+        const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    };
+
+    handleShareOnWhatsApp = async () => {
+        const message = 'Come join us over at SpareFoodShare and stop food waste!';
+        try {
+            const phoneNumber = await this.promptAsync('Enter a phone number to share to:');
+            if (phoneNumber) {
+                const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }
+        } catch (error) {
+            console.error('Error in phone number input:', error);
+        }
+    };
+
+    promptAsync = (message) => {
+        return new Promise((resolve, reject) => {
+            const phoneNumber = window.prompt(message);
+            if (phoneNumber !== null) {
+                resolve(phoneNumber);
+            } else {
+                reject(new Error('Phone number input canceled.'));
+            }
+        });
+    };
+
     render() {
         const {user} = this.context;
         return (
@@ -51,12 +82,10 @@ class DisplayList extends Component {
                                         <p>Join the community and help fight back against food wastage. Browse through the existing listings - or post an item of your own!</p>
                                     </div>
                                     <div>
-                                        {user ? (
-                                            null
-                                        ) : (
+                                        {user ? null : (
                                             <a className="loginButton" type="button" href="../login">
                                                 Sign up or Login
-                                            </a>                                            ) }
+                                            </a>) }
                                     </div>
                                 </div>
                             </div>
@@ -77,8 +106,8 @@ class DisplayList extends Component {
                                     </div>
                                     <div>
                                         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-                                        <a href="#" className="fa fa-facebook"></a>
-                                        <a href="#" className="fa fa-whatsapp"></a>
+                                        <button onClick={this.handleShareOnFacebook} className="fa fa-facebook"></button>
+                                        <button onClick={this.handleShareOnWhatsApp} className="fa fa-whatsapp"></button>
                                     </div>
                                 </div>
                             </div>

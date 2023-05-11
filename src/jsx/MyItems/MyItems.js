@@ -152,10 +152,11 @@ class MyItems extends PureComponent{
     }
 
     saveItemChanges = async(e) => {
+        e.preventDefault();
         let item_name = e.target[0].value;
         let item_des = e.target[1].value;
-        let item_location = e.target[2].value;
-        let item_expiration_date = e.target[3].value;
+        let item_expiration_date = e.target[2].value;
+        let item_location = e.target[3].value;
         if(this.state.anyChanges){
             const jwt = JSON.parse(localStorage.getItem('authTokens')).access;
             let response = await fetch('http://127.0.0.1:8000/api/item_operations/', {
@@ -173,10 +174,10 @@ class MyItems extends PureComponent{
                                         })
             })
             if(response.status === 200)
-                console.log("Update Successfully :)");
+                alert("Item updated!");
+                window.location.reload();
             }else
                 alert("No changes");
-        e.preventDefault();
     }
 
     handleFilterChange = (e) => {

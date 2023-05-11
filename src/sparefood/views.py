@@ -66,6 +66,7 @@ def getApiRoutes(request) -> Response:
 
 class RegistrationView(APIView):
     """The registration endpoint for creating a new user"""
+
     @classmethod
     def post(cls, request) -> Response:
         """Creates a new user object and returns a status if successful as well as calls to activate email.
@@ -113,6 +114,7 @@ def activate_account(request, uidb64, token) -> HttpResponseRedirect:
 
 class NewRefreshToken(APIView):
     """Returns a new JWT token if necessary for client actions when given a valid JWT."""
+
     @classmethod
     def get(cls, request) -> Response:
         """Provides new JWT token.
@@ -140,6 +142,7 @@ class NewRefreshToken(APIView):
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """Generates a refresh and access token pair for a user and returns the encrypted values before salting."""
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -160,6 +163,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class CreateItemView(APIView):
     """View for posting a new item to the database."""
+
     @classmethod
     def post(cls, request) -> Response:
         """Endpoint for creating a new item when valid data is provided.
@@ -177,6 +181,7 @@ class CreateItemView(APIView):
 
 class CreateOrderView(APIView):
     """View for posting a new order to the database."""
+
     @classmethod
     def post(cls, request) -> Response:
         """Endpoint for creating a new order when valid data is provided.
@@ -365,6 +370,7 @@ class InfiniteMyItemsView(ListAPIView):
 
 class MyExpiringItemsView(APIView):
     """Returns all items that will expire tomorrow for a given user."""
+
     @classmethod
     def get(cls, request) -> Response:
         """Gets all items for a user that will expire tomorrow based on server-side system time.
@@ -414,7 +420,7 @@ def infinite_myorders_filter(request) -> QuerySet:
     limit = int(request.GET.get('limit'))
     offset = int(request.GET.get('offset'))
     max_index = int(offset) + int(limit)
-    if decode_jwt(request):
+    if is_admin(request):
         return Order.objects.all().values("id",
                                           "created_date",
                                           "donation_amount",
@@ -425,22 +431,25 @@ def infinite_myorders_filter(request) -> QuerySet:
                                           "initiator__email",
                                           "initiator__full_name",
                                           "item",
-                                          "item__name"
+                                          "item__name",
+                                          "item__provider__email"
                                           )[offset: max_index]
     else:
         return Order.objects.filter(
-            Q(initiator_id=decode_jwt(request))).values("id",
-                                                        "created_date",
-                                                        "donation_amount",
-                                                        "is_collected",
-                                                        "is_deleted",
-                                                        "collection_location",
-                                                        "initiator",
-                                                        "initiator__email",
-                                                        "initiator__full_name",
-                                                        "item",
-                                                        "item__name"
-                                                        )[offset: max_index]
+            Q(initiator_id=decode_jwt(request))
+        ).values("id",
+                 "created_date",
+                 "donation_amount",
+                 "is_collected",
+                 "is_deleted",
+                 "collection_location",
+                 "initiator",
+                 "initiator__email",
+                 "initiator__full_name",
+                 "item",
+                 "item__name",
+                 "item__provider__email"
+                 )[offset: max_index]
 
 
 class OrdersView(ListAPIView):
@@ -560,6 +569,7 @@ def is_more_chats(request) -> bool:
 
 class MessagesView(APIView):
     """Gets all messages for a given valid chatroom uuid."""
+
     @classmethod
     def get(cls, request) -> JsonResponse:
         """Gets all messages for a chatroom uuid.
@@ -633,6 +643,7 @@ def is_more_sales(request) -> bool:
 
 class ItemOperationsView(APIView):
     """Endpoint for changing item information if a valid user requests so."""
+
     @classmethod
     def post(cls, request) -> Response:
         """Functional view for either editing or deleting an item from the database.
@@ -666,6 +677,7 @@ class UserProfileUpdateView(APIView):
     - User phone number\n
     - User full name\n
     """
+
     @classmethod
     def post(cls, request) -> Response:
         """Post point for updating the user information with new provided data if it is valid.
@@ -702,6 +714,7 @@ class StatsView(APIView):
     - number of new users that joined the website this week for each given weekday\n
     - number of new users that joined the website this month over the past 6 months
     """
+
     @classmethod
     def get(cls, request) -> Response:
         """Endpoint for obtaining admin statistics.
@@ -928,6 +941,7 @@ class StatsView(APIView):
 
 class ShareView(APIView):
     """Increments an item's share count on any given valid item uuid."""
+
     @classmethod
     def post(cls, request, item_uuid) -> Response:
         """Creates or increments an item share count for today's system date.
