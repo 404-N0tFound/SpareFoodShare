@@ -85,11 +85,13 @@
 }
 
 .fa {
+    pointer-events: all;
     padding: 10px;
     font-size: 30px;
-    width: 25px;
+    width: 47px;
     text-align: center;
     margin: 5px 10px;
+    border: 0;
 }
 
 

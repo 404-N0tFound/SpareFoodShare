@@ -200,7 +200,7 @@ class BrowseScreen extends PureComponent {
                 <body className="listings-body">
                 <div className="items-filter">
                     <select id="select-option" name="select-option" onChange={this.handleFilterChange} defaultValue="default">
-                        <option style ={{backgroundImage: 'url(' + require('../pics/sort.jpg') +')'} } value="default" disabled>Sort By</option>
+                        <option value="default" disabled>Sort By</option>
                         <option value="upload_date">Upload Date</option>
                         <option value="expiration_date">Expiration Date</option>
                     </select>

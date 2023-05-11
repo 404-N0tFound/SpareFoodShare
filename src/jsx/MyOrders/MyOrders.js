@@ -95,10 +95,8 @@ class MyOrders extends PureComponent{
                                         <h2>Item Name: {ordersObj.item__name} </h2>
                                         <p>Provider Email: {ordersObj.item__provider__email}</p>
                                         <p>Pickup Location: {ordersObj.collection_location} </p>
-                                        <p>Created Date: {ordersObj.created_date } </p>
+                                        <p>Order Creation Date: {ordersObj.created_date } </p>
                                         <p>Donation: ￡{ordersObj.donation_amount} </p>
-                                        {ordersObj.is_collected && <p>Collect Date: {ordersObj.collect_date} </p>}
-                                        {!ordersObj.is_collected && <p>Collect Date: Not Collected </p>}
                                     </div>
                                 </li>
                             </div>
