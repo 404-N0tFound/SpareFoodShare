@@ -1,5 +1,5 @@
 -r requirements.txt
 
-setuptools~=67.7.2
+setuptools~=67.8.0
 flake8~=6.0.0
 graphviz~=0.20.1
