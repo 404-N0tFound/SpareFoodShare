@@ -26,7 +26,7 @@
         "react-awesome-reveal": "^4.2.3",
         "react-dom": "^18.2.0",
         "react-helmet": "^6.1.0",
-        "react-router-dom": "^6.10.0",
+        "react-router-dom": "^6.11.2",
         "react-scripts": "^5.0.1",
         "recharts": "^2.5.0",
         "sort-by": "^1.2.0",
