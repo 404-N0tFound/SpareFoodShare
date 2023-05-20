@@ -1,10 +1,15 @@
 # Spare Food Share
 ![Node Version](https://img.shields.io/badge/Node.js-18.14.1LTS_|_19.6.1-informational?style=flat&logo=node.js&logoColor=white&color=11BB11)
 ![React Version](https://img.shields.io/badge/React-^18.2.0-informational?style=flat&logo=react&logoColor=white&color=107bb1)
-![Python Version](https://img.shields.io/badge/Python_Version-3.9_|_3.10_|_3.11-informational?style=flat&logo=python&logoColor=white&color=11BB11)
+![Python Version](https://img.shields.io/badge/Python_Version-3.10_|_3.11-informational?style=flat&logo=python&logoColor=white&color=11BB11)
 ![Lint](https://git.shefcompsci.org.uk/com6103-2022-23/team09/project/badges/master/pipeline.svg)
 
 This is the code for SpareFoodShare :carrot:. In order to run the project, you will need the necessary node packages as well as a configured python environment from [requirements.txt](requirements.txt).
+
+# About
+To view the report that was submitted alongside this assignemnt, you can view it [here](https://docs.google.com/document/d/14qVnZDcAqWAhbgB3xcMCSdaKjq8J6GfIjq5eACNkwso/edit?usp=sharing).\
+Our demonstration video that was submitted alongside it can be viewed here:\
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/xYYydMtzi0I/0.jpg)](https://www.youtube.com/watch?v=xYYydMtzi0I "Welcome to SpareFoodShare")
 
 # Installation
 For installing all the required libraries for this project, you will need to download and install:
