@@ -40,9 +40,6 @@ jobs:
 
     - name: Setup Venv
       run:
-        pip install virtualenv
-        virtualenv venv
-        source venv/bin/activate
         chmod +x ./setup_env.sh
         ./setup_env.sh
 
